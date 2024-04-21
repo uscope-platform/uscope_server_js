@@ -9,7 +9,6 @@ class peripherals_db {
         this.db = d;
     }
 
-
     public async get_version(): Promise<string> {
         const res = await this.db`
             select version from uscope.data_versions where "table"='Peripherals'
@@ -52,7 +51,6 @@ class peripherals_db {
         `;
     }
 
-
     public async update_peripheral_field(id:number, field_name: string, field_value:any) : Promise<object> {
 
         const res = await this.db`
@@ -61,14 +59,12 @@ class peripherals_db {
         return res[0];
     }
 
-
     public async remove_peripheral(id:number) : Promise<object> {
         const res = await this.db`
             delete from uscope.peripherals where id=${id}
         `;
         return res[0];
     }
-
 
 
 }
