@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import filter_model from "../data_model/filter";
+import filter_model from "../data_model/filters_model";
 
 
 class filters_db {
