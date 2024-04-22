@@ -1,7 +1,7 @@
 import postgres from "postgres";
 
 import applications_db from "./applications_db";
-import app_backend from "./app_backend";
+import platform_db from "./platform_db";
 import scripts_db from "./scripts_db";
 import programs_db from "./programs_db";
 import filters_db from "./filters_db";
@@ -30,7 +30,7 @@ class database {
          })
 
          this.applications = new Applications_db(sql);
-         this.app_backend = new app_backend(sql);
+         this.app_backend = new platform_db(sql);
          this.scripts = new scripts_db(sql);
          this.programs = new programs_db(sql);
          this.filters = new filters_db(sql);
