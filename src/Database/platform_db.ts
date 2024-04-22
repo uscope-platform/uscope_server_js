@@ -1,4 +1,5 @@
 import postgres from "postgres";
+import {user_model} from "../data_model/platform_model";
 
 class platform_db {
     private db: postgres.Sql;
@@ -8,8 +9,8 @@ class platform_db {
     }
 
 
-    public async get_user(username:string): Promise<object> {
-        const res = await this.db`
+    public async get_user(username:string): Promise<user_model> {
+        const res = await this.db<user_model[]>`
             select * from uscope.users where username = ${username}
         `
         return res[0];

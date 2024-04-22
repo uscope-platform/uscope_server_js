@@ -12,13 +12,13 @@ import Applications_db from "./applications_db";
 const sql = postgres({ max: 4 })
 
 class database {
-    public applications:object;
-    public scripts: object;
-    public programs: object;
-    public filters: object;
-    public emulators: object;
-    public peripherals: object;
-    public app_backend: object;
+    public applications:applications_db;
+    public scripts: scripts_db;
+    public programs: programs_db;
+    public filters: filters_db;
+    public emulators: emulators_db;
+    public peripherals: peripherals_db;
+    public platform: platform_db;
 
      constructor(host: string, username:string, password:string) {
          let sql = postgres('postgres://username:password@host:port/database', {
@@ -30,7 +30,7 @@ class database {
          })
 
          this.applications = new Applications_db(sql);
-         this.app_backend = new platform_db(sql);
+         this.platform = new platform_db(sql);
          this.scripts = new scripts_db(sql);
          this.programs = new programs_db(sql);
          this.filters = new filters_db(sql);
