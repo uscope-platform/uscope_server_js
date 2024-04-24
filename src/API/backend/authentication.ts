@@ -4,6 +4,15 @@ import jwt from "jsonwebtoken";
 import {randomBytes, timingSafeEqual} from "node:crypto";
 import {auth_response, auto_login_object, user_login_object} from "../../data_model/platform_model";
 
+class CustomError extends Error {
+    public status:number;
+    public message:string
+    constructor(status:number, message:string) {
+        super(message);
+        this.message = message;
+        this.status = status;
+    }
+}
 
 export default class Authenticator {
     private secret: string
@@ -30,7 +39,7 @@ export default class Authenticator {
                 let auto_token = <auto_login_object>{};
                 auto_token.selector = randomBytes(64).toString('hex');
                 let validator = randomBytes(64).toString('hex');
-                auto_token.expiry = Date.now()+ 86400 * 30;
+                auto_token.expiry = Date.now()/1000 + 86400 * 30;
                 auto_token.validator = await this.validate_auto_token(validator)
                 await this.db.platform.add_auto_token(login.user, auto_token)
                 auto_token.validator = validator
@@ -38,7 +47,7 @@ export default class Authenticator {
             }
             return token
         } else {
-            throw 401
+            throw new CustomError(401, "Login failed")
         }
     }
 
@@ -46,11 +55,11 @@ export default class Authenticator {
 
         let query_res = await this.db.platform.get_auto_token(login.selector)
         if(query_res.length>1 || query_res.length==0){
-            throw 401
+            throw new CustomError(401, "Login failed")
         } else {
             let token = <auto_login_object>query_res[0]
-            if(Date.now()>=token.expiry){
-                throw 401
+            if(Date.now()/1000>=token.expiry){
+                throw new CustomError(401, "Login failed")
             }
             let hashed_validator =await this.validate_auto_token(login.validator)
             if(timingSafeEqual(Buffer.from(hashed_validator), Buffer.from(token.validator))){
@@ -73,7 +82,7 @@ export default class Authenticator {
             ret.role = user.role;
             return ret;
         } else {
-            throw 401
+            throw new CustomError(401, "Login failed")
         }
     }
 

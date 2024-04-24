@@ -10,6 +10,7 @@ interface user_add_request {
     password:string,
     role:string
 }
+
 class Platform_api {
     public router: Router;
     private auth: Authenticator;
@@ -22,51 +23,28 @@ class Platform_api {
 
         this.router.post('/user', async (ctx:Koa.Context, next:Koa.Next) => {
             let body = <user_add_request>ctx.request.body;
-            try{
-                await this.auth.create_user(body.user, body.password, body.role)
-                ctx.status = 200
-            } catch(error:any){
-                ctx.message = error
-                ctx.status = 501
-            }
+
+            await this.auth.create_user(body.user, body.password, body.role)
+            ctx.status = 200
             next();
         });
 
         this.router.delete('/user/:name', async (ctx:Koa.Context, next:Koa.Next) => {
-            try{
-                await this.auth.remove_user(ctx.params.name)
-                ctx.status = 200
-            } catch(error:any){
-                ctx.message = error
-                ctx.status = 501
-            }
+            await this.auth.remove_user(ctx.params.name)
+            ctx.status = 200
             next();
         });
 
         this.router.post('/login/manual', async (ctx:Koa.Context, next:Koa.Next) =>{
-            try {
-                let body = <user_login_object>ctx.request.body;
-                ctx.body = await this.auth.authenticate(body)
-                ctx.status = 200;
-            } catch (error:any){
-                if(typeof error === "number"){
-                    ctx.status = error;
-                } else {
-                    ctx.status = 401;
-                }
-                ctx.message = "Login failed";
-            }
+            let body = <user_login_object>ctx.request.body;
+            ctx.body = await this.auth.authenticate(body)
+            ctx.status = 200;
         })
 
         this.router.post('/login/auto', async (ctx:Koa.Context, next:Koa.Next) =>{
-            try {
-                let body = <auto_login_object>ctx.request.body;
-                ctx.body = await this.auth.authenticate(body)
-                ctx.status = 200;
-            } catch (error:any){
-                ctx.status = error;
-                ctx.message = "Login failed";
-            }
+            let body = <auto_login_object>ctx.request.body;
+            ctx.body = await this.auth.authenticate(body)
+            ctx.status = 200;
         })
     }
 }
