@@ -1,5 +1,6 @@
-import postgres from "postgres";
-import {user_model} from "../data_model/platform_model";
+import postgres, {Row} from "postgres";
+import {auto_login_object, user_model} from "../data_model/platform_model";
+
 
 class platform_db {
     private db: postgres.Sql;
@@ -30,6 +31,19 @@ class platform_db {
         return ;
     }
 
+    public async add_auto_token(username:string, token: auto_login_object): Promise<any> {
+        const res = await this.db`
+            insert into uscope.login_tokens (username,selector, validator, expiry) values
+                   (${username}, ${token.selector}, ${token.validator}, ${token.expiry})
+        `
+        return ;
+    }
+
+    public async get_auto_token(selector:string):Promise<Row[]> {
+        return await this.db`
+            select * from uscope.login_tokens where selector = ${selector}
+        `
+    }
 }
 
 export default platform_db;
