@@ -5,7 +5,8 @@ import bodyParser from "koa-bodyparser";
 import platform_router from "../../src/API/frontend/platform_api";
 import database from "../../src/Database/Database";
 import {expect} from "@jest/globals";
-import {error_handler} from "../../src/API/backend/middleware";
+import {authorizer, error_handler} from "../../src/API/backend/middleware";
+import jwt from "koa-jwt";
 
 
 
@@ -15,6 +16,8 @@ describe('platform_tests', () => {
     const app = new Koa();
 
     app.use(bodyParser());
+
+    let bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTQwNDQ4NjJ9.3FCjAmBgEUuAlFqL7goWpwuu0OH6ldyTA--BLjyzIOE";
 
     let results:any = {}
     let tokens:any = {}
@@ -48,6 +51,8 @@ describe('platform_tests', () => {
 
     // Error handling middleware
     app.use(error_handler);
+    app.use(jwt({ secret: 'secret', passthrough: true }));
+    app.use(authorizer())
 
     let rtr = new platform_router("secret", db)
     app.use(rtr.router.routes())
@@ -57,7 +62,11 @@ describe('platform_tests', () => {
 
     test('add_user', async () => {
         let user_obj = {user:"test_user",password:"test", role:"admin"}
-        return request(app.callback()).post('/platform/user').send(user_obj).then((response)=>{
+        return request(app.callback())
+            .post('/platform/user')
+            .set('Authorization', `Bearer ${bearer_token}`)
+            .send(user_obj)
+            .then((response)=>{
             expect(response.status).toBe(200);
             expect(results.user).toBe("test_user");
             expect(results.pw_hash).not.toBeNull();
@@ -67,7 +76,10 @@ describe('platform_tests', () => {
     });
 
     test('remove_user', async () => {
-        return request(app.callback()).delete('/platform/user/test_delete').then((response)=>{
+        return request(app.callback())
+            .delete('/platform/user/test_delete')
+            .set('Authorization', `Bearer ${bearer_token}`)
+            .then((response)=>{
             expect(response.status).toBe(200);
             expect(results.username).toBe("test_delete");
         });
