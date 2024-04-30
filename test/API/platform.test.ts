@@ -58,7 +58,7 @@ describe('platform_tests', () => {
     app.use(rtr.router.routes())
     app.use(rtr.router.allowedMethods());
 
-    app.listen(3000);
+    let server = app.listen(3000);
 
     test('add_user', async () => {
         let user_obj = {user:"test_user",password:"test", role:"admin"}
@@ -171,4 +171,5 @@ describe('platform_tests', () => {
         });
     });
 
+    afterAll(() => server.close());
 });
