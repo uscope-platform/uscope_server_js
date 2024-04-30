@@ -39,11 +39,11 @@ export function authorizer() {
         // THE CHECK IS DONE IN TWO PASS TO HAVE PERFECT MATCHES OVERRIDE PARAMETRIZED ONES
         for(let item in endpoints_map[api_class].endpoints){
             let found_endpoint = endpoints_map[api_class].endpoints[item]
-            let id_regex =/\/:\w+$/;
+            let id_regex =/\/:[a-zA-Z0-9\-_]+$/;
             if(found_endpoint.match(id_regex)){
                 let stripped_req_endpoint = requested_endpoint.split("/")[0];
                 let stripped_found_endpoint = found_endpoint.replace(id_regex,"").slice(1);
-                if(stripped_found_endpoint === stripped_req_endpoint){
+                if(stripped_found_endpoint === stripped_req_endpoint || (stripped_found_endpoint=="" && !stripped_req_endpoint.includes("/"))){
                     let required_role = roles_hierarchy[rules[api_class][item]];
                     if(required_role===99){
                         await next();
@@ -57,7 +57,7 @@ export function authorizer() {
                 }
             }
         }
-        //TODO: HANDLE PARAMETRIC ARGUMENTS
+        
         ctx.status = 403;
         ctx.message = "Unauthorized access";
     };
