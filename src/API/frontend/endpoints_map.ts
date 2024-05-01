@@ -128,7 +128,7 @@ let endpoints_map : api_map = {
     },
 
     peripheral:{
-        prefix:"/peripherals",
+        prefix:"/peripheral",
         endpoints:{
             hash:"/hash",
             load_all:"/load_all",
