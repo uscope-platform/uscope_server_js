@@ -113,7 +113,7 @@ let endpoints_map : api_map = {
             add:"/:id",
             edit:"/:id",
             delete:"/:id",
-            compile:""
+            compile:"/compile"
         }
     },
 
