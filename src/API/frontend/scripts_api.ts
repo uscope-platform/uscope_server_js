@@ -2,6 +2,7 @@ import Router from "koa-router";
 import database from "../../Database/Database";
 import * as Koa from "koa";
 import endpoints_map from "./endpoints_map";
+import script_model, {script_edit_model} from "../../data_model/script_model";
 
 class scripts_router {
     public router: Router;
@@ -15,25 +16,25 @@ class scripts_router {
 
         this.router.get(endpoints_map.script.endpoints.hash, async (ctx:Koa.Context, next:Koa.Next) => {
             try{
-                ctx.body = await this.db.scripts.get_version();
-                ctx.status = 200;
+                ctx.response.status = 200;
+                ctx.response.body = await this.db.scripts.get_version();
             } catch(error:any){
-                ctx.message = error
-                ctx.status = 501
+                ctx.response.message = error
+                ctx.response.status = 501
+                next();
             }
-            next();
         });
 
 
         this.router.get(endpoints_map.script.endpoints.load_all, async (ctx:Koa.Context, next:Koa.Next) => {
             try{
-                ctx.body = await this.db.scripts.load_all()
+                ctx.body = await this.db.scripts.load_all();
                 ctx.status = 200
             } catch(error:any){
                 ctx.message = error
                 ctx.status = 501
+                next()
             }
-            next();
         });
 
 
@@ -46,42 +47,46 @@ class scripts_router {
             } catch(error:any){
                 ctx.message = error
                 ctx.status = 501
+                next()
             }
-            next();
         });
 
 
         this.router.post(endpoints_map.script.endpoints.add, async (ctx:Koa.Context, next:Koa.Next) => {
             try{
-
+                let  scr = <script_model>ctx.request.body;
+                await this.db.scripts.add_script(scr)
                 ctx.status = 200
             } catch(error:any){
                 ctx.message = error
                 ctx.status = 501
+                next()
             }
-            next();
         });
 
         this.router.patch(endpoints_map.script.endpoints.edit, async (ctx:Koa.Context, next:Koa.Next) => {
             try{
-
+                let id = parseInt(ctx.params.id);
+                let e = <script_edit_model>ctx.request.body;
+                ctx.body = await this.db.scripts.update_script_field(id, e.field, e.value);
                 ctx.status = 200
             } catch(error:any){
                 ctx.message = error
                 ctx.status = 501
+                next()
             }
-            next();
         });
 
         this.router.delete(endpoints_map.script.endpoints.delete, async (ctx:Koa.Context, next:Koa.Next) => {
             try{
-
+                let id = parseInt(ctx.params.id);
+                await this.db.scripts.remove_script(id)
                 ctx.status = 200
             } catch(error:any){
                 ctx.message = error
                 ctx.status = 501
+                next()
             }
-            next();
         });
 
 

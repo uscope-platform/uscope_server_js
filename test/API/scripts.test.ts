@@ -33,7 +33,6 @@ describe('script tests', () => {
         }];
 
     let results:any = {}
-    let tokens:any = {}
     let db = {
         scripts:{
             get_version: ():string =>{
@@ -44,8 +43,16 @@ describe('script tests', () => {
             },
             get_script:(id:number) =>{
                 return scripts[id-1]
+            },
+            add_script:(scr:any) =>{
+                results = scr;
+            },
+            update_script_field: (id:number, field_name: string, field_value:any) =>{
+                results = [id, field_name, field_value];
+            },
+            remove_script:(id:number) =>{
+                results = id;
             }
-
         }
     } as any as database
 
@@ -94,15 +101,43 @@ describe('script tests', () => {
     });
 
     test('add', async () => {
-
+        let script_obj = {
+            "id": 3,
+            "name": "new script_3",
+            "path": null,
+            "content": "",
+            "triggers": ""
+        }
+        return request(app.callback())
+            .post('/script/3')
+            .set('Authorization', `Bearer ${token}`)
+            .send(script_obj)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(script_obj)
+            });
     });
 
     test('edit', async () => {
-
+            let edit = {script:2, field:"content", value:"test_content"};
+            return request(app.callback())
+                .patch('/script/2')
+                .set('Authorization', `Bearer ${token}`)
+                .send(edit)
+                .then((response)=>{
+                    expect(response.status).toBe(200);
+                    expect(results).toStrictEqual([2, "content", "test_content"])
+                });
     });
 
     test('delete', async () => {
-
+        return request(app.callback())
+            .delete('/script/3')
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(3)
+            });
     });
 
     afterAll(() => server.close());
