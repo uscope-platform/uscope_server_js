@@ -57,9 +57,22 @@ describe('db_creation_test', () => {
                 expect(results_array.sort()).toStrictEqual(columns_map[tab].sort());
             }
 
+             res = await check_db`
+                select event_manipulation, event_object_table from information_schema.triggers where trigger_schema = 'test_schema'
+            `
+            let expected_res = []
+            for(let tab of ["programs", "scripts", "applications", "peripherals", "emulators", "bitstreams", "filters" ]){
+                expected_res.push({event_manipulation:"INSERT", event_object_table:tab})
+                expected_res.push({event_manipulation:"DELETE", event_object_table:tab})
+                expected_res.push({event_manipulation:"UPDATE", event_object_table:tab})
+            }
+            expect(res).toEqual(expected_res);
         })
     });
     afterAll(async ()=> {
+        let res = await check_db`
+                drop schema test_schema cascade;
+            `
         await db.close();
         await check_db.end();
     })
