@@ -9,6 +9,9 @@ class platform_db {
         this.db = d;
     }
 
+    public async close(): Promise<void>{
+        this.db.end();
+    }
 
     public async get_user(username:string): Promise<user_model> {
         const res = await this.db<user_model[]>`

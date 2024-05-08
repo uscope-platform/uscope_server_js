@@ -8,6 +8,10 @@ class bitstreams_db {
         this.db = d;
     }
 
+    public async close(): Promise<void>{
+        this.db.end();
+    }
+
     public async get_version(): Promise<string> {
         const res = await this.db`
             select version from uscope.data_versions where "table"='Applications'

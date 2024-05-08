@@ -42,6 +42,16 @@ class database {
 
      }
 
+     public async close():Promise<void> {
+         await this.db.end();
+         await this.applications.close();
+         await this.peripherals.close();
+         await this.platform.close();
+         await this.scripts.close();
+         await this.programs.close();
+         await this.emulators.close();
+         return
+     }
     public async init_db(schema_name:string): Promise<void> {
         await this.create_schema(schema_name);
         await this.create_data_versions(schema_name);
@@ -60,27 +70,14 @@ class database {
 
     public async populate_versions(schema_name:string):Promise<void> {
 
-        await this.db`
-            insert into ${sql(schema_name)}.data_versions("table", version, last_modified) values ('Applications', gen_random_uuid(),CURRENT_TIMESTAMP);
-        `
-        await this.db`
-            insert into ${sql(schema_name)}.data_versions("table", version, last_modified) values ('bitstreams', gen_random_uuid(),CURRENT_TIMESTAMP);
-        `
-        await this.db`
-            insert into ${sql(schema_name)}.data_versions("table", version, last_modified) values ('Peripherals', gen_random_uuid(),CURRENT_TIMESTAMP);
-        `
-        await this.db`
-            insert into ${sql(schema_name)}.data_versions("table", version, last_modified) values ('programs', gen_random_uuid(),CURRENT_TIMESTAMP);
-        `
-        await this.db`
-            insert into ${sql(schema_name)}.data_versions("table", version, last_modified) values ('scripts', gen_random_uuid(),CURRENT_TIMESTAMP);
-        `
-        await this.db`
-            insert into ${sql(schema_name)}.data_versions("table", version, last_modified) values ('filters', gen_random_uuid(),CURRENT_TIMESTAMP);
-        `
-        await this.db`
-            insert into ${sql(schema_name)}.data_versions("table", version, last_modified) values ('emulators', gen_random_uuid(),CURRENT_TIMESTAMP);
-        `
+        await this.add_version(schema_name,"Applications");
+        await this.add_version(schema_name,"bitstreams");
+        await this.add_version(schema_name,"Peripherals");
+        await this.add_version(schema_name,"programs");
+        await this.add_version(schema_name,"scripts");
+        await this.add_version(schema_name,"filters");
+        await this.add_version(schema_name,"emulators");
+
     }
 
     public async create_schema(schema_name:string): Promise<void> {
@@ -394,7 +391,6 @@ class database {
         }
     }
 
-
     public async create_peripherals(schema_name:string): Promise<void> {
         let res = await this.create_table(schema_name, "peripherals")
         if(res) {
@@ -449,7 +445,6 @@ class database {
         return
     }
 
-
     public async create_table(schema_name:string, tab_name:string): Promise<boolean> {
         const ref = await this.db`
             SELECT EXISTS (
@@ -467,6 +462,17 @@ class database {
             `
         }
         return !ref[0].exists;
+    }
+
+    private async add_version(schema_name:string, table_name:string):Promise<any>{
+        let res = await this.db`
+            select version from ${sql(schema_name)}.data_versions where "table" = ${table_name}
+         `
+        if(res.length==0){
+            await this.db`
+                insert into ${sql(schema_name)}.data_versions("table", version, last_modified) values (${table_name}, gen_random_uuid(),CURRENT_TIMESTAMP);
+            `
+        }
     }
 }
 
