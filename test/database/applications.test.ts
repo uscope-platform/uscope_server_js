@@ -57,7 +57,24 @@ describe('applications_database_tests', () => {
 
 
     test('update_application', () => {
-        return db.update_application_field(7, "channels",  {test:13123}).then((res)=>{
+        let updated_app = {
+            id: 7,
+            application_name:'new application_7',
+            bitstream:"",
+            channels:[],
+            channel_groups:[],
+            clock_frequency:100000000,
+            initial_registers_values:[],
+            macro:[],
+            parameters:[],
+            peripherals:[],
+            soft_cores:[],
+            filters:[],
+            programs:[],
+            scripts:[],
+            miscellaneous:{}
+        }
+        return db.update_application_field(updated_app).then((res)=>{
             let i:number = 0;
         })
     });
