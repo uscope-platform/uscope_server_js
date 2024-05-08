@@ -2,7 +2,6 @@ import Router from "koa-router";
 import database from "../../Database/Database";
 import * as Koa from "koa";
 import endpoints_map from "./endpoints_map";
-import filter_model, {filter_edit_model} from "../../data_model/filters_model";
 import emulator_model, {emulator_edit_model} from "../../data_model/emulator_model";
 
 class emulators_router {

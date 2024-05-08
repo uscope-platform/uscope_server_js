@@ -29,10 +29,20 @@ class applications_db {
     }
 
     public async add_application(app:application_model) : Promise<any> {
+        return this.upsert_application(app);
+    }
+
+
+    public async update_application_field(app: application_model): Promise<object> {
+        return this.upsert_application(app);
+    }
+
+
+    private async upsert_application(app:application_model) : Promise<any> {
 
         // @ts-ignore
         const res: any = await this.db`
-            insert into uscope.applications (
+            INSERT INTO uscope.applications (
                 id,
                 application_name, 
                 clock_frequency,
@@ -64,19 +74,23 @@ class applications_db {
                 ${app.filters},
                 ${app.programs},
                 ${app.scripts}
-            )
+            ) ON CONFLICT DO UPDATE SET
+                application_name = EXCLUDED.application_name,
+                clock_frequency = EXCLUDED.clock_frequency,
+                bitstream = EXCLUDED.bitstream,
+                channels = EXCLUDED.channels,
+                channel_groups = EXCLUDED.channel_groups,
+                initial_registers_values = EXCLUDED.initial_registers_values,
+                macro = EXCLUDED.macro,
+                parameters = EXCLUDED.parameters,
+                peripherals = EXCLUDED.peripherals,
+                miscellaneous = EXCLUDED.miscellaneous,
+                soft_cores = EXCLUDED.soft_cores,
+                filters = EXCLUDED.filters,
+                programs = EXCLUDED.programs,
+                scripts = EXCLUDED.scripts;   
         `;
     }
-
-
-    public async update_application_field(id:number, field_name: string, field_value:any) : Promise<object> {
-
-        const res = await this.db`
-            update uscope.applications set ${this.db(field_name)}=${field_value} where id=${id}
-        `;
-        return res[0];
-    }
-
 
     public async remove_application(id:number) : Promise<object> {
         const res = await this.db`

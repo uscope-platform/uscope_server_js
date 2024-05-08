@@ -74,7 +74,7 @@ interface api_map {
             run:string
         }
     },
-    applications:{
+    application:{
         prefix:string,
         endpoints:{
             [index: string]: any;
@@ -164,7 +164,7 @@ let endpoints_map : api_map = {
         }
     },
 
-    applications:{
+    application:{
         prefix:"/application",
         endpoints:{
             hash:"/hash",

@@ -1,7 +1,6 @@
 import Koa from "koa";
-import database from "../../Database/Database";
 import endpoints_map from "../frontend/endpoints_map";
-import authorization_rules, {roles_hierarchy} from "./authorization_rules";
+import  {roles_hierarchy} from "./authorization_rules";
 import rules from "./authorization_rules";
 
 
