@@ -6,7 +6,8 @@ import postgres from "postgres";
 
 describe('db_creation_test', () => {
 
-    let db = new database("localhost", "uscope", "test")
+    let db = new database("localhost", "uscope", "test", "test_schema")
+
     let check_db =postgres({
         host: "localhost",
         port: 5432,
@@ -14,8 +15,9 @@ describe('db_creation_test', () => {
         username: "uscope",
         password:"test"
     });
+
     test('create_db', () => {
-        return db.init_db("test_schema").then(async ()=>{
+        return db.init_db().then(async ()=>{
             let res = await check_db`
                 SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'test_schema';
             `

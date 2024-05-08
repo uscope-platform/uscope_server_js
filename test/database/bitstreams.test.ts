@@ -1,24 +1,22 @@
 import bitstreams_db from "../../src/Database/bitstreams_db";
 import postgres from "postgres";
+import database from "../../src/Database/Database";
 
 
 describe('emulator_database_tests', () => {
-    let db: bitstreams_db = new bitstreams_db(postgres({
-        host: "localhost",
-        port: 5432,
-        database:"uscope",
-        username: "uscope",
-        password:"test"
-    }));
+
+    let db = new database("localhost", "uscope", "test", "test_schema")
+
+    beforeAll(async () =>{await db.init_db()})
 
     test('get_version_test', () => {
-        return db.get_version().then((val:string)=>{
+        return db.bitstreams.get_version().then((val:string)=>{
             let i:number = 0;
         })
     });
 
     test('load_all', () => {
-        return db.load_all().then((res)=>{
+        return db.bitstreams.load_all().then((res)=>{
             let res2 = JSON.stringify(res)
             let i:number = 0;
         })
@@ -27,13 +25,13 @@ describe('emulator_database_tests', () => {
 
 
     test('get_bitstream', () => {
-        return db.get_bitstream(1).then((res)=>{
+        return db.bitstreams.get_bitstream(1).then((res)=>{
             let i:number = 0;
         })
     });
 
     test('add_emulator', () => {
-        return db.add_bitstream({
+        return db.bitstreams.add_bitstream({
             id:77,
             path:'new peripheral_77'
         }).then((res)=>{
@@ -43,16 +41,17 @@ describe('emulator_database_tests', () => {
 
 
     test('update_emulator', () => {
-        return db.update_bitstream_field(77, "path",  "cecca").then((res)=>{
+        return db.bitstreams.update_bitstream_field(77, "path",  "cecca").then((res)=>{
             let i:number = 0;
         })
     });
 
 
     test('remove_emulator', () => {
-        return db.remove_bitstream(77).then((res)=>{
+        return db.bitstreams.remove_bitstream(77).then((res)=>{
             let i:number = 0;
         })
     });
 
+    afterAll(()=> db.close())
 });

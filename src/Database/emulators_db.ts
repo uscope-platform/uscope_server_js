@@ -5,9 +5,11 @@ import emulator_model from "../data_model/emulator_model";
 
 class emulators_db {
     private db: postgres.Sql;
+    private schema: string;
 
-    constructor(d: postgres.Sql) {
+    constructor(d: postgres.Sql, schema: string) {
         this.db = d;
+        this.schema = schema;
     }
 
     public async close(): Promise<void>{
@@ -16,20 +18,20 @@ class emulators_db {
 
     public async get_version(): Promise<string> {
         const res = await this.db`
-            select version from uscope.data_versions where "table"='emulators'
+            select version from ${this.db(this.schema)}.data_versions where "table"='emulators'
         `
         return res[0].version;
     }
 
     public async load_all() : Promise<emulator_model[]> {
         return this.db<emulator_model[]>`
-            select * from uscope.emulators
+            select * from ${this.db(this.schema)}.emulators
         `;
     }
 
     public async get_emulator(id:number) : Promise<emulator_model> {
         const res = await this.db<emulator_model[]>`
-            select * from uscope.emulators where id=${id}
+            select * from ${this.db(this.schema)}.emulators where id=${id}
         `;
         return res[0];
     }
@@ -38,7 +40,7 @@ class emulators_db {
 
         // @ts-ignore
         const res: any = await this.db`
-            insert into uscope.emulators (
+            insert into ${this.db(this.schema)}.emulators (
                 id,
                 name,
                 cores,
@@ -60,7 +62,7 @@ class emulators_db {
     public async update_emulator_field(id:number, field_name: string, field_value:any) : Promise<object> {
 
         const res = await this.db`
-            update uscope.emulators set ${this.db(field_name)}=${field_value} where id=${id}
+            update ${this.db(this.schema)}.emulators set ${this.db(field_name)}=${field_value} where id=${id}
         `;
         return res[0];
     }
@@ -68,7 +70,7 @@ class emulators_db {
 
     public async remove_emulator(id:number) : Promise<object> {
         const res = await this.db`
-            delete from uscope.emulators where id=${id}
+            delete from ${this.db(this.schema)}.emulators where id=${id}
         `;
         return res[0];
     }

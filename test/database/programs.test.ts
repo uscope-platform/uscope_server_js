@@ -1,26 +1,23 @@
 
 import postgres from "postgres";
 import programs_db from "../../src/Database/programs_db";
+import database from "../../src/Database/Database";
 
 
 
 describe('programs_database_tests', () => {
-    let db: programs_db = new programs_db(postgres({
-        host: "localhost",
-        port: 5432,
-        database:"uscope",
-        username: "uscope",
-        password:"test"
-    }));
+    let db = new database("localhost", "uscope", "test", "test_schema")
+
+    beforeAll(async () =>{await db.init_db()})
 
     test('get_version_test', () => {
-        return db.get_version().then((val:string)=>{
+        return db.programs.get_version().then((val:string)=>{
             let i:number = 0;
         })
     });
 
     test('load_all', () => {
-        return db.load_all().then((res)=>{
+        return db.programs.load_all().then((res)=>{
             let res2 = JSON.stringify(res)
             let i:number = 0;
         })
@@ -29,13 +26,13 @@ describe('programs_database_tests', () => {
 
 
     test('get_program', () => {
-        return db.get_program(1).then((res)=>{
+        return db.programs.get_program(1).then((res)=>{
             let i:number = 0;
         })
     });
 
     test('add_program', () => {
-        return db.add_program({
+        return db.programs.add_program({
             id:77,
             name:'new program_77',
             content:'',
@@ -57,16 +54,17 @@ describe('programs_database_tests', () => {
 
 
     test('update_program', () => {
-        return db.update_program_field(77, "cached_bin_version",  "test.js").then((res)=>{
+        return db.programs.update_program_field(77, "cached_bin_version",  "test.js").then((res)=>{
             let i:number = 0;
         })
     });
 
 
     test('remove_program', () => {
-        return db.remove_program(77).then((res)=>{
+        return db.programs.remove_program(77).then((res)=>{
             let i:number = 0;
         })
     });
 
+    afterAll(()=> db.close())
 });

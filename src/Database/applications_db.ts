@@ -3,9 +3,11 @@ import {application_model} from "../data_model/application_model";
 
 class applications_db {
     private db: postgres.Sql;
+    private schema: string;
 
-    constructor(d: postgres.Sql) {
+    constructor(d: postgres.Sql, schema: string) {
         this.db = d;
+        this.schema = schema;
     }
 
     public async close(): Promise<void>{
@@ -14,20 +16,20 @@ class applications_db {
 
     public async get_version(): Promise<string> {
         const res = await this.db`
-            select version from uscope.data_versions where "table"='Applications'
+            select version from ${this.db(this.schema)}.data_versions where "table"='Applications'
         `
         return res[0].version;
     }
 
     public async load_all() : Promise<application_model[]> {
         return this.db<application_model[]>`
-            select * from uscope.applications
+            select * from ${this.db(this.schema)}.applications
         `;
     }
 
     public async get_application(id:number) : Promise<application_model> {
         const res = await this.db<application_model[]>`
-            select * from uscope.applications where id=${id}
+            select * from ${this.db(this.schema)}.applications where id=${id}
         `;
         return res[0];
     }
@@ -46,7 +48,7 @@ class applications_db {
 
         // @ts-ignore
         const res: any = await this.db`
-            INSERT INTO uscope.applications (
+            INSERT INTO ${this.db(this.schema)}.applications (
                 id,
                 application_name, 
                 clock_frequency,
@@ -98,7 +100,7 @@ class applications_db {
 
     public async remove_application(id:number) : Promise<object> {
         const res = await this.db`
-            delete from uscope.applications where id=${id}
+            delete from ${this.db(this.schema)}.applications where id=${id}
         `;
         return res[0];
     }
