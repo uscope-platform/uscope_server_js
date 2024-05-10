@@ -1,9 +1,6 @@
 import database from "../../src/Database/Database";
-import postgres from "postgres";
 import program_model from "../../src/data_model/program_model";
-import exp = require("node:constants");
 import {expect} from "@jest/globals";
-import {getRawAsset} from "node:sea";
 
 
 
@@ -45,14 +42,6 @@ describe('programs_database_tests', () => {
     ]
 
     let db = new database("localhost", "uscope", "test", "test_schema")
-
-    let check_db =postgres({
-        host: "localhost",
-        port: 5432,
-        database:"uscope",
-        username: "uscope",
-        password:"test"
-    });
 
 
     beforeAll(async () =>{await db.init_db()})
@@ -105,7 +94,6 @@ describe('programs_database_tests', () => {
 
     afterAll(async ()=> {
         await db.delete_database();
-        check_db.end();
         db.close()
     })
 });

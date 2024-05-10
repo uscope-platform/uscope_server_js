@@ -1,6 +1,3 @@
-
-import postgres from "postgres";
-import peripherals_db from "../../src/Database/peripherals_db";
 import database from "../../src/Database/Database";
 
 

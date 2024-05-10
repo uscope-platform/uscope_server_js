@@ -65,6 +65,13 @@ class bitstreams_db {
         return res[0];
     }
 
+    public async bitstream_exists(id:number) : Promise<boolean> {
+        let res = await this.db`
+            SELECT EXISTS(SELECT 1 FROM ${this.db(this.schema)}.bitstreams WHERE id=${id})
+        `
+        return res[0].exists;
+    }
+
 }
 
 export default bitstreams_db;

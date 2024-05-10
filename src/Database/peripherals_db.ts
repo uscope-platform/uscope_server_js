@@ -72,7 +72,12 @@ class peripherals_db {
         return res[0];
     }
 
-
+    public async peripheral_exists(id:number) : Promise<boolean> {
+        let res = await this.db`
+            SELECT EXISTS(SELECT 1 FROM ${this.db(this.schema)}.peripherals WHERE id=${id})
+        `
+        return res[0].exists;
+    }
 }
 
 export default peripherals_db;

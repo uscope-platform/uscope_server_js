@@ -80,6 +80,13 @@ class scripts_db {
         return res[0];
     }
 
+    public async script_exists(id:number) : Promise<boolean> {
+        let res = await this.db`
+            SELECT EXISTS(SELECT 1 FROM ${this.db(this.schema)}.scripts WHERE id=${id})
+        `
+        return res[0].exists;
+    }
+
 
 }
 

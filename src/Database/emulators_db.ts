@@ -75,6 +75,13 @@ class emulators_db {
         return res[0];
     }
 
+    public async emulator_exists(id:number) : Promise<boolean> {
+        let res = await this.db`
+            SELECT EXISTS(SELECT 1 FROM ${this.db(this.schema)}.emulators WHERE id=${id})
+        `
+        return res[0].exists;
+    }
+
 
 }
 

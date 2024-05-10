@@ -1,6 +1,3 @@
-
-import postgres from "postgres";
-import platform_db from "../../src/Database/platform_db";
 import database from "../../src/Database/Database";
 
 

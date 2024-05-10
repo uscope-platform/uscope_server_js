@@ -72,7 +72,12 @@ class filters_db {
         return res[0];
     }
 
-
+    public async filter_exists(id:number) : Promise<boolean> {
+        let res = await this.db`
+            SELECT EXISTS(SELECT 1 FROM ${this.db(this.schema)}.filters WHERE id=${id})
+        `
+        return res[0].exists;
+    }
 
 }
 

@@ -1,6 +1,5 @@
 import database from "../../src/Database/Database";
 import {expect} from "@jest/globals";
-import postgres from "postgres";
 
 
 
@@ -45,14 +44,6 @@ describe('applications_database_tests',  () => {
 
     let db = new database("localhost", "uscope", "test", "test_schema")
 
-    let check_db =postgres({
-        host: "localhost",
-        port: 5432,
-        database:"uscope",
-        username: "uscope",
-        password:"test"
-    });
-
     beforeAll(async () =>{await db.init_db()})
 
     test('get_version_test', async () => {
@@ -67,11 +58,8 @@ describe('applications_database_tests',  () => {
 
     test('add_application', async () => {
         await db.applications.add_application(apps[0]);
-        let res = await check_db`
-                 select  * from test_schema.applications where id=1;
-        `
-        res[0].clock_frequency = parseInt(res[0].clock_frequency)
-        expect(res[0]).toEqual(apps[0]);
+        let res = await db.applications.get_application(1);
+        expect(res).toEqual(apps[0]);
     });
 
     test('load_all', async () => {
@@ -113,15 +101,12 @@ describe('applications_database_tests',  () => {
 
     test('remove_application', async () => {
         await db.applications.remove_application(2);
-        let res = await check_db`
-            SELECT EXISTS(SELECT 1 FROM test_schema.applications WHERE id=2)
-        `
-        expect(res[0].exists).toBeFalsy();
+        let res = await db.applications.application_exists(2)
+        expect(res).toBeFalsy();
     });
 
     afterAll(async ()=> {
         await db.delete_database();
         db.close()
-        check_db.end()
     })
 });

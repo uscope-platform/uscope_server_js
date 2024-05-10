@@ -1,4 +1,3 @@
-import postgres from "postgres";
 import database from "../../src/Database/Database";
 import {expect} from "@jest/globals";
 import script_model from "../../src/data_model/script_model";
@@ -26,14 +25,6 @@ describe('script_database_tests', () => {
 
     let db = new database("localhost", "uscope", "test", "test_schema")
 
-    let check_db =postgres({
-        host: "localhost",
-        port: 5432,
-        database:"uscope",
-        username: "uscope",
-        password:"test"
-    });
-
     beforeAll(async () =>{await db.init_db()})
 
     test('get_version_test', async () => {
@@ -48,12 +39,8 @@ describe('script_database_tests', () => {
 
     test('add_script', async () => {
         await db.scripts.add_script(scripts[0]);
-        let res = await check_db`
-                 select  * from test_schema.scripts where id=1;
-        `
-        res[0].script_content = res[0].content;
-        delete res[0].content
-        expect(res[0]).toEqual(scripts[0]);
+        let res = await db.scripts.get_script(1);
+        expect(res).toEqual(scripts[0]);
     });
 
 
@@ -80,15 +67,12 @@ describe('script_database_tests', () => {
 
     test('remove_script', async () => {
         await db.scripts.remove_script(2);
-        let res = await check_db`
-            SELECT EXISTS(SELECT 1 FROM test_schema.scripts WHERE id=2)
-        `
-        expect(res[0].exists).toBeFalsy();
+        let res = await db.scripts.script_exists(2);
+        expect(res).toBeFalsy();
     });
 
     afterAll(async ()=> {
         await db.delete_database();
         db.close()
-        check_db.end();
     })
 });

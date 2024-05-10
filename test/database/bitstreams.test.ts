@@ -1,5 +1,3 @@
-import bitstreams_db from "../../src/Database/bitstreams_db";
-import postgres from "postgres";
 import database from "../../src/Database/Database";
 
 

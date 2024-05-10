@@ -115,6 +115,12 @@ class applications_db {
         return res[0];
     }
 
+    public async application_exists(id:number) : Promise<boolean> {
+        let res = await this.db`
+            SELECT EXISTS(SELECT 1 FROM ${this.db(this.schema)}.applications WHERE id=${id})
+        `
+        return res[0].exists;
+    }
 }
 
 export default applications_db;
