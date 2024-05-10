@@ -4,7 +4,7 @@ export interface application_model {
     [index: string]: any;
     id:number
     application_name:string
-    clock_frequency:number | string,
+    clock_frequency:number,
     bitstream:string,
     channels:object,
     channel_groups:object,

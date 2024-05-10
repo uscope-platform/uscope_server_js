@@ -22,16 +22,26 @@ class applications_db {
     }
 
     public async load_all() : Promise<application_model[]> {
-        return this.db<application_model[]>`
+        let res = await this.db`
             select * from ${this.db(this.schema)}.applications
         `;
+
+         let converted_res =<application_model[]><unknown>res.map((app)=>{
+             if (typeof app.clock_frequency === "string") {
+                 app.clock_frequency = parseInt(app.clock_frequency)
+             }
+            return app;
+        })
+        return converted_res;
     }
 
     public async get_application(id:number) : Promise<application_model> {
-        const res = await this.db<application_model[]>`
+        const res = await this.db`
             select * from ${this.db(this.schema)}.applications where id=${id}
         `;
-        return res[0];
+
+        res[0].clock_frequency = parseInt(res[0].clock_frequency)
+        return <application_model>res[0];
     }
 
     public async add_application(app:application_model) : Promise<any> {

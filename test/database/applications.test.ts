@@ -1,7 +1,6 @@
 import database from "../../src/Database/Database";
 import {expect} from "@jest/globals";
 import postgres from "postgres";
-import {application_model} from "../../src/data_model/application_model";
 
 
 
@@ -14,7 +13,7 @@ describe('applications_database_tests',  () => {
             bitstream:"",
             channels:[],
             channel_groups:[],
-            clock_frequency:"100000000",
+            clock_frequency:100000000,
             initial_registers_values:[],
             macro:[],
             parameters:[],
@@ -31,7 +30,7 @@ describe('applications_database_tests',  () => {
             bitstream:"",
             channels:[],
             channel_groups:[],
-            clock_frequency:"100000000",
+            clock_frequency:100000000,
             initial_registers_values:[],
             macro:[],
             parameters:[],
@@ -72,6 +71,7 @@ describe('applications_database_tests',  () => {
         let res = await check_db`
                  select  * from test_schema.applications where id=1;
         `
+        res[0].clock_frequency = parseInt(res[0].clock_frequency)
         expect(res[0]).toEqual(apps[0]);
     });
 
@@ -96,7 +96,7 @@ describe('applications_database_tests',  () => {
             bitstream:"test_bitstream.bit",
             channels:[],
             channel_groups:[],
-            clock_frequency:"100000000",
+            clock_frequency:100000000,
             initial_registers_values:[],
             macro:[],
             parameters:[],
