@@ -80,7 +80,7 @@ class applications_db {
                 ${app.filters},
                 ${app.programs},
                 ${app.scripts}
-            ) ON CONFLICT DO UPDATE SET
+            ) ON CONFLICT(id) DO UPDATE SET
                 application_name = EXCLUDED.application_name,
                 clock_frequency = EXCLUDED.clock_frequency,
                 bitstream = EXCLUDED.bitstream,

@@ -1,16 +1,58 @@
-
-
-import applications_db from "../../src/Database/applications_db";
-import postgres from "postgres";
 import database from "../../src/Database/Database";
 import {expect} from "@jest/globals";
-import {before} from "node:test";
+import postgres from "postgres";
+import {application_model} from "../../src/data_model/application_model";
 
 
 
 describe('applications_database_tests',  () => {
 
+    let apps = [
+        {
+            id: 1,
+            application_name:'new application_7',
+            bitstream:"",
+            channels:[],
+            channel_groups:[],
+            clock_frequency:"100000000",
+            initial_registers_values:[],
+            macro:[],
+            parameters:[],
+            peripherals:[],
+            soft_cores:[],
+            filters:[],
+            programs:[],
+            scripts:[],
+            miscellaneous:{}
+        },
+        {
+            id: 2,
+            application_name:'new application_2',
+            bitstream:"",
+            channels:[],
+            channel_groups:[],
+            clock_frequency:"100000000",
+            initial_registers_values:[],
+            macro:[],
+            parameters:[],
+            peripherals:[],
+            soft_cores:[],
+            filters:[],
+            programs:[],
+            scripts:[],
+            miscellaneous:{}
+        }
+    ]
+
     let db = new database("localhost", "uscope", "test", "test_schema")
+
+    let check_db =postgres({
+        host: "localhost",
+        port: 5432,
+        database:"uscope",
+        username: "uscope",
+        password:"test"
+    });
 
     beforeAll(async () =>{await db.init_db()})
 
@@ -25,50 +67,36 @@ describe('applications_database_tests',  () => {
        })
     });
 
-    test('load_all', () => {
-        return db.applications.load_all().then((res)=>{
-            let res2 = JSON.stringify(res)
-            let i:number = 0;
-        })
+    test('add_application', async () => {
+        await db.applications.add_application(apps[0]);
+        let res = await check_db`
+                 select  * from test_schema.applications where id=1;
+        `
+        expect(res[0]).toEqual(apps[0]);
     });
 
-    test('get_application', () => {
-        return db.applications.get_application(1).then((res)=>{
-            let i:number = 0;
-        })
+    test('load_all', async () => {
+        await db.applications.add_application(apps[1]);
+        let res = await db.applications.load_all();
+
+        expect(res).toEqual(apps);
+
     });
 
-    test('add_application', () => {
-        return db.applications.add_application({
-            id: 7,
-            application_name:'new application_7',
-            bitstream:"",
-            channels:[],
-            channel_groups:[],
-            clock_frequency:100000000,
-            initial_registers_values:[],
-            macro:[],
-            parameters:[],
-            peripherals:[],
-            soft_cores:[],
-            filters:[],
-            programs:[],
-            scripts:[],
-            miscellaneous:{}
-        }).then((res)=>{
-            let i:number = 0;
-        })
+    test('get_application', async () => {
+        let res = await db.applications.get_application(2);
+        expect(res).toEqual(apps[1]);
+
     });
 
-
-    test('update_application', () => {
+    test('update_application', async () => {
         let updated_app = {
-            id: 7,
+            id: 1,
             application_name:'new application_7',
-            bitstream:"",
+            bitstream:"test_bitstream.bit",
             channels:[],
             channel_groups:[],
-            clock_frequency:100000000,
+            clock_frequency:"100000000",
             initial_registers_values:[],
             macro:[],
             parameters:[],
@@ -79,17 +107,22 @@ describe('applications_database_tests',  () => {
             scripts:[],
             miscellaneous:{}
         }
-        return db.applications.update_application_field(updated_app).then((res)=>{
-            let i:number = 0;
-        })
+        await db.applications.update_application_field(updated_app);
+        let res = await db.applications.get_application(1);
+        expect(res).toEqual(updated_app);
     });
 
 
-    test('remove_application', () => {
-        return db.applications.remove_application(7).then((res)=>{
-            let i:number = 0;
-        })
+    test('remove_application', async () => {
+        await db.applications.remove_application(2);
+        let res = await check_db`
+            SELECT EXISTS(SELECT 1 FROM test_schema.applications WHERE id=2)
+        `
+        expect(res[0].exists).toBeFalsy();
     });
 
-    afterAll(()=> db.close())
+    afterAll(()=> {
+        db.close()
+        check_db.end()
+    })
 });
