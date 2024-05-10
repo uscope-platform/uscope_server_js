@@ -23,17 +23,27 @@ class programs_db {
     }
 
     public async load_all() : Promise<program_model[]> {
-        return this.db<program_model[]>`
+        let res = await this.db`
             select * from ${this.db(this.schema)}.programs
         `;
+
+        return <program_model[]> res.map((prg)=>{
+            prg.hex = prg.hex.map((val:string)=>{
+                return parseInt(val);
+            })
+            return prg;
+        })
     }
 
 
     public async get_program(id:number) : Promise<program_model> {
-        const res = await this.db<program_model[]>`
+        const res = await this.db`
             select * from ${this.db(this.schema)}.programs where id=${id}
         `;
-        return res[0];
+        res[0].hex = res[0].hex.map((val:string)=>{
+            return parseInt(val);
+        })
+        return <program_model>res[0];
     }
 
     public async add_program(app:program_model) : Promise<any> {
@@ -79,6 +89,12 @@ class programs_db {
         return res[0];
     }
 
+    public async program_exists(id:number) : Promise<boolean> {
+        let res = await this.db`
+            SELECT EXISTS(SELECT 1 FROM ${this.db(this.schema)}.programs WHERE id=${id})
+        `
+        return res[0].exists;
+    }
 
 }
 

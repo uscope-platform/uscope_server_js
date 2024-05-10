@@ -78,7 +78,7 @@ describe('script_database_tests', () => {
     });
 
 
-    test('remove_application', async () => {
+    test('remove_script', async () => {
         await db.scripts.remove_script(2);
         let res = await check_db`
             SELECT EXISTS(SELECT 1 FROM test_schema.scripts WHERE id=2)
