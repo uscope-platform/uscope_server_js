@@ -4,8 +4,7 @@ export default interface emulator_model {
     name:string,
     cores:object,
     connections:object[],
-    n_cycles:number,
-    async_multirate:boolean
+    n_cycles:number
 }
 
 

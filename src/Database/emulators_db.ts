@@ -45,15 +45,13 @@ class emulators_db {
                 name,
                 cores,
                 connections,
-                n_cycles,
-                async_multirate
+                n_cycles
             ) values (
                 ${app.id},
                 ${app.name},
                 ${app.cores},
                 ${app.connections},
-                ${app.n_cycles},
-                ${app.async_multirate}
+                ${app.n_cycles}
             )
         `;
     }

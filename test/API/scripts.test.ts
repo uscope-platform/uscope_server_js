@@ -66,7 +66,7 @@ describe('script tests', () => {
     app.use(rtr.router.routes())
     app.use(rtr.router.allowedMethods());
 
-    let server = app.listen(3000);
+    let server = app.listen(3002);
     
     let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTQwNDQ4NjJ9.3FCjAmBgEUuAlFqL7goWpwuu0OH6ldyTA--BLjyzIOE";
 

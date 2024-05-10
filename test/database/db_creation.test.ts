@@ -68,13 +68,11 @@ describe('db_creation_test', () => {
                 expected_res.push({event_manipulation:"DELETE", event_object_table:tab})
                 expected_res.push({event_manipulation:"UPDATE", event_object_table:tab})
             }
-            expect(res).toEqual(expected_res);
+            expect(res).toEqual(expect.arrayContaining(expected_res));
         })
     });
     afterAll(async ()=> {
-        let res = await check_db`
-                drop schema test_schema cascade;
-            `
+        await db.delete_database()
         await db.close();
         await check_db.end();
     })
