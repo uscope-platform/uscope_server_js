@@ -55,15 +55,14 @@ describe('applications_database_tests',  () => {
 
     beforeAll(async () =>{await db.init_db()})
 
-    test('get_version_test', () => {
-       return db.applications.get_version().then((val:string)=>{
-           let uuid  = val.replaceAll("-", "");
+    test('get_version_test', async () => {
+        let res = await  db.applications.get_version();
+        let uuid  = res.replaceAll("-", "");
 
-           const isHEX = (ch:string) => "0123456789abcdef".includes(ch.toLowerCase());
+        const isHEX = (ch:string) => "0123456789abcdef".includes(ch.toLowerCase());
 
-           expect(uuid.length).toBe(32)
-           expect([...uuid].every(isHEX)).toBeTruthy()
-       })
+        expect(uuid.length).toBe(32)
+        expect([...uuid].every(isHEX)).toBeTruthy()
     });
 
     test('add_application', async () => {
@@ -78,7 +77,6 @@ describe('applications_database_tests',  () => {
     test('load_all', async () => {
         await db.applications.add_application(apps[1]);
         let res = await db.applications.load_all();
-
         expect(res).toEqual(apps);
 
     });
@@ -121,7 +119,8 @@ describe('applications_database_tests',  () => {
         expect(res[0].exists).toBeFalsy();
     });
 
-    afterAll(()=> {
+    afterAll(async ()=> {
+        await db.delete_database();
         db.close()
         check_db.end()
     })

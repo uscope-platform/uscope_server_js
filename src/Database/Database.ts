@@ -450,9 +450,9 @@ class database {
         return
     }
 
-    public async delete_database(schema_name:string):Promise<void>{
+    public async delete_database():Promise<void>{
         await this.db`
-                drop schema ${sql(schema_name)} cascade;
+                drop schema ${sql(this.schema)} cascade;
             `
     }
 

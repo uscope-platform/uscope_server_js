@@ -23,17 +23,24 @@ class scripts_db {
     }
 
     public async load_all() : Promise<script_model[]> {
-        return this.db<script_model[]>`
+        let raw_res = await this.db`
             select * from ${this.db(this.schema)}.scripts
         `;
+        return <script_model[]> raw_res.map((scr)=>{
+            scr.script_content = scr.content;
+            delete scr.content;
+            return scr;
+        })
     }
 
 
     public async get_script(id:number) : Promise<script_model> {
-        const res = await this.db<script_model[]>`
+        const raw_res = await this.db`
             select * from ${this.db(this.schema)}.scripts where id=${id}
         `;
-        return res[0];
+        raw_res[0].script_content = raw_res[0].content;
+        delete raw_res[0].content;
+        return <script_model> raw_res[0];
     }
 
     public async add_script(app:script_model) : Promise<any> {

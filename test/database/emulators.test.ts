@@ -1,6 +1,3 @@
-
-import postgres from "postgres";
-import emulators_db from "../../src/Database/emulators_db";
 import database from "../../src/Database/Database";
 
 
