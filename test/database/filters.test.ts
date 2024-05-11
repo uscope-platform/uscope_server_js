@@ -50,25 +50,23 @@ describe('filters_database_tests', () => {
         expect(res).toStrictEqual(flt);
     });
 
-    test('get_filter', () => {
-        return db.filters.get_filter(1).then((res)=>{
-            let i:number = 0;
-        })
+    test('get_filter', async () => {
+        let res = await db.filters.get_filter(73);
+        expect(res).toStrictEqual(flt[1]);
     });
 
 
-    test('update_filter' +
-        '', () => {
-        return db.filters.update_filter_field(73, "parameters",  {test:13123}).then((res)=>{
-            let i:number = 0;
-        })
+    test('update_filter', async () => {
+        await db.filters.update_filter_field(73, "parameters", {test:13123});
+        let res = await db.filters.get_filter(73);
+        expect(res.parameters).toStrictEqual({test:13123});
     });
 
 
-    test('remove_filter', () => {
-        return db.filters.remove_filter(73).then((res)=>{
-            let i:number = 0;
-        })
+    test('remove_filter', async () => {
+        await db.filters.remove_filter(73);
+        let res = await db.filters.filter_exists(73)
+        expect(res).toBeFalsy();
     });
 
     afterAll(async ()=> {
