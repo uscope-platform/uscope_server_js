@@ -126,7 +126,7 @@ class database {
         if(res){
             await this.db`
                 alter table ${sql(this.schema)}.login_tokens add
-                    username  text constraint login_tokens_users_username_fk references users on update cascade on delete cascade
+                    username  text constraint login_tokens_users_username_fk references ${sql(this.schema)}.users on update cascade on delete cascade
             `
             await this.db`
                 alter table ${sql(this.schema)}.login_tokens add expiry    timestamp

@@ -45,6 +45,12 @@ class platform_db {
         return ;
     }
 
+    public async user_exists(username:string): Promise<boolean> {
+        const res = await this.db`
+            select EXISTS(select * from ${this.db(this.schema)}.users where username= ${username})
+        `
+        return res[0].exists;
+    }
     public async add_auto_token(username:string, token: auto_login_object): Promise<any> {
         const res = await this.db`
             insert into ${this.db(this.schema)}.login_tokens (username,selector, validator, expiry) values
@@ -53,10 +59,11 @@ class platform_db {
         return ;
     }
 
-    public async get_auto_token(selector:string):Promise<Row[]> {
-        return this.db`
+    public async get_auto_token(selector:string):Promise<auto_login_object> {
+        let ret =  await this.db`
             select * from ${this.db(this.schema)}.login_tokens where selector = ${selector}
         `;
+        return <auto_login_object>ret[0];
     }
 
     public async has_users():Promise<boolean>{
