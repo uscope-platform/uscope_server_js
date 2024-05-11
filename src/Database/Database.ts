@@ -334,6 +334,11 @@ class database {
             `
 
             await this.db`
+                alter table ${sql(this.schema)}.bitstreams
+                    add hash text;
+            `
+
+            await this.db`
                 create unique index bitstreams_id_index on ${sql(this.schema)}.bitstreams (id);
             `
             await this.db`

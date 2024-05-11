@@ -98,7 +98,7 @@ describe('bitstream API tests', () => {
                 expect(response.status).toBe(200);
                 expect(response.body.id).toBe(bitstreams[0].id);
                 expect(response.body.path).toBe(bitstreams[0].path);
-                let res = new Buffer(response.body.data.data);
+                let res = Buffer.alloc(response.body.data.data);
                 expect(bitstreams[0].data.equals(res)).toBeTruthy();
             });
     });
@@ -117,7 +117,7 @@ describe('bitstream API tests', () => {
                 expect(response.status).toBe(200);
                 expect(results.id).toBe(bitstream_obj.id);
                 expect(results.path).toBe(bitstream_obj.path);
-                let res = new Buffer(results.data.data);
+                let res = Buffer.alloc(results.data.data);
                 expect(bitstream_obj.data.equals(res)).toBeTruthy();
             });
     });

@@ -2,21 +2,24 @@ import database from "../../src/Database/Database";
 import bitstream_model from "../../src/data_model/bitstreams_model";
 import {expect} from "@jest/globals";
 import * as fs from "node:fs";
+import {createHash} from "node:crypto";
 
 
 describe('bitstreams_database_tests', () => {
     let data = fs.readFileSync(__dirname + "/../data/mock.bit");
-
+    let hash = createHash('sha256').update(data).digest('hex');
     let bit: bitstream_model[] = [
         {
             id:1,
             path:'test_1',
-            data: data
+            data: data,
+            hash: hash
         },
         {
             id:2,
             path:'test_2',
-            data: data
+            data: data,
+            hash: hash
         }
     ]
 
@@ -42,6 +45,7 @@ describe('bitstreams_database_tests', () => {
         expect(res.id).toBe(bit[0].id)
         expect(res.path).toBe(bit[0].path)
         expect(res.data.equals(bit[0].data)).toBeTruthy();
+        expect(res.hash).toBe(bit[0].hash)
     });
 
     test('load_all', async () => {
@@ -51,10 +55,12 @@ describe('bitstreams_database_tests', () => {
         expect(res[0].id).toBe(bit[0].id)
         expect(res[0].path).toBe(bit[0].path)
         expect(res[0].data.equals(bit[0].data)).toBeTruthy();
+        expect(res[0].hash).toBe(bit[0].hash)
 
         expect(res[1].id).toBe(bit[1].id)
         expect(res[1].path).toBe(bit[1].path)
         expect(res[1].data.equals(bit[0].data)).toBeTruthy();
+        expect(res[1].hash).toBe(bit[1].hash)
 
     });
 
@@ -64,6 +70,7 @@ describe('bitstreams_database_tests', () => {
         expect(res.id).toBe(bit[1].id)
         expect(res.path).toBe(bit[1].path)
         expect(res.data.equals(bit[1].data)).toBeTruthy();
+        expect(res.hash).toBe(bit[1].hash)
     });
 
 
@@ -79,7 +86,7 @@ describe('bitstreams_database_tests', () => {
         let res = await db.bitstreams.bitstream_exists(2);
         expect(res).toBeFalsy();
     });
-    
+
     afterAll(async ()=> {
         await db.delete_database();
         db.close();

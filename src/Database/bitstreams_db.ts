@@ -1,5 +1,6 @@
 import postgres from "postgres";
 import bitstream_model from "../data_model/bitstreams_model";
+import {createHash} from "node:crypto";
 
 class bitstreams_db {
     private db: postgres.Sql;
@@ -36,16 +37,20 @@ class bitstreams_db {
 
     public async add_bitstream(bit:bitstream_model) : Promise<any> {
 
+        let file_hash = createHash('sha256').update(bit.data).digest('hex');
+
         // @ts-ignore
         const res: any = await this.db`
             insert into ${this.db(this.schema)}.bitstreams (
                 id,
                 path,
-                data
+                data,
+                hash
             ) values (
                 ${bit.id},
                 ${bit.path},
-                ${bit.data}
+                ${bit.data}, 
+                ${file_hash}
             )
         `;
     }
