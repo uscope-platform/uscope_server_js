@@ -59,11 +59,10 @@ class platform_db {
         return ;
     }
 
-    public async get_auto_token(selector:string):Promise<auto_login_object> {
-        let ret =  await this.db`
+    public async get_auto_token(selector:string):Promise<Row[]> {
+        return await this.db`
             select * from ${this.db(this.schema)}.login_tokens where selector = ${selector}
         `;
-        return <auto_login_object>ret[0];
     }
 
     public async has_users():Promise<boolean>{

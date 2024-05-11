@@ -47,9 +47,9 @@ describe('platform_database_tests', () => {
 
         await db.platform.add_auto_token("admin", token);
         let res = await db.platform.get_auto_token(token.selector);
-        expect(res.selector).toBe(token.selector);
-        expect(res.validator).toBe(token.validator)
-        let res_epoch = new Date(res.expiry).getTime() - new Date(res.expiry).getTimezoneOffset()*60*1000
+        expect(res[0].selector).toBe(token.selector);
+        expect(res[0].validator).toBe(token.validator)
+        let res_epoch = new Date(res[0].expiry).getTime() - new Date(res[0].expiry).getTimezoneOffset()*60*1000
         expect(res_epoch).toBe(token.expiry);
     });
 
