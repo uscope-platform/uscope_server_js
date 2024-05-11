@@ -15,36 +15,50 @@ interface user_add_request {
 class platform_router {
     public router: Router;
     private auth: Authenticator;
+    private db: database;
 
     constructor(secret:string, db: database) {
         this.auth = new Authenticator(secret, db)
+        this.db = db;
         this.router = new Router({
             prefix: endpoints_map.platform.prefix
         });
 
+        this.router.get(endpoints_map.platform.endpoints.get_users, async (ctx:Koa.Context, next:Koa.Next) => {
+            ctx.body = await this.db.platform.load_all();
+            ctx.status = 200;
+            next();
+        });
+
+        this.router.get(endpoints_map.platform.endpoints.onboarding, async (ctx:Koa.Context, next: Koa.Next)=>{
+            ctx.body = !(await this.db.platform.has_users());
+            ctx.status = 200;
+            next();
+        })
+
         this.router.post(endpoints_map.platform.endpoints.add_user, async (ctx:Koa.Context, next:Koa.Next) => {
             let body = <user_add_request>ctx.request.body;
 
-            await this.auth.create_user(body.user, body.password, body.role)
-            ctx.status = 200
+            await this.auth.create_user(body.user, body.password, body.role);
+            ctx.status = 200;
             next();
         });
 
         this.router.delete(endpoints_map.platform.endpoints.remove_user, async (ctx:Koa.Context, next:Koa.Next) => {
-            await this.auth.remove_user(ctx.params.name)
-            ctx.status = 200
+            await this.auth.remove_user(ctx.params.name);
+            ctx.status = 200;
             next();
         });
 
         this.router.post(endpoints_map.platform.endpoints.manual_login, async (ctx:Koa.Context, next:Koa.Next) =>{
             let body = <user_login_object>ctx.request.body;
-            ctx.body = await this.auth.authenticate(body)
+            ctx.body = await this.auth.authenticate(body);
             ctx.status = 200;
         })
 
         this.router.post(endpoints_map.platform.endpoints.auto_login, async (ctx:Koa.Context, next:Koa.Next) =>{
             let body = <auto_login_object>ctx.request.body;
-            ctx.body = await this.auth.authenticate(body)
+            ctx.body = await this.auth.authenticate(body);
             ctx.status = 200;
         })
     }

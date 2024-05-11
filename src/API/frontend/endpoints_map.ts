@@ -44,6 +44,8 @@ interface api_map {
         endpoints:{
             [index: string]: any;
             add_user:string,
+            get_users:string,
+            onboarding: string,
             remove_user:string,
             manual_login:string,
             auto_login:string
@@ -140,14 +142,15 @@ let endpoints_map : api_map = {
             compile:"/compile"
         }
     },
-
     platform:{
         prefix:"/platform",
         endpoints:{
             add_user:'/user',
+            get_users:'/user',
             remove_user:'/user/:name',
             manual_login:'/login/manual',
-            auto_login:'/login/auto'
+            auto_login:'/login/auto',
+            onboarding: '/onboarding'
         }
     },
 
@@ -201,5 +204,4 @@ let endpoints_map : api_map = {
         }
     }
 }
-
 export default endpoints_map

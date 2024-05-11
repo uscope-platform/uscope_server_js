@@ -9,7 +9,6 @@ import {authorizer, error_handler} from "../../src/API/backend/middleware";
 import jwt from "koa-jwt";
 
 
-
 describe('platform API tests', () => {
 
 
@@ -36,6 +35,9 @@ describe('platform API tests', () => {
                     role:"admin"
                 }
             },
+            load_all:():any[] =>{
+                return[ {username:"admin", role:"admin"},{username:"user", role:"user"} ]
+            },
             add_auto_token:(user:string, token:object) =>{
                 tokens = JSON.parse(JSON.stringify({user:user, token:token}));
             },
@@ -45,6 +47,9 @@ describe('platform API tests', () => {
                     "expiry": 171658415100,
                     "validator": "14f1097418691f37690a06cb947bafee0f1912aa5f7e228e72f902e55da5af5a"
                 }]
+            },
+            has_users:()=>{
+                return false
             }
         }
     } as any as database
@@ -83,6 +88,26 @@ describe('platform API tests', () => {
             expect(response.status).toBe(200);
             expect(results.username).toBe("test_delete");
         });
+    });
+
+    test('load_all users', async () => {
+        return request(app.callback())
+            .get('/platform/user')
+            .set('Authorization', `Bearer ${bearer_token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(response.body).toStrictEqual( [{username:"admin", role:"admin"}, {username:"user", role:"user"}]);
+            });
+    });
+
+    test('onboarding', async () => {
+        return request(app.callback())
+            .get('/platform/onboarding')
+            .set('Authorization', `Bearer ${bearer_token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(response.body).toBeTruthy();
+            });
     });
 
 

@@ -22,6 +22,15 @@ class platform_db {
         return res[0];
     }
 
+    public async load_all(): Promise<any[]> {
+        const res = await this.db<user_model[]>`
+            select * from ${this.db(this.schema)}.users
+        `
+        return res.map((user:user_model)=>{
+            return {username:user.username, role:user.role};
+        });
+    }
+
     public async add_user(username:string, pw_hash:string, role:string): Promise<any> {
         const res = await this.db`
             insert into ${this.db(this.schema)}.users (username, pw_hash, role) values (${username}, ${pw_hash}, ${role})
@@ -48,6 +57,13 @@ class platform_db {
         return this.db`
             select * from ${this.db(this.schema)}.login_tokens where selector = ${selector}
         `;
+    }
+
+    public async has_users():Promise<boolean>{
+        let res = await this.db`
+            select EXISTS(select * from ${this.db(this.schema)}.users)
+        `
+        return res[0].exists;
     }
 }
 

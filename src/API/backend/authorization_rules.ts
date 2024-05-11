@@ -32,6 +32,8 @@ interface rules_map {
     platform:{
         [index: string]: any;
         add_user:string,
+        get_users:string,
+        onboarding: string,
         remove_user:string,
         manual_login:string,
         auto_login:string
@@ -106,6 +108,8 @@ let rules : rules_map = {
     platform:{
         add_user:'admin',
         remove_user:'admin',
+        get_users:'admin',
+        onboarding: 'public',
         manual_login:'public',
         auto_login:'public'
     },
