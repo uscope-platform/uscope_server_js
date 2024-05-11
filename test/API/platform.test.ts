@@ -10,7 +10,7 @@ import jwt from "koa-jwt";
 
 
 
-describe('platform_tests', () => {
+describe('platform API tests', () => {
 
 
     const app = new Koa();

@@ -13,6 +13,18 @@ interface api_map {
             delete:string
         }
     },
+    bitstream:{
+        prefix:string,
+        endpoints:{
+            [index: string]: any;
+            hash:string,
+            load_all:string,
+            get:string,
+            add:string,
+            edit:string,
+            delete:string
+        }
+    },
     program:{
         prefix:string,
         endpoints:{
@@ -94,6 +106,18 @@ let endpoints_map : api_map = {
 
     script:{
         prefix:"/script",
+        endpoints:{
+            hash:"/hash",
+            load_all:"/load_all",
+            get:"/:id",
+            add:"/:id",
+            edit:"/:id",
+            delete:"/:id"
+        }
+    },
+
+    bitstream:{
+        prefix:"/bitstream",
         endpoints:{
             hash:"/hash",
             load_all:"/load_all",

@@ -9,7 +9,7 @@ import programs_router from "../../src/API/frontend/programs_api";
 
 
 
-describe('programs tests', () => {
+describe('programs API tests', () => {
 
 
     const app = new Koa();

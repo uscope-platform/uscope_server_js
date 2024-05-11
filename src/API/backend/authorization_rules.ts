@@ -10,6 +10,15 @@ interface rules_map {
         edit:string,
         delete:string
     },
+    bitstream:{
+        [index: string]: any;
+        hash:string,
+        load_all:string,
+        get:string,
+        add:string,
+        edit:string,
+        delete:string
+    },
     program:{
         [index: string]: any;
         hash:string,
@@ -70,20 +79,28 @@ interface rules_map {
 
 let rules : rules_map = {
     script:{
-        hash:"operator",
-        load_all:"operator",
-        get:"operator",
-        add:"user",
-        edit:"user",
-        delete:"user"
+        hash:'operator',
+        load_all:'operator',
+        get:'operator',
+        add:'user',
+        edit:'user',
+        delete:'user'
+    },
+    bitstream:{
+        hash:'operator',
+        load_all:'operator',
+        get:'admin',
+        add:'admin',
+        edit:'admin',
+        delete:'admin'
     },
     program:{
-        hash:"operator",
-        load_all:"operator",
-        get:"operator",
-        add:"user",
-        edit:"user",
-        delete:"user",
+        hash:'operator',
+        load_all:'operator',
+        get:'operator',
+        add:'user',
+        edit:'user',
+        delete:'user',
         compile:"user"
     },
     platform:{
@@ -93,38 +110,38 @@ let rules : rules_map = {
         auto_login:'public'
     },
     peripheral:{
-        hash:"operator",
-        load_all:"operator",
-        get:"operator",
-        add:"admin",
-        edit:"admin",
-        delete:"admin"
+        hash:'operator',
+        load_all:'operator',
+        get:'operator',
+        add:'admin',
+        edit:'admin',
+        delete:'admin'
     },
     filter:{
-        hash:"operator",
-        load_all:"operator",
-        get:"operator",
-        add:"user",
-        edit:"user",
-        delete:"user"
+        hash:'operator',
+        load_all:'operator',
+        get:'operator',
+        add:'user',
+        edit:'user',
+        delete:'user'
     },
     emulator:{
-        hash:"operator",
-        load_all:"operator",
-        get:"operator",
-        add:"user",
-        edit:"user",
-        delete:"user",
-        run:"user"
+        hash:'operator',
+        load_all:'operator',
+        get:'user',
+        add:'user',
+        edit:'user',
+        delete:'user',
+        run:'user'
     },
     application:{
-        hash:"operator",
-        load_all:"operator",
-        load_app:"operator",
-        get:"operator",
-        add:"admin",
-        edit:"admin",
-        delete:"admin"
+        hash:'operator',
+        load_all:'operator',
+        load_app:'operator',
+        get:'operator',
+        add:'admin',
+        edit:'admin',
+        delete:'admin'
     }
 }
 

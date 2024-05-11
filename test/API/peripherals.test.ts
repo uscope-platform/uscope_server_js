@@ -9,8 +9,7 @@ import peripherals_router from "../../src/API/frontend/peripherals_api";
 
 
 
-describe('peripherals tests', () => {
-
+describe('peripherals API tests', () => {
 
     const app = new Koa();
 

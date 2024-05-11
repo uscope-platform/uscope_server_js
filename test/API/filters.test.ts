@@ -10,7 +10,7 @@ import filters_router from "../../src/API/frontend/filters_api";
 
 
 
-describe('filters tests', () => {
+describe('filters API tests', () => {
 
 
     const app = new Koa();

@@ -9,7 +9,7 @@ import applications_router from "../../src/API/frontend/applications_api";
 import endpoints_map from "../../src/API/frontend/endpoints_map";
 
 
-describe('applications tests', () => {
+describe('applications API tests', () => {
 
 
     const app = new Koa();

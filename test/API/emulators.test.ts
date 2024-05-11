@@ -11,7 +11,7 @@ import emulators_router from "../../src/API/frontend/emulators_api";
 
 
 
-describe('emulators tests', () => {
+describe('emulators API tests', () => {
 
 
     const app = new Koa();

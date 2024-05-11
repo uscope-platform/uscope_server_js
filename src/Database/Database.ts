@@ -329,6 +329,11 @@ class database {
                     add path text    not null
             `
             await this.db`
+                alter table ${sql(this.schema)}.bitstreams
+                    add data bytea
+            `
+
+            await this.db`
                 create unique index bitstreams_id_index on ${sql(this.schema)}.bitstreams (id);
             `
             await this.db`

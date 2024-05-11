@@ -40,10 +40,12 @@ class bitstreams_db {
         const res: any = await this.db`
             insert into ${this.db(this.schema)}.bitstreams (
                 id,
-                path
+                path,
+                data
             ) values (
                 ${bit.id},
-                ${bit.path}
+                ${bit.path},
+                ${bit.data}
             )
         `;
     }
