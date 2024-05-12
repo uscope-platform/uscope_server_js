@@ -8,6 +8,7 @@ import {createHash} from "node:crypto";
 describe('bitstreams_database_tests', () => {
     let data = fs.readFileSync(__dirname + "/../data/mock.bit");
     let hash = createHash('sha256').update(data).digest('hex');
+
     let bit: bitstream_model[] = [
         {
             id:1,
@@ -73,7 +74,14 @@ describe('bitstreams_database_tests', () => {
         expect(res.hash).toBe(bit[1].hash)
     });
 
+    test('get_bitstream by path', async () => {
+        let res = await db.bitstreams.get_by_path("test_2");
 
+        expect(res.id).toBe(bit[1].id)
+        expect(res.path).toBe(bit[1].path)
+        expect(res.data.equals(bit[1].data)).toBeTruthy();
+        expect(res.hash).toBe(bit[1].hash)
+    });
 
     test('update_emulator', async () => {
         await db.bitstreams.update_bitstream_field(2, "path", "changed")

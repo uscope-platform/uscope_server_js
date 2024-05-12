@@ -1,6 +1,12 @@
 
 interface rules_map {
     [index: string]: any;
+    operations: {
+        [index: string]: any;
+        load_application:string,
+        write_registers:string,
+        read_registers:string
+    }
     script: {
         [index: string]: any;
         hash:string,
@@ -27,7 +33,8 @@ interface rules_map {
         add:string,
         edit:string,
         delete:string,
-        compile:string
+        compile:string,
+        apply:string
     },
     platform:{
         [index: string]: any;
@@ -54,7 +61,10 @@ interface rules_map {
         get: string,
         add: string,
         edit: string,
-        delete: string
+        delete: string,
+        design:string,
+        implement:string,
+        get_response: string
     },
     emulator:{
         [index: string]: any;
@@ -70,7 +80,6 @@ interface rules_map {
         [index: string]: any;
         hash:string,
         load_all:string,
-        load_app:string,
         get:string,
         add:string,
         edit:string,
@@ -80,6 +89,11 @@ interface rules_map {
 }
 
 let rules : rules_map = {
+    operations:{
+        load_application:"operator",
+        read_registers:"operator",
+        write_registers:"operator"
+    },
     script:{
         hash:'operator',
         load_all:'operator',
@@ -103,7 +117,8 @@ let rules : rules_map = {
         add:'user',
         edit:'user',
         delete:'user',
-        compile:"user"
+        compile:"user",
+        apply:"operator"
     },
     platform:{
         add_user:'admin',
@@ -127,7 +142,10 @@ let rules : rules_map = {
         get:'operator',
         add:'user',
         edit:'user',
-        delete:'user'
+        delete:'user',
+        implement:"user",
+        design:"user",
+        get_response:"user"
     },
     emulator:{
         hash:'operator',
@@ -141,7 +159,6 @@ let rules : rules_map = {
     application:{
         hash:'operator',
         load_all:'operator',
-        load_app:'operator',
         get:'operator',
         add:'admin',
         edit:'admin',

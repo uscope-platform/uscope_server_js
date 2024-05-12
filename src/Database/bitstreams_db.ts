@@ -34,6 +34,13 @@ class bitstreams_db {
         `;
         return res[0];
     }
+    public async get_by_path(path:string) : Promise<bitstream_model> {
+        const res = await this.db<bitstream_model[]>`
+            select * from ${this.db(this.schema)}.bitstreams where path=${path}
+        `;
+        return res[0];
+    }
+
 
     public async add_bitstream(bit:bitstream_model) : Promise<any> {
 

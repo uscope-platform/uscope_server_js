@@ -1,6 +1,14 @@
 
 interface api_map {
     [index: string]: any;
+    operations: {
+        prefix:string,
+        endpoints:{
+            load_application:string,
+            write_registers:string,
+            read_registers:string
+        }
+    }
     script: {
         prefix: string,
         endpoints:{
@@ -35,7 +43,8 @@ interface api_map {
             add:string,
             edit:string,
             delete:string,
-            compile:string
+            compile:string,
+            apply:string
         }
 
     },
@@ -72,7 +81,10 @@ interface api_map {
             get: string,
             add: string,
             edit: string,
-            delete: string
+            delete: string,
+            design:string,
+            implement:string,
+            get_response: string
         }
     },
     emulator:{
@@ -94,7 +106,6 @@ interface api_map {
             [index: string]: any;
             hash:string,
             load_all:string,
-            load_app:string,
             get:string,
             add:string,
             edit:string,
@@ -117,7 +128,14 @@ let endpoints_map : api_map = {
             delete:"/:id"
         }
     },
-
+    operations: {
+        prefix:"/operations",
+        endpoints:{
+            load_application:"/load_application/:id",
+            write_registers:"/write_registers",
+            read_registers:"/read_registers"
+        }
+    },
     bitstream:{
         prefix:"/bitstream",
         endpoints:{
@@ -139,7 +157,8 @@ let endpoints_map : api_map = {
             add:"/:id",
             edit:"/:id",
             delete:"/:id",
-            compile:"/compile"
+            compile:"/compile",
+            apply:"/apply"
         }
     },
     platform:{
@@ -174,7 +193,10 @@ let endpoints_map : api_map = {
             get:"/:id",
             add:"/:id",
             edit:"/:id",
-            delete:"/:id"
+            delete:"/:id",
+            design:"/design",
+            implement:"/implement",
+            get_response:"/response"
         }
     },
 
@@ -187,7 +209,7 @@ let endpoints_map : api_map = {
             add:"/:id",
             edit:"/:id",
             delete:"/:id",
-            run:""
+            run:"/run"
         }
     },
 
@@ -196,7 +218,6 @@ let endpoints_map : api_map = {
         endpoints:{
             hash:"/hash",
             load_all:"/load_all",
-            load_app:"",
             get:"/:id",
             add:"/:id",
             edit:"/:id",
