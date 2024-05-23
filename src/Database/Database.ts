@@ -309,6 +309,10 @@ class database {
                     add id serial constraint applications_pk primary key
             `
             await this.db`
+                alter table ${sql(this.schema)}.applications
+                    add pl_clocks jsonb default '{"0": 100000000, "1": 100000000, "2": 100000000, "3": 100000000}'::jsonb;
+            `
+            await this.db`
                 create unique index applications_application_name_index on ${sql(this.schema)}.applications (application_name);
             `
             await this.db`
@@ -401,7 +405,7 @@ class database {
                     add emulation_time double precision;
             `
             await this.db`
-            create trigger bump_emulators_version after insert or delete or update on ${sql(this.schema)}.emulators execute procedure ${sql(this.schema)}.update_version('emulators');
+                create trigger bump_emulators_version after insert or delete or update on ${sql(this.schema)}.emulators execute procedure ${sql(this.schema)}.update_version('emulators');
             `
         }
     }

@@ -21,7 +21,13 @@ describe('applications_database_tests',  () => {
             filters:[],
             programs:[],
             scripts:[],
-            miscellaneous:{}
+            miscellaneous:{},
+            pl_clocks:{
+                "0":140e6,
+                "1":130e6,
+                "2":120e6,
+                "3":110e6
+            }
         },
         {
             id: 2,
@@ -38,7 +44,13 @@ describe('applications_database_tests',  () => {
             filters:[],
             programs:[],
             scripts:[],
-            miscellaneous:{}
+            miscellaneous:{},
+            pl_clocks:{
+                "0":140e6,
+                "1":130e6,
+                "2":120e6,
+                "3":110e6
+            }
         }
     ]
 
@@ -91,7 +103,13 @@ describe('applications_database_tests',  () => {
             filters:[],
             programs:[],
             scripts:[],
-            miscellaneous:{}
+            miscellaneous:{},
+            pl_clocks: {
+                "0": 140e6,
+                "1": 130e6,
+                "2": 120e6,
+                "3": 110e6
+            }
         }
         await db.applications.update_application_field(updated_app);
         let res = await db.applications.get_application(1);

@@ -37,7 +37,7 @@ describe('db_creation_test', () => {
             } = {
                 applications:[
                     "application_name", "bitstream", "clock_frequency","channels", "channel_groups",
-                    "initial_registers_values", "macro", "parameters", "peripherals", "miscellaneous",
+                    "initial_registers_values", "macro", "parameters", "peripherals", "pl_clocks", "miscellaneous",
                     "soft_cores", "filters", "programs", "scripts", "id"
                 ],
                 bitstreams:["id", "path", "data", "hash"],

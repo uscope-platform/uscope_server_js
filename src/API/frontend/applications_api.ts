@@ -151,8 +151,10 @@ class applications_router {
                     app.application_name = e.item["value"];
                 } else if(e.item["name"] === "clock_frequency"){
                     app.clock_frequency = e.item["value"];
-                } else if(e.item["name"] === "bitstream"){
+                } else if(e.item["name"] === "bitstream") {
                     app.bitstream = e.item["value"];
+                } else if(e.item["name"] === "pl_clocks"){
+                    app.pl_clocks[e.item["item_id"]] = e.item["value"];
                 } else {
                     app.miscellaneous[e.item["name"]] = e.item["value"];
                 }

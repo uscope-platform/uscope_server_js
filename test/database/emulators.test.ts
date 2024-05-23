@@ -1,5 +1,4 @@
 import database from "../../src/Database/Database";
-import filter_model from "../../src/data_model/filters_model";
 import {expect} from "@jest/globals";
 import emulator_model from "../../src/data_model/emulator_model";
 

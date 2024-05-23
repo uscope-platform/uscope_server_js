@@ -73,7 +73,8 @@ class applications_db {
                 soft_cores, 
                 filters,
                 programs,
-                scripts
+                scripts,
+                pl_clocks
             ) values (
                 ${app.id},
                 ${app.application_name},
@@ -89,7 +90,8 @@ class applications_db {
                 ${app.soft_cores},
                 ${app.filters},
                 ${app.programs},
-                ${app.scripts}
+                ${app.scripts},
+                ${app.pl_clocks}
             ) ON CONFLICT(id) DO UPDATE SET
                 application_name = EXCLUDED.application_name,
                 clock_frequency = EXCLUDED.clock_frequency,
@@ -104,7 +106,8 @@ class applications_db {
                 soft_cores = EXCLUDED.soft_cores,
                 filters = EXCLUDED.filters,
                 programs = EXCLUDED.programs,
-                scripts = EXCLUDED.scripts;   
+                scripts = EXCLUDED.scripts,
+                pl_clocks = EXCLUDED.pl_clocks
         `;
     }
 
