@@ -45,13 +45,13 @@ class emulators_db {
                 name,
                 cores,
                 connections,
-                n_cycles
+                emulation_time
             ) values (
                 ${app.id},
                 ${app.name},
                 ${app.cores},
                 ${app.connections},
-                ${app.n_cycles}
+                ${app.emulation_time}
             )
         `;
     }

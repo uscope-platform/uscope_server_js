@@ -11,14 +11,14 @@ describe('emulator_database_tests', () => {
         {
             id:1,
             name:'new new emulator',
-            n_cycles:100,
+            emulation_time:100.5,
             cores:{},
             connections:[]
         },
         {
             id:2,
             name:'test',
-            n_cycles:100,
+            emulation_time:10.2,
             cores:{},
             connections:[]
         }
@@ -58,9 +58,9 @@ describe('emulator_database_tests', () => {
     });
 
     test('update_emulator', async () => {
-        await db.emulators.update_emulator_field(1, "n_cycles", 12);
+        await db.emulators.update_emulator_field(1, "emulation_time", 12);
         let res = await db.emulators.get_emulator(1);
-        expect(res.n_cycles).toBe(12);
+        expect(res.emulation_time).toBe(12);
     });
 
 

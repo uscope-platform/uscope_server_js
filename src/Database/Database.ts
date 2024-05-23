@@ -398,7 +398,7 @@ class database {
             `
             await this.db`
                 alter table ${sql(this.schema)}.emulators
-                    add n_cycles    integer
+                    add emulation_time double precision;
             `
             await this.db`
             create trigger bump_emulators_version after insert or delete or update on ${sql(this.schema)}.emulators execute procedure ${sql(this.schema)}.update_version('emulators');

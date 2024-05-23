@@ -84,7 +84,7 @@ describe('Operation API tests', () => {
 
     test('load_application', async () => {
         let router = rtr as any;
-        let mock_results = {app:{}, bit:{}};
+        let mock_results = {app:{}, bit:{data:{}}};
         const spy = jest.spyOn(router.ops_backend, 'load_application').mockImplementation(
             (app:any, bit:any) => {
                 mock_results.app = app;
@@ -98,7 +98,7 @@ describe('Operation API tests', () => {
                 expect(results).toStrictEqual( {app_id:1, bitstream:"test_bitstream"})
                 expect(spy).toBeCalledTimes(1);
                 expect(mock_results.app).toStrictEqual(init_app);
-                expect(data.equals(<Buffer>mock_results.bit)).toBeTruthy();
+                expect(data.equals(<Buffer>mock_results.bit.data)).toBeTruthy();
             });
     });
 

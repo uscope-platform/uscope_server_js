@@ -4,7 +4,7 @@ export default interface emulator_model {
     name:string,
     cores:object,
     connections:object[],
-    n_cycles:number
+    emulation_time:number
 }
 
 
