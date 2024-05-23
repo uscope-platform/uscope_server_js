@@ -72,8 +72,9 @@ describe('Operation API tests', () => {
     app.use(jwt({ secret: 'secret', passthrough: true }));
     app.use(authorizer())
 
-
-    let rtr = new operations_router(db)
+    let driver_host = "";
+    let driver_port = 0;
+    let rtr = new operations_router(db,driver_host, driver_port)
     app.use(rtr.router.routes())
     app.use(rtr.router.allowedMethods());
 

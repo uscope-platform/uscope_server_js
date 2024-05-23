@@ -9,9 +9,9 @@ class operations_router {
     public db: database;
     private ops_backend: OperationsBackend;
 
-    constructor(db: database) {
+    constructor(db: database, driver_host:string, driver_port:number) {
         this.db = db
-        this.ops_backend = new OperationsBackend();
+        this.ops_backend = new OperationsBackend(driver_host, driver_port);
 
         this.router = new Router({
             prefix: endpoints_map.operations.prefix
@@ -23,7 +23,7 @@ class operations_router {
                 let id = parseInt(ctx.params.id);
                 let app =await this.db.applications.get_application(id);
                 let bitstream = await this.db.bitstreams.get_by_path(app.bitstream)
-                await this.ops_backend.load_application(app, bitstream.data);
+                await this.ops_backend.load_application(app, bitstream);
                 ctx.status = 200
             } catch(error:any){
                 ctx.message = error

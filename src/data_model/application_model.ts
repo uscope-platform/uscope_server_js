@@ -15,7 +15,7 @@ export interface application_model {
     miscellaneous: {
         [index: string]: any;
     },
-    soft_cores:object,
+    soft_cores:object[],
     filters:object,
     programs: number[],
     scripts: number[]

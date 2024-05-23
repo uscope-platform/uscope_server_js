@@ -5,10 +5,10 @@ import {authorizer, error_handler} from "../../src/API/backend/middleware";
 import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
-import peripherals_router from "../../src/API/frontend/peripherals_api";
 import bitstream_router from "../../src/API/frontend/bitstreams_api";
 import fs from "node:fs";
 import bitstream_model from "../../src/data_model/bitstreams_model";
+import {createHash} from "node:crypto";
 
 
 
@@ -19,17 +19,20 @@ describe('bitstream API tests', () => {
     app.use(bodyParser({jsonLimit:'50mb'}));
 
     let data = fs.readFileSync(__dirname + "/../data/mock.bit");
+    let hash = createHash('sha256').update(data).digest('hex');
 
     let bitstreams: bitstream_model[] = [
         {
             id:1,
             path:'test_1',
-            data: data
+            data: data,
+            hash: hash
         },
         {
             id:2,
             path:'test_2',
-            data: data
+            data: data,
+            hash: hash
         }
     ]
     let results:any = {}
@@ -98,8 +101,10 @@ describe('bitstream API tests', () => {
                 expect(response.status).toBe(200);
                 expect(response.body.id).toBe(bitstreams[0].id);
                 expect(response.body.path).toBe(bitstreams[0].path);
-                let res = Buffer.alloc(response.body.data.data);
-                expect(bitstreams[0].data.equals(res)).toBeTruthy();
+                let res = response.body.data.data;
+                let check = [...bitstreams[0].data];
+                expect(JSON.stringify(res)).toBe(JSON.stringify(check));
+                expect(response.body.hash).toBe(bitstreams[0].hash);
             });
     });
 
@@ -107,7 +112,8 @@ describe('bitstream API tests', () => {
         let bitstream_obj = {
                 id:3,
                 path:'test_1',
-                data: data
+                data: data,
+                hash: hash
             }
         return request(app.callback())
             .post('/bitstream/3')
@@ -117,8 +123,11 @@ describe('bitstream API tests', () => {
                 expect(response.status).toBe(200);
                 expect(results.id).toBe(bitstream_obj.id);
                 expect(results.path).toBe(bitstream_obj.path);
-                let res = Buffer.alloc(results.data.data);
-                expect(bitstream_obj.data.equals(res)).toBeTruthy();
+                let res = JSON.stringify(results.data.data);
+                let check = JSON.stringify([...bitstream_obj.data]);
+                let result = res == check;
+                expect(result).toBeTruthy();
+                expect(results.hash).toBe(bitstream_obj.hash);
             });
     });
 
