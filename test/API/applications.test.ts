@@ -33,6 +33,12 @@ describe('applications API tests', () => {
             address:0x213,
             value:0
         }],
+        pl_clocks:{
+            "0":100e6,
+            "1":100e6,
+            "2":100e6,
+            "3":100e6,
+        },
         parameters:[],
         peripherals:[],
         soft_cores:[],
@@ -133,7 +139,13 @@ describe('applications API tests', () => {
             filters:[],
             programs:[],
             scripts:[],
-            miscellaneous:{}
+            miscellaneous:{},
+            pl_clocks:{
+                "0":100e6,
+                "1":100e6,
+                "2":100e6,
+                "3":100e6,
+            }
         }
         return request(app.callback())
             .post('/application/5')
@@ -203,6 +215,12 @@ describe('applications API tests', () => {
                         scripts:[],
                         miscellaneous:{
                             test_misc_p:123
+                        },
+                        pl_clocks:{
+                            "0":100e6,
+                            "1":100e6,
+                            "2":100e6,
+                            "3":100e6,
                         }
                     }
                 )
@@ -244,6 +262,12 @@ describe('applications API tests', () => {
                         miscellaneous:{
                             "test param": 125,
                             test_misc_p:123
+                        },
+                        pl_clocks:{
+                            "0":100e6,
+                            "1":100e6,
+                            "2":100e6,
+                            "3":100e6,
                         }
                     })
             });
@@ -296,6 +320,12 @@ describe('applications API tests', () => {
                         scripts:[],
                         miscellaneous:{
                             test_misc_p:123
+                        },
+                        pl_clocks:{
+                            "0":100e6,
+                            "1":100e6,
+                            "2":100e6,
+                            "3":100e6,
                         }
                     }
                 )
@@ -347,6 +377,12 @@ describe('applications API tests', () => {
                         scripts:[],
                         miscellaneous:{
                             test_rename:123
+                        },
+                        pl_clocks:{
+                            "0":100e6,
+                            "1":100e6,
+                            "2":100e6,
+                            "3":100e6,
                         }
                     })
             });
@@ -398,6 +434,12 @@ describe('applications API tests', () => {
                         scripts:[],
                         miscellaneous:{
                             test_misc_p:3
+                        },
+                        pl_clocks:{
+                            "0":100e6,
+                            "1":100e6,
+                            "2":100e6,
+                            "3":100e6,
                         }
                     })
             });
@@ -411,7 +453,7 @@ describe('applications API tests', () => {
             item:"test_misc_p",
             action:"remove",
             object:"misc"
-        };;
+        };
 
         return request(app.callback())
             .patch('/application/1')
@@ -443,7 +485,13 @@ describe('applications API tests', () => {
                         filters:[],
                         programs:[],
                         scripts:[],
-                        miscellaneous:{}
+                        miscellaneous:{},
+                        pl_clocks:{
+                            "0":100e6,
+                            "1":100e6,
+                            "2":100e6,
+                            "3":100e6,
+                        }
                     })
             });
     });
@@ -485,11 +533,189 @@ describe('applications API tests', () => {
                         scripts:[],
                         miscellaneous:{
                             test_misc_p:123
+                        },
+                        pl_clocks:{
+                            "0":100e6,
+                            "1":100e6,
+                            "2":100e6,
+                            "3":100e6,
                         }
                     })
             });
     });
 
+
+
+
+    test('edit_app_name', async () => {
+
+        let edit = {
+            application:1,
+            item:{
+                name:"application_name",
+                value:"test_rename",
+                edit_name:false
+            },
+            action:"edit",
+            object:"misc"
+        };
+
+        return request(app.callback())
+            .patch('/application/1')
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(
+                    {
+                        id: 1,
+                        application_name:'test_rename',
+                        bitstream:"",
+                        channels:[],
+                        channel_groups:[{
+                            group_name: "test group 1",
+                            group_id: "test_group_1",
+                            channels:[],
+                            default:false
+                        }],
+                        clock_frequency:100000000,
+                        initial_registers_values:[],
+                        macro:[{
+                            address:0x213,
+                            value:0
+                        }],
+                        parameters:[],
+                        peripherals:[],
+                        soft_cores:[],
+                        filters:[],
+                        programs:[],
+                        scripts:[],
+                        miscellaneous:{
+                            test_misc_p:123
+                        },
+                        pl_clocks:{
+                            "0":100e6,
+                            "1":100e6,
+                            "2":100e6,
+                            "3":100e6,
+                        }
+                    })
+            });
+    });
+
+    test('edit_bitstream', async () => {
+
+        let edit = {
+            application:1,
+            item:{
+                name:"bitstream",
+                value:"test.bin",
+                edit_name:false
+            },
+            action:"edit",
+            object:"misc"
+        };
+
+        return request(app.callback())
+            .patch('/application/1')
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(
+                    {
+                        id: 1,
+                        application_name:'new application_1',
+                        bitstream:"test.bin",
+                        channels:[],
+                        channel_groups:[{
+                            group_name: "test group 1",
+                            group_id: "test_group_1",
+                            channels:[],
+                            default:false
+                        }],
+                        clock_frequency:100000000,
+                        initial_registers_values:[],
+                        macro:[{
+                            address:0x213,
+                            value:0
+                        }],
+                        parameters:[],
+                        peripherals:[],
+                        soft_cores:[],
+                        filters:[],
+                        programs:[],
+                        scripts:[],
+                        miscellaneous:{
+                            test_misc_p:123
+                        },
+                        pl_clocks:{
+                            "0":100e6,
+                            "1":100e6,
+                            "2":100e6,
+                            "3":100e6,
+                        }
+                    })
+            });
+    });
+
+
+    test('edit_pl_clocks', async () => {
+
+        let edit = {
+            application:1,
+            item:{
+                name:"pl_clocks",
+                value:123000000,
+                edit_name:false,
+                item_id:2
+            },
+            action:"edit",
+            object:"misc"
+        };
+
+        return request(app.callback())
+            .patch('/application/1')
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(
+                    {
+                        id: 1,
+                        application_name:'new application_1',
+                        bitstream:"",
+                        channels:[],
+                        channel_groups:[{
+                            group_name: "test group 1",
+                            group_id: "test_group_1",
+                            channels:[],
+                            default:false
+                        }],
+                        clock_frequency:100000000,
+                        initial_registers_values:[],
+                        macro:[{
+                            address:0x213,
+                            value:0
+                        }],
+                        parameters:[],
+                        peripherals:[],
+                        soft_cores:[],
+                        filters:[],
+                        programs:[],
+                        scripts:[],
+                        miscellaneous:{
+                            test_misc_p:123
+                        },
+                        pl_clocks:{
+                            "0":100e6,
+                            "1":100e6,
+                            "2":123e6,
+                            "3":100e6,
+                        }
+                    })
+            });
+    });
 
     afterEach(() => {
         results = undefined;
