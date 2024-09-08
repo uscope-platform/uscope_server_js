@@ -23,7 +23,12 @@ export default class OperationsBackend {
         return 0;
     }
 
-    public async write_registers(addr:number, value:number) : Promise<any> {
+    public async write_register_direct(addr:number, value:number) : Promise<any> {
+        // TODO: implement register writing
+        return 0;
+    }
+
+    public async write_register_proxied(proxy_addr: number, addr:number, value:number) : Promise<any> {
         // TODO: implement register writing
         return 0;
     }

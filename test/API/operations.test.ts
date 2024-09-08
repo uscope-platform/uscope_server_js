@@ -121,7 +121,7 @@ describe('Operation API tests', () => {
         ]
         let router = rtr as any;
         let mock_results:{addr:number[], value:number[]} = {addr:[], value:[]};
-        const spy = jest.spyOn(router.ops_backend, 'write_registers').mockImplementation(
+        const spy = jest.spyOn(router.ops_backend, 'write_register_direct').mockImplementation(
             (address:any, value:any) => {
                 mock_results.addr.push(address);
                 mock_results.value.push(value);
@@ -148,6 +148,27 @@ describe('Operation API tests', () => {
             address: 18316525568,
             value: 123
         }
+
+        let router = rtr as any;
+        let mock_results:{addr:number[], proxy_addr:number[], value:number[]} = {addr:[], proxy_addr:[], value:[]};
+        const spy = jest.spyOn(router.ops_backend, 'write_register_proxied').mockImplementation(
+            (proxy_addr:any, address:any, value:any) => {
+                mock_results.proxy_addr.push(proxy_addr);
+                mock_results.addr.push(address);
+                mock_results.value.push(value);
+            });
+
+        return request(app.callback())
+            .post('/operations/write_registers')
+            .set('Authorization', `Bearer ${token}`)
+            .send([proxy_write])
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(mock_results.proxy_addr).toStrictEqual([proxy_write.proxy_address])
+                expect(mock_results.addr).toStrictEqual([proxy_write.address]);
+                expect(mock_results.value).toStrictEqual([proxy_write.value]);
+            });
 
     });
 
