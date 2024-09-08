@@ -38,11 +38,7 @@ class operations_router {
             try{
                 let data = <register_write_model[]>ctx.request.body;
                 for(let item of data){
-                    if(item.type === "proxied"){
-                        await this.ops_backend.write_register_proxied(item.proxy_address, item.address, item.value);
-                    } else{
-                        await this.ops_backend.write_register_direct(item.address, item.value);
-                    }
+                    await this.ops_backend.write_register(item);
                 }
                 ctx.status = 200;
             } catch(error:any){

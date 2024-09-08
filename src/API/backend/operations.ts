@@ -3,6 +3,7 @@ import fs from "node:fs";
 import {createHash} from "node:crypto";
 import bitstream_model from "../../data_model/bitstreams_model";
 import hw_interface from "../../hw_interface";
+import register_write_model from "../../data_model/operations_model";
 
 export default class OperationsBackend {
     private hw_if: hw_interface;
@@ -23,15 +24,11 @@ export default class OperationsBackend {
         return 0;
     }
 
-    public async write_register_direct(addr:number, value:number) : Promise<any> {
+    public async write_register(reg:register_write_model) : Promise<any> {
         // TODO: implement register writing
         return 0;
     }
 
-    public async write_register_proxied(proxy_addr: number, addr:number, value:number) : Promise<any> {
-        // TODO: implement register writing
-        return 0;
-    }
 
     private refresh_bitfile(bitfile: bitstream_model, path:string) {
 
