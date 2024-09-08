@@ -5,7 +5,7 @@ interface rules_map {
         [index: string]: any;
         load_application:string,
         write_registers:string,
-        read_registers:string
+        read_register:string
     }
     script: {
         [index: string]: any;
@@ -91,7 +91,7 @@ interface rules_map {
 let rules : rules_map = {
     operations:{
         load_application:"operator",
-        read_registers:"operator",
+        read_register:"operator",
         write_registers:"operator"
     },
     script:{

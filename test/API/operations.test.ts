@@ -102,11 +102,72 @@ describe('Operation API tests', () => {
             });
     });
 
-    test('write_register', async () => {
+    test('write_register_direct', async () => {
+        let direct_write = [
+        {
+            address: 18316660736,
+            proxy_address: 0,
+            proxy_type: "",
+            type: "direct",
+            value: 8
+        },
+        {
+            address: 18316660730,
+            proxy_address: 0,
+            proxy_type: "",
+            type: "direct",
+            value:1231
+        },
+        ]
+        let router = rtr as any;
+        let mock_results:{addr:number[], value:number[]} = {addr:[], value:[]};
+        const spy = jest.spyOn(router.ops_backend, 'write_registers').mockImplementation(
+            (address:any, value:any) => {
+                mock_results.addr.push(address);
+                mock_results.value.push(value);
+            });
+
+        return request(app.callback())
+            .post('/operations/write_registers')
+            .set('Authorization', `Bearer ${token}`)
+            .send(direct_write)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(2);
+                expect(mock_results.addr).toStrictEqual([direct_write[0].address, direct_write[1].address]);
+                expect(mock_results.value).toStrictEqual([direct_write[0].value, direct_write[1].value]);
+            });
 
     });
 
+    test('write_register_proxied', async () => {
+        let proxy_write  = {
+            type: "proxied",
+            proxy_type: "axis_constant",
+            proxy_address: 12341,
+            address: 18316525568,
+            value: 123
+        }
+
+    });
+
+
     test('read_register', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'read_register').mockImplementation(
+            (address:any) => {
+                result = address
+            });
+
+        return request(app.callback())
+            .get('/operations/read_register/54231231')
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(54231231);
+            });
 
     });
 

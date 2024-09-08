@@ -6,7 +6,7 @@ interface api_map {
         endpoints:{
             load_application:string,
             write_registers:string,
-            read_registers:string
+            read_register:string
         }
     }
     script: {
@@ -133,7 +133,7 @@ let endpoints_map : api_map = {
         endpoints:{
             load_application:"/load_application/:id",
             write_registers:"/write_registers",
-            read_registers:"/read_registers"
+            read_register:"/read_register/:address"
         }
     },
     bitstream:{

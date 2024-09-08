@@ -3,6 +3,8 @@ import database from "../../Database/Database";
 import * as Koa from "koa";
 import endpoints_map from "./endpoints_map";
 import OperationsBackend from "../backend/operations";
+import peripheral_model from "../../data_model/peripheral_model";
+import register_write_model from "../../data_model/operations_model";
 
 class operations_router {
     public router: Router;
@@ -34,11 +36,31 @@ class operations_router {
 
 
         this.router.post(endpoints_map.operations.endpoints.write_registers, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
 
+                let data = <register_write_model[]>ctx.request.body;
+                for(let item of data){
+                    await this.ops_backend.write_registers(item.address, item.value);
+                }
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next();
+            }
         });
 
-        this.router.post(endpoints_map.operations.endpoints.read_registers, async (ctx:Koa.Context, next:Koa.Next) => {
-
+        this.router.get(endpoints_map.operations.endpoints.read_register, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let address = parseInt(ctx.params.address);
+                ctx.response.status = 200;
+                ctx.response.body = await this.ops_backend.read_register(address);
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
         });
     }
 }

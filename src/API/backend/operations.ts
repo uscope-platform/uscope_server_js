@@ -1,4 +1,4 @@
-import {application_model} from "../../data_model/application_model";
+import {application_model, core_load_info} from "../../data_model/application_model";
 import fs from "node:fs";
 import {createHash} from "node:crypto";
 import bitstream_model from "../../data_model/bitstreams_model";
@@ -15,25 +15,18 @@ export default class OperationsBackend {
         const fs_path = "/lib/firmware/" + app.bitstream;
         this.refresh_bitfile(bit, fs_path);
         await this.hw_if.load_bitstream(fs_path);
-        for(let i in app.soft_cores){
-            // TODO: APPLY CORE
-        }
-
-        // TODO: SETUP IRV
-        // TODO: SETUP SCOPE BUFFER
-        // TODO: SETUP CLOCK FREQUENCY
-
-
     }
+
 
     public async read_register(addr:number) : Promise<number> {
+        // TODO: implement register reading
         return 0;
     }
 
-    public async write_registers(addr:number) : Promise<number> {
+    public async write_registers(addr:number, value:number) : Promise<any> {
+        // TODO: implement register writing
         return 0;
     }
-
 
     private refresh_bitfile(bitfile: bitstream_model, path:string) {
 
@@ -43,4 +36,10 @@ export default class OperationsBackend {
             fs.writeFileSync(path, bitfile.data);
         }
     }
+
+    private load_core(core:core_load_info){
+        // TODO:  implement core loading
+        return 0;
+    }
+
 }
