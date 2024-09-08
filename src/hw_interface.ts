@@ -13,8 +13,8 @@ export default class hw_interface {
     public async read_data(){
 
     }
-    public async read_register(address:number){
-
+    public async read_register(address:number): Promise<number>{
+        return 0;
     }
     public async write_register(write_obj:object){
 

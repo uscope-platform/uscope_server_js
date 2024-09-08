@@ -20,13 +20,11 @@ export default class OperationsBackend {
 
 
     public async read_register(addr:number) : Promise<number> {
-        // TODO: implement register reading
-        return 0;
+        return await this.hw_if.read_register(addr);
     }
 
     public async write_register(reg:register_write_model) : Promise<any> {
-        // TODO: implement register writing
-        return 0;
+        return await this.hw_if.write_register(reg);
     }
 
 
