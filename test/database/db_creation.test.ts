@@ -1,6 +1,5 @@
 import database from "../../src/Database/Database";
-import {expect} from "@jest/globals";
-import applications_db from "../../src/Database/applications_db";
+import {expect} from "@jest/globals"
 import postgres from "postgres";
 
 
@@ -42,7 +41,7 @@ describe('db_creation_test', () => {
                 ],
                 bitstreams:["id", "path", "data", "hash"],
                 data_versions:["table", "version", "last_modified"],
-                emulators:["id", "emulation_time", "cores", "connections", "name"],
+                emulators:["id", "emulation_time", "cores", "deployment_mode", "connections", "name"],
                 filters:["id", "ideal_taps", "quantized_taps", "name", "parameters"],
                 login_tokens:["selector", "validator", "expiry", "username"],
                 peripherals:["id", "image", "name", "parametric", "registers", "version"],

@@ -4,7 +4,8 @@ export default interface emulator_model {
     name:string,
     cores:object,
     connections:object[],
-    emulation_time:number
+    emulation_time:number,
+    deployment_mode:boolean
 }
 
 

@@ -12,14 +12,16 @@ describe('emulator_database_tests', () => {
             name:'new new emulator',
             emulation_time:100.5,
             cores:{},
-            connections:[]
+            connections:[],
+            deployment_mode:false,
         },
         {
             id:2,
             name:'test',
             emulation_time:10.2,
             cores:{},
-            connections:[]
+            connections:[],
+            deployment_mode:true,
         }
     ]
 

@@ -36,7 +36,7 @@ class emulators_db {
         return res[0];
     }
 
-    public async add_emulator(app:emulator_model) : Promise<any> {
+    public async add_emulator(emu:emulator_model) : Promise<any> {
 
         // @ts-ignore
         const res: any = await this.db`
@@ -45,13 +45,15 @@ class emulators_db {
                 name,
                 cores,
                 connections,
-                emulation_time
+                emulation_time,
+                deployment_mode
             ) values (
-                ${app.id},
-                ${app.name},
-                ${app.cores},
-                ${app.connections},
-                ${app.emulation_time}
+                ${emu.id},
+                ${emu.name},
+                ${emu.cores},
+                ${emu.connections},
+                ${emu.emulation_time},
+                ${emu.deployment_mode}
             )
         `;
     }
