@@ -3,7 +3,7 @@ import database from "../../Database/Database";
 import * as Koa from "koa";
 import endpoints_map from "./endpoints_map";
 import OperationsBackend from "../backend/operations";
-import register_write_model from "../../data_model/operations_model";
+import register_write_model, {programs_info} from "../../data_model/operations_model";
 
 class operations_router {
     public router: Router;
@@ -61,6 +61,25 @@ class operations_router {
                 next()
             }
         });
+
+
+        this.router.post(endpoints_map.operations.endpoints.compile_program, async (ctx:Koa.Context, next:Koa.Next) => {
+
+            let data = <programs_info>ctx.request.body;
+            ctx.response.body = await this.ops_backend.compile_program(data);
+            ctx.status = 200
+        });
+
+        this.router.post(endpoints_map.operations.endpoints.apply_program, async (ctx:Koa.Context, next:Koa.Next) => {
+
+            let core_id = parseInt(ctx.params.id);
+            let data = <programs_info>ctx.request.body;
+
+            ctx.response.body = await this.ops_backend.apply_program(data);
+            ctx.status = 200
+        });
+
+
     }
 }
 

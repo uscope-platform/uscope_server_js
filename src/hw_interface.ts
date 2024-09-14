@@ -23,6 +23,7 @@ export default class hw_interface {
     public async load_bitstream(bit:string){
 
     }
+
     public async set_clock_frequency(clock:number, frequency:number) {
 
     }
@@ -34,6 +35,8 @@ export default class hw_interface {
     public async set_scaling_factors(factors:boolean){}
 
     public async set_channel_status(status:boolean){}
+
+    public async compile_program(program:object){}
 
     public async apply_program(program:number[], core_address:number){}
 

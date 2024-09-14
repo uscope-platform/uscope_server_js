@@ -158,6 +158,82 @@ describe('Operation API tests', () => {
 
     });
 
+    test('compile_program', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'compile_program').mockImplementation(
+            (program:any) => {
+                result = program
+            });
+
+        let prog_info = {
+            id:1,
+            content: "void main(){\n\n float a;\nfloat b;\n float c = add(a, b);\n}",
+            headers: [
+                {
+                    name: "functions",
+                    content: "float add(float in_1, float in_2) { return in_1 + in_2;}"
+            }],
+            io: [],
+            type: "C"
+        }
+        return request(app.callback())
+            .post('/operations/compile_program')
+            .set('Authorization', `Bearer ${token}`)
+            .send(prog_info)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(prog_info);
+            });
+
+    });
+
+
+    test('apply_program', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'apply_program').mockImplementation(
+            (prog:any) => {
+                result = prog
+            });
+        let prog_info = {
+            id: 1,
+            content: "void main(){\n\n float a;\nfloat b;\n float c = add(a, b);\n}",
+            headers: [{
+                name: "functions",
+                content: "float add(float in_1, float in_2) { return in_1 + in_2;}"
+            }],
+            io: [{
+                address: "3",
+                associated_io: "sin_t",
+                name: "sin_t",
+                type: "output"
+            },
+            {
+                address: "21",
+                associated_io: "cos_t",
+                name: "cos_t",
+                type: "output"
+            }],
+            type: "C",
+            core_address: "0x83c000000",
+            hash: "499168ac9423d43da383435da3a0737b09f200b2"
+        }
+
+        return request(app.callback())
+            .post('/operations/apply_program/1')
+            .set('Authorization', `Bearer ${token}`)
+            .send(prog_info)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(prog_info);
+            });
+
+    });
+
+
 
     afterEach(() => {
         // restore the spy created with spyOn

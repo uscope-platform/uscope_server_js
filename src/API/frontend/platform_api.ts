@@ -36,6 +36,12 @@ class platform_router {
             next();
         })
 
+        this.router.post(endpoints_map.platform.endpoints.onboarding, async (ctx:Koa.Context, next: Koa.Next)=>{
+
+            ctx.status = 501;
+            next();
+        })
+
         this.router.post(endpoints_map.platform.endpoints.add_user, async (ctx:Koa.Context, next:Koa.Next) => {
             let body = <user_add_request>ctx.request.body;
 
