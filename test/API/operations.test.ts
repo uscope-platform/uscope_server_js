@@ -143,8 +143,9 @@ describe('Operation API tests', () => {
         let router = rtr as any;
         let result = 0;
         const spy = jest.spyOn(router.ops_backend, 'read_register').mockImplementation(
-            (address:any) => {
+            (address:any) : number => {
                 result = address
+                return 4213;
             });
 
         return request(app.callback())
@@ -152,6 +153,7 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
+                expect(response.text).toStrictEqual("4213");
                 expect(spy).toBeCalledTimes(1);
                 expect(result).toStrictEqual(54231231);
             });
@@ -234,6 +236,162 @@ describe('Operation API tests', () => {
     });
 
 
+
+    test('fetch_data', async () => {
+        let router = rtr as any;
+        const spy = jest.spyOn(router.ops_backend, 'fetch_data').mockImplementation(
+            () : number[] => {
+                return [1.5, 2.0, 3.0, 4.0, 5.0]
+            });
+
+        return request(app.callback())
+            .get('/operations/plot/data')
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(response.text).toStrictEqual("[1.5,2,3,4,5]");
+            });
+
+    });
+
+
+
+
+    test('set_scaling_factors', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'set_scaling_factors').mockImplementation(
+            (sfs:any) => {
+                result = sfs
+            });
+
+        let sfs = [1, 1.5, 2, -5.4, 1, 0];
+
+        return request(app.callback())
+            .post('/operations/plot/channel_scaling')
+            .set('Authorization', `Bearer ${token}`)
+            .send(sfs)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(sfs);
+            });
+
+    });
+
+    test('set_channel_statuses', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'set_channel_status').mockImplementation(
+            (sfs:any) => {
+                result = sfs
+            });
+
+        let statuses = {'0': false, '1': true, '2': true, '3': true, '4': true, '5': true};
+
+        return request(app.callback())
+            .post('/operations/plot/channel_status')
+            .set('Authorization', `Bearer ${token}`)
+            .send(statuses)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(statuses);
+            });
+
+    });
+
+
+    test('get_acquisition', async () => {
+        let router = rtr as any;
+        const spy = jest.spyOn(router.ops_backend, 'get_acquisition').mockImplementation(
+            () : string => {
+                return "wait_trigger"
+            });
+
+        return request(app.callback())
+            .get('/operations/plot/acquisition')
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(response.text).toStrictEqual("wait_trigger");
+            });
+
+    });
+
+    test('set_acquisition', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'set_acquisition').mockImplementation(
+            (arg:any) => {
+                result = arg
+            });
+
+        let acq = {
+            level: 0,
+            level_type: 'int',
+            mode: 'continuous',
+            prescaler: 0,
+            source: 1,
+            trigger: 'rising_edge',
+            trigger_point: 200
+        };
+
+        return request(app.callback())
+            .post('/operations/plot/acquisition')
+            .set('Authorization', `Bearer ${token}`)
+            .send(acq)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(acq);
+            });
+
+    });
+
+    test('set_dma_disable', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'set_dma_disable').mockImplementation(
+            (arg:any) => {
+                result = arg
+            });
+
+        return request(app.callback())
+            .post('/operations/plot/dma_disable')
+            .set('Authorization', `Bearer ${token}`)
+            .send({status:true})
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual({status:true});
+            });
+
+    });
+
+    test('address', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'set_scope_address').mockImplementation(
+            (arg:any) => {
+                result = arg
+            });
+
+        let acq = {'address': 18316853248, 'dma_buffer_offset': 520};
+
+        return request(app.callback())
+            .post('/operations/plot/address')
+            .set('Authorization', `Bearer ${token}`)
+            .send(acq)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(acq);
+            });
+
+    });
 
     afterEach(() => {
         // restore the spy created with spyOn

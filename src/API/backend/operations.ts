@@ -3,7 +3,11 @@ import fs from "node:fs";
 import {createHash} from "node:crypto";
 import bitstream_model from "../../data_model/bitstreams_model";
 import hw_interface from "../../hw_interface";
-import register_write_model, {programs_info} from "../../data_model/operations_model";
+import register_write_model, {
+    acquisition_status,
+    channel_statuses, dma_status,
+    programs_info, scope_address
+} from "../../data_model/operations_model";
 import database from "../../Database/Database";
 
 export default class OperationsBackend {
@@ -21,6 +25,10 @@ export default class OperationsBackend {
         await this.hw_if.load_bitstream(fs_path);
     }
 
+    public async fetch_data() : Promise<number[]>{
+        return await this.hw_if.read_data();
+    }
+
 
     public async read_register(addr:number) : Promise<number> {
         return await this.hw_if.read_register(addr);
@@ -33,6 +41,32 @@ export default class OperationsBackend {
     public async compile_program(prog:programs_info) : Promise<any> {
         return await this.hw_if.compile_program(prog);
     }
+
+    public async set_scaling_factors(factors:number[]) : Promise<any> {
+        return await this.hw_if.set_scaling_factors(factors);
+    }
+
+    public async set_channel_status(status:channel_statuses) : Promise<any> {
+        return await this.hw_if.set_channel_status(status);
+    }
+
+    public async get_acquisition() : Promise<string> {
+        return this.hw_if.get_acquisition_status();
+    }
+
+    public async set_acquisition(status:acquisition_status) : Promise<any> {
+        return this.hw_if.set_acquisition(status)
+    }
+
+    public async set_scope_address(addr:scope_address): Promise<any>{
+        return this.hw_if.set_scope_address(addr);
+    }
+
+    public async set_dma_disable(status:dma_status): Promise<any>{
+        return this.hw_if.set_dma_disable(status);
+    }
+
+
 
     public async apply_program(prog:programs_info) : Promise<any> {
         let p_obj =await this.db.programs.get_program(prog.id)

@@ -28,3 +28,28 @@ export interface programs_info {
     core_address:number,
     hash:string
 }
+
+export type channel_statuses = {
+    [key: string]: boolean ;
+};
+
+
+export interface   acquisition_status {
+    level:number,
+    level_type: string,
+    mode: string,
+    prescaler: number,
+    source: number,
+    trigger: string,
+    trigger_point: number
+}
+
+export interface   scope_address {
+    address:number,
+    dma_buffer_offset: number
+}
+
+
+export interface dma_status {
+    status:boolean
+}

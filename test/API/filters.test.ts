@@ -5,7 +5,6 @@ import {authorizer, error_handler} from "../../src/API/backend/middleware";
 import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
-import peripherals_router from "../../src/API/frontend/peripherals_api";
 import filters_router from "../../src/API/frontend/filters_api";
 
 

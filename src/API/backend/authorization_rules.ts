@@ -7,7 +7,13 @@ interface rules_map {
         write_registers:string,
         read_register:string
         compile_program:string,
-        apply_program:string
+        apply_program:string,
+        fetch_data:string,
+        set_channel_status:string,
+        scaling_factors:string,
+        acquisition:string,
+        scope_address:string,
+        dma_disable:string
     }
     script: {
         [index: string]: any;
@@ -96,7 +102,13 @@ let rules : rules_map = {
         read_register:"operator",
         write_registers:"operator",
         compile_program:"operator",
-        apply_program:"operator"
+        apply_program:"operator",
+        fetch_data:"operator",
+        set_channel_status:"operator",
+        scaling_factors:"operator",
+        acquisition:"operator",
+        scope_address:'operator',
+        dma_disable:'operator'
     },
     script:{
         hash:'operator',

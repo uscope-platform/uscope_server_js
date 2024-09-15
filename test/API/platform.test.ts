@@ -63,7 +63,7 @@ describe('platform API tests', () => {
     app.use(rtr.router.routes())
     app.use(rtr.router.allowedMethods());
 
-    let server = app.listen(3004);
+    let server = app.listen(3006);
 
     test('add_user', async () => {
         let user_obj = {user:"test_user",password:"test", role:"admin"}

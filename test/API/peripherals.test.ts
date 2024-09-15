@@ -181,6 +181,21 @@ describe('peripherals API tests', () => {
             });
     });
 
+    test('add_fail', async () => {
+        let peripheral_obj = {
+            id:54,
+            peripheral_name: 'new peripheral_' + 54
+        }
+        return request(app.callback())
+            .post('/peripheral/54')
+            .set('Authorization', `Bearer ${token}`)
+            .send(peripheral_obj)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(peripheral_obj)
+            });
+    });
+
     test('edit', async () => {
         let edit = {script:4, field:"parametric", value:false};
         return request(app.callback())

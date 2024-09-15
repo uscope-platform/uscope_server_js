@@ -5,8 +5,6 @@ import {authorizer, error_handler} from "../../src/API/backend/middleware";
 import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
-import peripherals_router from "../../src/API/frontend/peripherals_api";
-import filters_router from "../../src/API/frontend/filters_api";
 import emulators_router from "../../src/API/frontend/emulators_api";
 
 
@@ -93,7 +91,7 @@ describe('emulators API tests', () => {
     app.use(rtr.router.routes())
     app.use(rtr.router.allowedMethods());
 
-    let server = app.listen(3006);
+    let server = app.listen(3004);
 
     let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTQwNDQ4NjJ9.3FCjAmBgEUuAlFqL7goWpwuu0OH6ldyTA--BLjyzIOE";
 

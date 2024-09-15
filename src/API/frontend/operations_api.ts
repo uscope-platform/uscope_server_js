@@ -3,7 +3,11 @@ import database from "../../Database/Database";
 import * as Koa from "koa";
 import endpoints_map from "./endpoints_map";
 import OperationsBackend from "../backend/operations";
-import register_write_model, {programs_info} from "../../data_model/operations_model";
+import register_write_model, {
+    acquisition_status,
+    channel_statuses, dma_status,
+    programs_info, scope_address
+} from "../../data_model/operations_model";
 
 class operations_router {
     public router: Router;
@@ -12,7 +16,7 @@ class operations_router {
 
     constructor(db: database, driver_host:string, driver_port:number) {
         this.db = db
-        this.ops_backend = new OperationsBackend(driver_host, driver_port);
+        this.ops_backend = new OperationsBackend(driver_host, driver_port, db);
 
         this.router = new Router({
             prefix: endpoints_map.operations.prefix
@@ -64,21 +68,111 @@ class operations_router {
 
 
         this.router.post(endpoints_map.operations.endpoints.compile_program, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let data = <programs_info>ctx.request.body;
+                ctx.response.body = await this.ops_backend.compile_program(data);
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
 
-            let data = <programs_info>ctx.request.body;
-            ctx.response.body = await this.ops_backend.compile_program(data);
-            ctx.status = 200
         });
 
         this.router.post(endpoints_map.operations.endpoints.apply_program, async (ctx:Koa.Context, next:Koa.Next) => {
-
-            let core_id = parseInt(ctx.params.id);
-            let data = <programs_info>ctx.request.body;
-
-            ctx.response.body = await this.ops_backend.apply_program(data);
-            ctx.status = 200
+            try{
+                let data = <programs_info>ctx.request.body;
+                ctx.response.body = await this.ops_backend.apply_program(data);
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
         });
 
+        this.router.get(endpoints_map.operations.endpoints.fetch_data, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                ctx.response.body = await this.ops_backend.fetch_data();
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
+        this.router.post(endpoints_map.operations.endpoints.set_channel_status, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let data = <channel_statuses>ctx.request.body;
+                ctx.response.body = await this.ops_backend.set_channel_status(data);
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
+        this.router.post(endpoints_map.operations.endpoints.scaling_factors, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let data = <number[]>ctx.request.body;
+                ctx.response.body = await this.ops_backend.set_scaling_factors(data);
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
+        this.router.get(endpoints_map.operations.endpoints.acquisition, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                ctx.response.body = await this.ops_backend.get_acquisition();
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
+        this.router.post(endpoints_map.operations.endpoints.acquisition, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let status = <acquisition_status>ctx.request.body;
+                ctx.response.body = await this.ops_backend.set_acquisition(status);
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        })
+
+        this.router.post(endpoints_map.operations.endpoints.scope_address, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let status = <scope_address>ctx.request.body;
+                ctx.response.body = await this.ops_backend.set_scope_address(status);
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
+        this.router.post(endpoints_map.operations.endpoints.dma_disable, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let status = <dma_status>ctx.request.body;
+                ctx.response.body = await this.ops_backend.set_dma_disable(status);
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
 
     }
 }

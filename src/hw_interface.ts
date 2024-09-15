@@ -1,3 +1,4 @@
+import {acquisition_status, channel_statuses, dma_status, scope_address} from "./data_model/operations_model";
 
 
 export default class hw_interface {
@@ -10,9 +11,10 @@ export default class hw_interface {
 
     }
 
-    public async read_data(){
-
+    public async read_data(): Promise<number[]> {
+        return [];
     }
+
     public async read_register(address:number): Promise<number>{
         return 0;
     }
@@ -32,9 +34,9 @@ export default class hw_interface {
 
     public async set_channel_signs(signs:boolean){}
 
-    public async set_scaling_factors(factors:boolean){}
+    public async set_scaling_factors(factors:number[]){}
 
-    public async set_channel_status(status:boolean){}
+    public async set_channel_status(status:channel_statuses){}
 
     public async compile_program(program:object){}
 
@@ -56,12 +58,17 @@ export default class hw_interface {
 
     public async stop_hil(){}
 
-    public async get_acquisition_status(){}
+    public async get_acquisition_status() : Promise<string> {
+        return "";
+    }
 
-    public async set_acquisition(arg:object){}
+    public async set_acquisition(arg:acquisition_status){}
 
 
-    public async set_scope_address(address:number){}
+    public async set_scope_address(address:scope_address){}
+
+    public async set_dma_disable(address:dma_status){}
+
 
 
     public async emulate_hil(spec:object){}

@@ -8,7 +8,13 @@ interface api_map {
             write_registers:string,
             read_register:string,
             compile_program:string,
-            apply_program:string
+            apply_program:string,
+            fetch_data:string,
+            set_channel_status:string,
+            scaling_factors:string,
+            acquisition:string,
+            scope_address:string,
+            dma_disable:string,
         }
     }
     script: {
@@ -137,7 +143,13 @@ let endpoints_map : api_map = {
             write_registers:"/write_registers",
             read_register:"/read_register/:address",
             compile_program:"/compile_program",
-            apply_program:"/apply_program/:id"
+            apply_program:"/apply_program/:id",
+            fetch_data:'/plot/data',
+            set_channel_status: '/plot/channel_status',
+            scaling_factors: '/plot/channel_scaling',
+            acquisition: '/plot/acquisition',
+            scope_address:'/plot/address',
+            dma_disable:'/plot/dma_disable'
         }
     },
     bitstream:{
