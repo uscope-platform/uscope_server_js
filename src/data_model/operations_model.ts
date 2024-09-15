@@ -53,3 +53,22 @@ export interface   scope_address {
 export interface dma_status {
     status:boolean
 }
+
+export interface set_hil_inputs {
+    address:number[],
+    core:string,
+    value:number
+}
+
+export interface hil_output {
+    address:number,
+    channel:number,
+    name:string,
+    output:string,
+    source:string
+}
+
+export interface select_hil_output {
+    channel: number,
+    output: hil_output
+}

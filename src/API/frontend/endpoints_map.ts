@@ -15,6 +15,11 @@ interface api_map {
             acquisition:string,
             scope_address:string,
             dma_disable:string,
+            hil_deploy:string,
+            hil_select_output:string,
+            hil_set_input:string,
+            hil_start:string,
+            hil_stop:string
         }
     }
     script: {
@@ -144,12 +149,19 @@ let endpoints_map : api_map = {
             read_register:"/read_register/:address",
             compile_program:"/compile_program",
             apply_program:"/apply_program/:id",
+
             fetch_data:'/plot/data',
             set_channel_status: '/plot/channel_status',
             scaling_factors: '/plot/channel_scaling',
             acquisition: '/plot/acquisition',
             scope_address:'/plot/address',
-            dma_disable:'/plot/dma_disable'
+            dma_disable:'/plot/dma_disable',
+
+            hil_deploy: '/hil/deploy',
+            hil_select_output: '/hil/select_out',
+            hil_set_input: '/hil/set_input',
+            hil_start:'/hil/start',
+            hil_stop:'/hil/stop'
         }
     },
     bitstream:{

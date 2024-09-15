@@ -6,8 +6,9 @@ import OperationsBackend from "../backend/operations";
 import register_write_model, {
     acquisition_status,
     channel_statuses, dma_status,
-    programs_info, scope_address
+    programs_info, scope_address, select_hil_output, set_hil_inputs
 } from "../../data_model/operations_model";
+import emulator_model from "../../data_model/emulator_model";
 
 class operations_router {
     public router: Router;
@@ -173,6 +174,71 @@ class operations_router {
                 next()
             }
         });
+
+
+
+        this.router.post(endpoints_map.operations.endpoints.hil_deploy, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let status = <emulator_model>ctx.request.body;
+                ctx.response.body = await this.ops_backend.hil_deploy(status);
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
+
+        this.router.post(endpoints_map.operations.endpoints.hil_set_input, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let status = <set_hil_inputs>ctx.request.body;
+                ctx.response.body = await this.ops_backend.hil_set_input(status);
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
+        this.router.post(endpoints_map.operations.endpoints.hil_select_output, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let status = <select_hil_output>ctx.request.body;
+                ctx.response.body = await this.ops_backend.hil_select_output(status);
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
+
+
+        this.router.get(endpoints_map.operations.endpoints.hil_start, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                ctx.response.body = await this.ops_backend.hil_start();
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
+
+        this.router.get(endpoints_map.operations.endpoints.hil_stop, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                ctx.response.body = await this.ops_backend.hil_stop();
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
 
     }
 }

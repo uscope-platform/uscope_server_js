@@ -1,4 +1,10 @@
-import {acquisition_status, channel_statuses, dma_status, scope_address} from "./data_model/operations_model";
+import {
+    acquisition_status,
+    channel_statuses,
+    dma_status,
+    scope_address,
+    select_hil_output, set_hil_inputs
+} from "./data_model/operations_model";
 
 
 export default class hw_interface {
@@ -69,6 +75,9 @@ export default class hw_interface {
 
     public async set_dma_disable(address:dma_status){}
 
+    public async select_output(out:select_hil_output){}
+
+    public async set_input(in_obj:set_hil_inputs){}
 
 
     public async emulate_hil(spec:object){}

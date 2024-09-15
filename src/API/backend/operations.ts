@@ -6,9 +6,10 @@ import hw_interface from "../../hw_interface";
 import register_write_model, {
     acquisition_status,
     channel_statuses, dma_status,
-    programs_info, scope_address
+    programs_info, scope_address, select_hil_output, set_hil_inputs
 } from "../../data_model/operations_model";
 import database from "../../Database/Database";
+import emulator_model from "../../data_model/emulator_model";
 
 export default class OperationsBackend {
     private hw_if: hw_interface;
@@ -66,7 +67,25 @@ export default class OperationsBackend {
         return this.hw_if.set_dma_disable(status);
     }
 
+    public async hil_select_output(out:select_hil_output): Promise<any>{
+        return this.hw_if.select_output(out);
+    }
 
+    public async hil_set_input(input:set_hil_inputs): Promise<any>{
+        return this.hw_if.set_input(input);
+    }
+
+    public async hil_start(): Promise<any>{
+        return this.hw_if.start_hil();
+    }
+
+    public async hil_stop(): Promise<any>{
+        return this.hw_if.stop_hil();
+    }
+
+    public async hil_deploy(hil:emulator_model): Promise<any>{
+        return this.hw_if.deploy_hil(hil);
+    }
 
     public async apply_program(prog:programs_info) : Promise<any> {
         let p_obj =await this.db.programs.get_program(prog.id)

@@ -13,7 +13,12 @@ interface rules_map {
         scaling_factors:string,
         acquisition:string,
         scope_address:string,
-        dma_disable:string
+        dma_disable:string,
+        hil_deploy:string,
+        hil_select_output:string,
+        hil_set_input:string,
+        hil_start:string,
+        hil_stop:string
     }
     script: {
         [index: string]: any;
@@ -108,7 +113,12 @@ let rules : rules_map = {
         scaling_factors:"operator",
         acquisition:"operator",
         scope_address:'operator',
-        dma_disable:'operator'
+        dma_disable:'operator',
+        hil_deploy:'operator',
+        hil_select_output:'operator',
+        hil_set_input:'operator',
+        hil_start:'operator',
+        hil_stop:'operator'
     },
     script:{
         hash:'operator',
