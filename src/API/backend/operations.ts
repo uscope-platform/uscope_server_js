@@ -5,7 +5,7 @@ import bitstream_model from "../../data_model/bitstreams_model";
 import hw_interface from "../../hw_interface";
 import register_write_model, {
     acquisition_status,
-    channel_statuses, dma_status,
+    channel_statuses, clock_info, dma_status,
     programs_info, scope_address, select_hil_output, set_hil_inputs
 } from "../../data_model/operations_model";
 import database from "../../Database/Database";
@@ -86,6 +86,20 @@ export default class OperationsBackend {
     public async hil_deploy(hil:emulator_model): Promise<any>{
         return this.hw_if.deploy_hil(hil);
     }
+
+
+    public async get_clocks(): Promise<any>{
+        let ret : number[] = [];
+        for(let i = 0; i<4; i++){
+            ret.push(await this.hw_if.get_clock(i.toString(), true));
+        }
+        return ret;
+    }
+
+    public async set_clock(info:clock_info): Promise<any>{
+        return this.hw_if.set_clock(info);
+    }
+
 
     public async apply_program(prog:programs_info) : Promise<any> {
         let p_obj =await this.db.programs.get_program(prog.id)

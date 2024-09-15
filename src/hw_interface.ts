@@ -1,6 +1,6 @@
 import {
     acquisition_status,
-    channel_statuses,
+    channel_statuses, clock_info,
     dma_status,
     scope_address,
     select_hil_output, set_hil_inputs
@@ -32,8 +32,12 @@ export default class hw_interface {
 
     }
 
-    public async set_clock_frequency(clock:number, frequency:number) {
+    public async set_clock(info:clock_info) {
 
+    }
+
+    public async get_clock(id:string, is_primary: boolean) : Promise<number>{
+        return 0;
     }
 
     public async set_channel_widths(widths:number[]){}

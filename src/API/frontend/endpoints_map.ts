@@ -9,6 +9,7 @@ interface api_map {
             read_register:string,
             compile_program:string,
             apply_program:string,
+            clock:string,
             fetch_data:string,
             set_channel_status:string,
             scaling_factors:string,
@@ -149,6 +150,7 @@ let endpoints_map : api_map = {
             read_register:"/read_register/:address",
             compile_program:"/compile_program",
             apply_program:"/apply_program/:id",
+            clock: "/clock",
 
             fetch_data:'/plot/data',
             set_channel_status: '/plot/channel_status',

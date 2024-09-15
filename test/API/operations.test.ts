@@ -580,6 +580,52 @@ describe('Operation API tests', () => {
             });
 
     });
+
+
+
+    test('get_clocks', async () => {
+        let router = rtr as any;
+        const spy = jest.spyOn(router.ops_backend, 'get_clocks').mockImplementation(
+            () : number[] => {
+                return [1999.1, 0, 123, 45]
+            });
+
+        return request(app.callback())
+            .get('/operations/clock')
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(response.text).toStrictEqual("[1999.1,0,123,45]");
+            });
+
+    });
+
+
+
+    test('set_clocks', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'set_clock').mockImplementation(
+            (arg:any) => {
+                result = arg
+            });
+
+        let clk_obj = {id:"test", value:1293.13, is_primary:false}
+
+        return request(app.callback())
+            .post('/operations/clock')
+            .set('Authorization', `Bearer ${token}`)
+            .send(clk_obj)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(clk_obj);
+            });
+
+    });
+
+
     afterEach(() => {
         // restore the spy created with spyOn
         jest.restoreAllMocks();

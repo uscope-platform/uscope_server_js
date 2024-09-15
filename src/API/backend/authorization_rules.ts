@@ -8,6 +8,7 @@ interface rules_map {
         read_register:string
         compile_program:string,
         apply_program:string,
+        clock:string,
         fetch_data:string,
         set_channel_status:string,
         scaling_factors:string,
@@ -109,6 +110,7 @@ let rules : rules_map = {
         compile_program:"operator",
         apply_program:"operator",
         fetch_data:"operator",
+        clock:"operator",
         set_channel_status:"operator",
         scaling_factors:"operator",
         acquisition:"operator",

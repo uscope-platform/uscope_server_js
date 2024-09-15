@@ -72,3 +72,9 @@ export interface select_hil_output {
     channel: number,
     output: hil_output
 }
+
+export interface clock_info {
+    id: string,
+    value: number,
+    is_primary:boolean
+}
