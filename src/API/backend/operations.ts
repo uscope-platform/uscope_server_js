@@ -100,7 +100,6 @@ export default class OperationsBackend {
         return this.hw_if.set_clock(info);
     }
 
-
     public async apply_program(prog:programs_info) : Promise<any> {
         let p_obj =await this.db.programs.get_program(prog.id)
 

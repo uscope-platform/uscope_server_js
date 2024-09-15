@@ -98,8 +98,12 @@ interface rules_map {
         add:string,
         edit:string,
         delete:string
+    },
+    settings:{
+        [index: string]: any;
+        debug_level:string,
+        hil_address_map:string
     }
-
 }
 
 let rules : rules_map = {
@@ -191,6 +195,10 @@ let rules : rules_map = {
         add:'admin',
         edit:'admin',
         delete:'admin'
+    },
+    settings:{
+        debug_level:'operator',
+        hil_address_map:'operator'
     }
 }
 

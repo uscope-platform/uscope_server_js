@@ -22,7 +22,15 @@ interface api_map {
             hil_start:string,
             hil_stop:string
         }
-    }
+    },
+    settings:{
+        prefix: string,
+        endpoints:{
+            [index: string]: any;
+            debug_level:string,
+            hil_address_map:string
+        }
+    },
     script: {
         prefix: string,
         endpoints:{
@@ -140,6 +148,13 @@ let endpoints_map : api_map = {
             add:"/:id",
             edit:"/:id",
             delete:"/:id"
+        }
+    },
+    settings:{
+        prefix:"/settings",
+        endpoints:{
+            debug_level:'/debug_level',
+            hil_address_map:'/hil_address_map',
         }
     },
     operations: {
