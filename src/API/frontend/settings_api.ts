@@ -2,6 +2,7 @@ import Router from "koa-router";
 import * as Koa from "koa";
 import endpoints_map from "./endpoints_map";
 import SettingsBackend from "../backend/settings";
+import {hil_address_map} from "../../data_model/operations_model";
 
 class settings_router{
     public router: Router;
@@ -39,6 +40,29 @@ class settings_router{
         });
 
 
+        this.router.get(endpoints_map.settings.endpoints.hil_address_map, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                ctx.body = await this.backend.get_hil_map();
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
+
+        this.router.post(endpoints_map.settings.endpoints.hil_address_map, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let level = <hil_address_map>ctx.request.body;
+                await this.backend.set_hil_map(level)
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
 
     }
 }

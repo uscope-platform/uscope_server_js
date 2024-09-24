@@ -78,3 +78,26 @@ export interface clock_info {
     value: number,
     is_primary:boolean
 }
+
+interface hil_map_bases {
+    controller:number,
+    cores_control:number,
+    cores_inputs:number,
+    cores_rom:number,
+    hil_control:number
+    scope_mux:number
+}
+
+interface hil_map_offsets {
+    controller:number,
+    cores_control:number,
+    cores_inputs:number,
+    cores_rom:number,
+    dma:number,
+    hil_tb:number
+}
+
+export interface hil_address_map {
+    bases: hil_map_bases,
+    offsets: hil_map_offsets
+}

@@ -5,6 +5,7 @@ import jwt from "koa-jwt"
 import request from "supertest";
 import {expect} from "@jest/globals";
 import settings_router from "../../src/API/frontend/settings_api";
+import {hil_address_map} from "../../src/data_model/operations_model";
 
 
 
@@ -75,6 +76,52 @@ describe('Settings API tests', () => {
             });
 
     });
+
+    test('get_address_map', async () => {
+
+        let router = rtr as any;
+        let a_map = {'bases': {'controller': 18316591104, 'cores_control': 18316656640, 'cores_inputs': 8192, 'cores_rom': 21474836480, 'hil_control': 18316525568, 'scope_mux': 18316853248}, 'offsets': {'controller': 4096, 'cores_control': 65536, 'cores_inputs': 4096, 'cores_rom': 268435456, 'dma': 4096, 'hil_tb': 0}};
+
+        const spy = jest.spyOn(router.backend, 'get_hil_map').mockImplementation(
+            () : hil_address_map => {
+                return a_map;
+            });
+
+        return request(app.callback())
+            .get('/settings/hil_address_map')
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(response.body).toStrictEqual(a_map);
+            });
+
+    });
+
+
+    test('set_address_map', async () => {
+
+        let router = rtr as any;
+        let result = "";
+        const spy = jest.spyOn(router.backend, 'set_hil_map').mockImplementation(
+            (arg:any)  => {
+                result= arg
+            });
+
+        let a_map = {'bases': {'controller': 18316591104, 'cores_control': 18316656640, 'cores_inputs': 8192, 'cores_rom': 21474836480, 'hil_control': 18316525568, 'scope_mux': 18316853248}, 'offsets': {'controller': 4096, 'cores_control': 65536, 'cores_inputs': 4096, 'cores_rom': 268435456, 'dma': 4096, 'hil_tb': 0}};
+
+        return request(app.callback())
+            .post('/settings/hil_address_map')
+            .set('Authorization', `Bearer ${token}`)
+            .send(a_map)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(a_map);
+            });
+
+    });
+
 
 
     afterEach(() => {

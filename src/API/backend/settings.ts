@@ -1,6 +1,6 @@
 
 import hw_interface from "../../hw_interface";
-import {clock_info} from "../../data_model/operations_model";
+import {clock_info, hil_address_map} from "../../data_model/operations_model";
 
 export default class SettingsBackend {
     private hw_if: hw_interface;
@@ -17,7 +17,7 @@ export default class SettingsBackend {
     }
 
 
-    public async set_hil_map(info:clock_info): Promise<any>{
+    public async set_hil_map(map:hil_address_map): Promise<any>{
 
     }
 
