@@ -57,7 +57,10 @@ interface rules_map {
         onboarding: string,
         remove_user:string,
         manual_login:string,
-        auto_login:string
+        auto_login:string,
+        db_dump:string,
+        db_restore:string,
+        versions:string
     },
     peripheral:{
         [index: string]: any;
@@ -158,7 +161,10 @@ let rules : rules_map = {
         get_users:'admin',
         onboarding: 'public',
         manual_login:'public',
-        auto_login:'public'
+        auto_login:'public',
+        db_dump:'public',
+        db_restore:'public',
+        versions:'public'
     },
     peripheral:{
         hash:'operator',

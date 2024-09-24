@@ -10,6 +10,7 @@ import peripherals_db from "./peripherals_db";
 import Applications_db from "./applications_db";
 import {promises} from "node:dns";
 import bitstreams_db from "./bitstreams_db";
+import {db_dump} from "../data_model/platform_model";
 
 const sql = postgres({ max: 4 })
 
@@ -44,6 +45,22 @@ class database {
          this.emulators = new emulators_db(this.db, schema);
          this.peripherals = new peripherals_db(this.db, schema);
          this.bitstreams = new bitstreams_db(this.db, schema);
+     }
+
+     public async dump():Promise<db_dump>{
+        return {
+            applications: await this.applications.load_all(),
+            filters: await this.filters.load_all(),
+            scripts: await this.scripts.load_all(),
+            programs: await this.programs.load_all(),
+            peripherals: await this.peripherals.load_all(),
+            emulators: await this.emulators.load_all(),
+            bitstreams: await this.bitstreams.load_all()
+        }
+     }
+
+     public async restore(obj:db_dump):Promise<any>{
+        // TODO: implement db restore
      }
 
      public async close():Promise<void> {

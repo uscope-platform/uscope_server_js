@@ -3,7 +3,7 @@ import * as Koa from 'koa';
 
 import Authenticator from '../backend/authentication'
 import database from "../../Database/Database";
-import {auto_login_object, user_login_object} from "../../data_model/platform_model";
+import {auto_login_object, db_dump, user_login_object} from "../../data_model/platform_model";
 import endpoints_map from "./endpoints_map";
 
 interface user_add_request {
@@ -67,6 +67,24 @@ class platform_router {
             ctx.body = await this.auth.authenticate(body);
             ctx.status = 200;
         })
+
+
+        this.router.get(endpoints_map.platform.endpoints.versions, async (ctx:Koa.Context, next:Koa.Next) =>{
+            ctx.status = 200;
+        })
+        
+        this.router.get(endpoints_map.platform.endpoints.db_dump, async (ctx:Koa.Context, next:Koa.Next) =>{
+            ctx.body = await this.db.dump();
+            ctx.status = 200;
+        })
+
+        this.router.post(endpoints_map.platform.endpoints.db_restore, async (ctx:Koa.Context, next:Koa.Next) =>{
+            let body = <db_dump>ctx.request.body;
+            ctx.body = await this.db.restore(body);
+            ctx.status = 200;
+        })
+
+
     }
 }
 

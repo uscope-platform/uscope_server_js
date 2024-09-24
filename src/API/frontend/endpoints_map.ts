@@ -79,7 +79,10 @@ interface api_map {
             onboarding: string,
             remove_user:string,
             manual_login:string,
-            auto_login:string
+            auto_login:string,
+            db_dump:string,
+            db_restore:string,
+            versions:string
         }
     },
     peripheral:{
@@ -214,7 +217,10 @@ let endpoints_map : api_map = {
             remove_user:'/user/:name',
             manual_login:'/login/manual',
             auto_login:'/login/auto',
-            onboarding: '/onboarding'
+            onboarding: '/onboarding',
+            db_dump: '/database/dump',
+            db_restore: '/database/restore',
+            versions: '/versions'
         }
     },
 
