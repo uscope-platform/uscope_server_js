@@ -20,7 +20,9 @@ interface api_map {
             hil_select_output:string,
             hil_set_input:string,
             hil_start:string,
-            hil_stop:string
+            hil_stop:string,
+            filter_design:string,
+            filter_implement:string
         }
     },
     settings:{
@@ -64,9 +66,7 @@ interface api_map {
             get:string,
             add:string,
             edit:string,
-            delete:string,
-            compile:string,
-            apply:string
+            delete:string
         }
 
     },
@@ -106,10 +106,7 @@ interface api_map {
             get: string,
             add: string,
             edit: string,
-            delete: string,
-            design:string,
-            implement:string,
-            get_response: string
+            delete: string
         }
     },
     emulator:{
@@ -181,7 +178,9 @@ let endpoints_map : api_map = {
             hil_select_output: '/hil/select_out',
             hil_set_input: '/hil/set_input',
             hil_start:'/hil/start',
-            hil_stop:'/hil/stop'
+            hil_stop:'/hil/stop',
+            filter_design:"/filter_design/:id",
+            filter_implement:"/filter_implement/:id"
         }
     },
     bitstream:{
@@ -204,9 +203,7 @@ let endpoints_map : api_map = {
             get:"/:id",
             add:"/:id",
             edit:"/:id",
-            delete:"/:id",
-            compile:"/compile",
-            apply:"/apply"
+            delete:"/:id"
         }
     },
     platform:{
@@ -244,10 +241,7 @@ let endpoints_map : api_map = {
             get:"/:id",
             add:"/:id",
             edit:"/:id",
-            delete:"/:id",
-            design:"/design",
-            implement:"/implement",
-            get_response:"/response"
+            delete:"/:id"
         }
     },
 

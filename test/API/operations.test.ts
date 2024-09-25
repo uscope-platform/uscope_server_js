@@ -602,7 +602,6 @@ describe('Operation API tests', () => {
     });
 
 
-
     test('set_clocks', async () => {
         let router = rtr as any;
         let result = 0;
@@ -625,6 +624,46 @@ describe('Operation API tests', () => {
 
     });
 
+
+
+    test('design_filter', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.filter_backend, 'design_filter').mockImplementation(
+            (arg:any) => {
+                result = arg
+            });
+
+        return request(app.callback())
+            .get('/operations/filter_design/4')
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(4);
+            });
+
+    });
+
+    test('implement_filter', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.filter_backend, 'implement_filter').mockImplementation(
+            (arg:any) => {
+                result = arg
+            });
+
+
+        return request(app.callback())
+            .get('/operations/filter_implement/23')
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(23);
+            });
+
+    });
 
     afterEach(() => {
         // restore the spy created with spyOn

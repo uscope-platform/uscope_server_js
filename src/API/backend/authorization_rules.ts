@@ -19,7 +19,9 @@ interface rules_map {
         hil_select_output:string,
         hil_set_input:string,
         hil_start:string,
-        hil_stop:string
+        hil_stop:string,
+        filter_design:string,
+        filter_implement:string
     }
     script: {
         [index: string]: any;
@@ -46,9 +48,7 @@ interface rules_map {
         get:string,
         add:string,
         edit:string,
-        delete:string,
-        compile:string,
-        apply:string
+        delete:string
     },
     platform:{
         [index: string]: any;
@@ -127,7 +127,9 @@ let rules : rules_map = {
         hil_select_output:'operator',
         hil_set_input:'operator',
         hil_start:'operator',
-        hil_stop:'operator'
+        hil_stop:'operator',
+        filter_design:'operator',
+        filter_implement:'operator'
     },
     script:{
         hash:'operator',
@@ -151,9 +153,7 @@ let rules : rules_map = {
         get:'operator',
         add:'user',
         edit:'user',
-        delete:'user',
-        compile:"user",
-        apply:"operator"
+        delete:'user'
     },
     platform:{
         add_user:'admin',

@@ -9,15 +9,18 @@ import register_write_model, {
     programs_info, scope_address, select_hil_output, set_hil_inputs
 } from "../../data_model/operations_model";
 import emulator_model from "../../data_model/emulator_model";
+import FiltersBackend from "../backend/filters";
 
 class operations_router {
     public router: Router;
     public db: database;
     private ops_backend: OperationsBackend;
+    private filter_backend: FiltersBackend;
 
     constructor(db: database, driver_host:string, driver_port:number) {
         this.db = db
         this.ops_backend = new OperationsBackend(driver_host, driver_port, db);
+        this.filter_backend = new FiltersBackend(db);
 
         this.router = new Router({
             prefix: endpoints_map.operations.prefix
@@ -261,6 +264,33 @@ class operations_router {
                 next()
             }
         });
+
+
+        this.router.get(endpoints_map.operations.endpoints.filter_design, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let id = parseInt(ctx.params.id);
+                ctx.response.body = await this.filter_backend.design_filter(id);
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
+
+        this.router.get(endpoints_map.operations.endpoints.filter_implement, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let id = parseInt(ctx.params.id);
+                ctx.response.body = await this.filter_backend.implement_filter(id);
+                ctx.status = 200
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
+
 
 
     }

@@ -156,7 +156,6 @@ describe('platform API tests', () => {
 
         return request(app.callback()).post('/platform/login/manual').send(user_obj).then((response)=>{
             expect(response.status).toBe(401);
-            let result = response.body;
             expect(response.text).toBe("Login failed");
         });
     });

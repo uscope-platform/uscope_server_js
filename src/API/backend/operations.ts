@@ -1,4 +1,4 @@
-import {application_model, core_load_info} from "../../data_model/application_model";
+import {application_model} from "../../data_model/application_model";
 import fs from "node:fs";
 import {createHash} from "node:crypto";
 import bitstream_model from "../../data_model/bitstreams_model";
@@ -10,6 +10,7 @@ import register_write_model, {
 } from "../../data_model/operations_model";
 import database from "../../Database/Database";
 import emulator_model from "../../data_model/emulator_model";
+
 
 export default class OperationsBackend {
     private hw_if: hw_interface;
