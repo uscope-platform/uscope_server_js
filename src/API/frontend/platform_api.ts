@@ -37,8 +37,12 @@ class platform_router {
         })
 
         this.router.post(endpoints_map.platform.endpoints.onboarding, async (ctx:Koa.Context, next: Koa.Next)=>{
-
-            ctx.status = 501;
+            let has_users = await this.db.platform.has_users();
+            let body = <user_add_request>ctx.request.body;
+            if(!has_users) {
+                await this.auth.create_user(body.user, body.password, body.role);
+            }
+            ctx.status = 200;
             next();
         })
 
@@ -72,7 +76,7 @@ class platform_router {
         this.router.get(endpoints_map.platform.endpoints.versions, async (ctx:Koa.Context, next:Koa.Next) =>{
             ctx.status = 200;
         })
-        
+
         this.router.get(endpoints_map.platform.endpoints.db_dump, async (ctx:Koa.Context, next:Koa.Next) =>{
             ctx.body = await this.db.dump();
             ctx.status = 200;

@@ -100,7 +100,7 @@ describe('platform API tests', () => {
             });
     });
 
-    test('onboarding', async () => {
+    test('onboarding_get', async () => {
         return request(app.callback())
             .get('/platform/onboarding')
             .set('Authorization', `Bearer ${bearer_token}`)
@@ -110,6 +110,21 @@ describe('platform API tests', () => {
             });
     });
 
+
+    test('onboarding_post', async () => {
+        let user_obj = {user:"test_user2",password:"test2", role:"admin2"}
+        return request(app.callback())
+            .post('/platform/onboarding')
+            .set('Authorization', `Bearer ${bearer_token}`)
+            .send(user_obj)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results.user).toBe("test_user2");
+                expect(results.pw_hash).not.toBeNull();
+                expect(results.pw_hash.startsWith("$argon2id$v=19$m=32768,t=4,p=2")).toBeTruthy()
+                expect(results.role).toBe("admin2");
+            });
+    });
 
     test('success manual_login', async () => {
         let user_obj = {
