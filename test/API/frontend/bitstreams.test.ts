@@ -1,13 +1,13 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
-import database from "../../src/Database/Database";
-import {authorizer, error_handler} from "../../src/API/backend/middleware";
+import database from "../../../src/Database/Database";
+import {authorizer, error_handler} from "../../../src/API/backend/middleware";
 import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
-import bitstream_router from "../../src/API/frontend/bitstreams_api";
+import bitstream_router from "../../../src/API/frontend/bitstreams_api";
 import fs from "node:fs";
-import bitstream_model from "../../src/data_model/bitstreams_model";
+import bitstream_model from "../../../src/data_model/bitstreams_model";
 import {createHash} from "node:crypto";
 
 
@@ -18,7 +18,7 @@ describe('bitstream API tests', () => {
 
     app.use(bodyParser({jsonLimit:'50mb'}));
 
-    let data = fs.readFileSync(__dirname + "/../data/mock.bit");
+    let data = fs.readFileSync(__dirname + "/../../data/mock.bit");
     let hash = createHash('sha256').update(data).digest('hex');
 
     let bitstreams: bitstream_model[] = [

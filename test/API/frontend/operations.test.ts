@@ -1,9 +1,9 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
-import database from "../../src/Database/Database";
-import {authorizer, error_handler} from "../../src/API/backend/middleware";
+import database from "../../../src/Database/Database";
+import {authorizer, error_handler} from "../../../src/API/backend/middleware";
 import jwt from "koa-jwt"
-import operations_router from "../../src/API/frontend/operations_api";
+import operations_router from "../../../src/API/frontend/operations_api";
 import fs from "node:fs";
 import {createHash} from "node:crypto";
 import request from "supertest";
@@ -14,7 +14,7 @@ import {expect} from "@jest/globals";
 describe('Operation API tests', () => {
 
 
-    let data = fs.readFileSync(__dirname + "/../data/mock.bit");
+    let data = fs.readFileSync(__dirname + "/../../data/mock.bit");
     let hash = createHash('sha256').update(data).digest('hex');
 
     const app = new Koa();

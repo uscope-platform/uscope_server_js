@@ -2,10 +2,10 @@
 import request from "supertest"
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
-import platform_router from "../../src/API/frontend/platform_api";
-import database from "../../src/Database/Database";
+import platform_router from "../../../src/API/frontend/platform_api";
+import database from "../../../src/Database/Database";
 import {expect} from "@jest/globals";
-import {authorizer, error_handler} from "../../src/API/backend/middleware";
+import {authorizer, error_handler} from "../../../src/API/backend/middleware";
 import jwt from "koa-jwt";
 
 

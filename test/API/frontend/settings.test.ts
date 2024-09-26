@@ -1,11 +1,11 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
-import {authorizer, error_handler} from "../../src/API/backend/middleware";
+import {authorizer, error_handler} from "../../../src/API/backend/middleware";
 import jwt from "koa-jwt"
 import request from "supertest";
 import {expect} from "@jest/globals";
-import settings_router from "../../src/API/frontend/settings_api";
-import {hil_address_map} from "../../src/data_model/operations_model";
+import settings_router from "../../../src/API/frontend/settings_api";
+import {hil_address_map} from "../../../src/data_model/operations_model";
 
 
 

@@ -1,74 +1,81 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
-import database from "../../src/Database/Database";
-import {authorizer, error_handler} from "../../src/API/backend/middleware";
+import database from "../../../src/Database/Database";
+import {authorizer, error_handler} from "../../../src/API/backend/middleware";
 import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
-import filters_router from "../../src/API/frontend/filters_api";
+import emulators_router from "../../../src/API/frontend/emulators_api";
 
 
 
-describe('filters API tests', () => {
+describe('emulators API tests', () => {
 
 
     const app = new Koa();
 
     app.use(bodyParser());
 
-    let filters: any = [
+    let emulators: any = [
         {
-            "id":1,
-            "name": "Filter 1",
-            "parameters": {
-                "type": "lp",
-                "n_taps": 130,
-                "taps_width": 16,
-                "pass_band_edge_1": 0,
-                "pass_band_edge_2": 0,
-                "stop_band_edge_1": 0,
-                "stop_band_edge_2": 0,
-                "sampling_frequency": 0
+            "name": "Includes test",
+            "cores": {
+                "1": {
+                    "id": 1,
+                    "name": "test_core",
+                    "order": 1,
+                    "inputs": [],
+                    "options": {
+                        "comparators": "reducing",
+                        "efi_implementation": "efi_trig"
+                    },
+                    "outputs": [
+                        {
+                            "name": "sin_t",
+                            "type": "float",
+                            "reg_n": 12,
+                            "register_type": "scalar"
+                        },
+                        {
+                            "name": "cos_t",
+                            "type": "float",
+                            "reg_n": 13,
+                            "register_type": "scalar"
+                        }
+                    ],
+                    "program": "test_header",
+                    "channels": 1,
+                    "input_data": [],
+                    "memory_init": [],
+                    "multirate_divisor": 0
+                }
             },
-            "ideal_taps": [],
-            "quantized_taps": []
-        },{
-            "id": 2,
-            "name": "test_2",
-            "parameters": {
-                "type": "bp",
-                "n_taps": 100,
-                "taps_width": 13,
-                "pass_band_edge_1": 600,
-                "pass_band_edge_2": 700,
-                "stop_band_edge_1": 500,
-                "stop_band_edge_2": 800,
-                "sampling_frequency": 3000
-            },
-            "ideal_taps": [-0.000045195506, 0.00290487418, -0.0000067935, 0.000073226, 0.0002756006],
-            "quantized_taps": [0, 0, 0, 1, 2,0]
+            "id": 1,
+            "connections": [],
+            "n_cycles": 1,
+            "async_multirate": false
         }
         ];
 
     let results:any = {}
     let db = {
-        filters:{
+        emulators:{
             get_version: ():string =>{
                 return "7fe0e405-4b6b-419a-a5f3-3b51fffa8e7e"
             },
             load_all:() =>{
-                return filters
+                return emulators
             },
-            get_filter:(id:number) =>{
-                return filters[id-1]
+            get_emulator:(id:number) =>{
+                return emulators[id-1]
             },
-            add_filter:(flt:any) =>{
+            add_emulator:(flt:any) =>{
                 results = flt;
             },
-            update_filter_field: (id:number, field_name: string, field_value:any) =>{
+            update_emulator_field: (id:number, field_name: string, field_value:any) =>{
                 results = [id, field_name, field_value];
             },
-            remove_filter:(id:number) =>{
+            remove_emulator:(id:number) =>{
                 results = id;
             }
         }
@@ -80,17 +87,17 @@ describe('filters API tests', () => {
     app.use(authorizer())
 
 
-    let rtr = new filters_router(db)
+    let rtr = new emulators_router(db)
     app.use(rtr.router.routes())
     app.use(rtr.router.allowedMethods());
 
-    let server = app.listen(3001);
+    let server = app.listen(3004);
 
     let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTQwNDQ4NjJ9.3FCjAmBgEUuAlFqL7goWpwuu0OH6ldyTA--BLjyzIOE";
 
     test('hash', async () => {
         return request(app.callback())
-            .get('/filter/hash')
+            .get('/emulator/hash')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -100,41 +107,35 @@ describe('filters API tests', () => {
 
     test('load_all', async () => {
         return request(app.callback())
-            .get('/filter/load_all')
+            .get('/emulator/load_all')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(response.body).toStrictEqual(filters)
+                expect(response.body).toStrictEqual(emulators)
             });
     });
 
     test('get', async () => {
         return request(app.callback())
-            .get('/filter/2')
+            .get('/emulator/1')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(response.body).toStrictEqual(filters[1])
+                expect(response.body).toStrictEqual(emulators[0])
             });
     });
 
     test('add', async () => {
-        let filter_obj = {
-            id:5,
-            name:'new filter_4',
-            parameters:{
-                type:"lp",
-                n_taps:100,
-                pass_band_edge_1:0,
-                stop_band_edge_1:0,
-                pass_band_edge_2:0,
-                stop_band_edge_2:0,
-                sampling_frequency:0,
-                taps_width:16
-            }
+        let filter_obj =  {
+            id:4,
+            name:'new_emulator_4',
+            cores:{},
+            connections:[],
+            n_cycles:1,
+            async_multirate:false
         }
         return request(app.callback())
-            .post('/filter/54')
+            .post('/emulator/5')
             .set('Authorization', `Bearer ${token}`)
             .send(filter_obj)
             .then((response)=>{
@@ -144,9 +145,9 @@ describe('filters API tests', () => {
     });
 
     test('edit', async () => {
-        let edit = {script:4, field:"name", value:"tgag"};
+        let edit = {emulator:4, field:"name", value:"tgag"};
         return request(app.callback())
-            .patch('/filter/4')
+            .patch('/emulator/4')
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -157,7 +158,7 @@ describe('filters API tests', () => {
 
     test('delete', async () => {
         return request(app.callback())
-            .delete('/filter/4')
+            .delete('/emulator/4')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
