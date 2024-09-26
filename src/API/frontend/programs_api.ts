@@ -19,9 +19,8 @@ class programs_router {
                 ctx.response.status = 200;
                 ctx.response.body = await this.db.programs.get_version();
             } catch(error:any){
-                ctx.response.message = error
+                ctx.response.body = error
                 ctx.response.status = 501
-                next();
             }
         });
 
@@ -31,9 +30,8 @@ class programs_router {
                 ctx.body = await this.db.programs.load_all();
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -45,9 +43,8 @@ class programs_router {
                 ctx.body = await this.db.programs.get_program(id);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -58,9 +55,8 @@ class programs_router {
                 await this.db.programs.add_program(prg)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -71,9 +67,8 @@ class programs_router {
                 ctx.body = await this.db.programs.update_program_field(id, e.field, e.value);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -83,9 +78,8 @@ class programs_router {
                 await this.db.programs.remove_program(id)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 

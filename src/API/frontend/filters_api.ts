@@ -19,9 +19,8 @@ class filters_router {
                 ctx.response.status = 200;
                 ctx.response.body = await this.db.filters.get_version();
             } catch(error:any){
-                ctx.response.message = error
+                ctx.response.body = error
                 ctx.response.status = 501
-                next();
             }
         });
 
@@ -31,9 +30,8 @@ class filters_router {
                 ctx.body = await this.db.filters.load_all();
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -45,9 +43,8 @@ class filters_router {
                 ctx.body = await this.db.filters.get_filter(id);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -58,9 +55,8 @@ class filters_router {
                 await this.db.filters.add_filter(flt)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -71,9 +67,8 @@ class filters_router {
                 ctx.body = await this.db.filters.update_filter_field(id, e.field, e.value);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -83,9 +78,8 @@ class filters_router {
                 await this.db.filters.remove_filter(id)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 

@@ -7,8 +7,8 @@ import {hil_address_map} from "../../data_model/operations_model";
 class settings_router{
     public router: Router;
     private backend: SettingsBackend;
-    constructor(driver_host: string, driver_port: number) {
-        this.backend = new SettingsBackend(driver_host, driver_port)
+    constructor(backed: SettingsBackend) {
+        this.backend = backed;
 
         this.router = new Router({
             prefix: endpoints_map.settings.prefix
@@ -20,9 +20,8 @@ class settings_router{
                 ctx.body = await this.backend.get_debug_level();
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -33,9 +32,8 @@ class settings_router{
                 await this.backend.set_debug_level(level)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -45,9 +43,8 @@ class settings_router{
                 ctx.body = await this.backend.get_hil_map();
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -58,9 +55,8 @@ class settings_router{
                 await this.backend.set_hil_map(level)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 

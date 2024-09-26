@@ -49,9 +49,8 @@ class applications_router {
                 ctx.response.status = 200;
                 ctx.response.body = await this.db.applications.get_version();
             } catch(error:any){
-                ctx.response.message = error
-                ctx.response.status = 501
-                next();
+                ctx.response.body = error
+                ctx.response.status = 501;
             }
         });
 
@@ -61,9 +60,8 @@ class applications_router {
                 ctx.body = await this.db.applications.load_all();
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -75,9 +73,8 @@ class applications_router {
                 ctx.body = await this.db.applications.get_application(id);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -88,9 +85,8 @@ class applications_router {
                 await this.db.applications.add_application(emu)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -100,20 +96,19 @@ class applications_router {
                 let e = <application_edit_model>ctx.request.body;
                 switch (e.action){
                     case "add":
-                        this.add_item(e);
+                        await this.add_item(e);
                         break;
                     case "edit":
-                        this.edit_item(e);
+                        await this.edit_item(e);
                         break;
                     case "remove":
-                        this.remove_item(e);
+                        await this.remove_item(e);
                         break;
                 }
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -123,9 +118,8 @@ class applications_router {
                 await this.db.applications.remove_application(id)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
-                ctx.status = 501
-                next()
+                ctx.response.body = error
+                ctx.response.status = 501
             }
         });
     }

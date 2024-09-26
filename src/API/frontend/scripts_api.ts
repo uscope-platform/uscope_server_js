@@ -19,9 +19,8 @@ class scripts_router {
                 ctx.response.status = 200;
                 ctx.response.body = await this.db.scripts.get_version();
             } catch(error:any){
-                ctx.response.message = error
+                ctx.response.body = error
                 ctx.response.status = 501
-                next();
             }
         });
 
@@ -31,9 +30,8 @@ class scripts_router {
                 ctx.body = await this.db.scripts.load_all();
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -45,9 +43,8 @@ class scripts_router {
                 ctx.body = await this.db.scripts.get_script(id);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -58,9 +55,8 @@ class scripts_router {
                 await this.db.scripts.add_script(scr)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -71,9 +67,8 @@ class scripts_router {
                 ctx.body = await this.db.scripts.update_script_field(id, e.field, e.value);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -83,9 +78,8 @@ class scripts_router {
                 await this.db.scripts.remove_script(id)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 

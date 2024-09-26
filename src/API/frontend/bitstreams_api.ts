@@ -19,9 +19,9 @@ class bitstream_router {
                 ctx.response.status = 200;
                 ctx.response.body = await this.db.bitstreams.get_version();
             } catch(error:any){
-                ctx.response.message = error
+                ctx.response.body = error
                 ctx.response.status = 501
-                next();
+
             }
         });
 
@@ -34,7 +34,7 @@ class bitstream_router {
                 })
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
                 next()
             }
@@ -49,7 +49,7 @@ class bitstream_router {
                 ctx.body = obj;
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
                 next()
             }
@@ -62,7 +62,7 @@ class bitstream_router {
                 await this.db.bitstreams.add_bitstream(bit)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
                 next()
             }
@@ -75,7 +75,7 @@ class bitstream_router {
                 ctx.body = await this.db.bitstreams.update_bitstream_field(id, e.field, e.value);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
                 next()
             }
@@ -87,7 +87,7 @@ class bitstream_router {
                 await this.db.bitstreams.remove_bitstream(id)
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
                 next()
             }
