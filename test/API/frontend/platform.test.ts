@@ -7,6 +7,7 @@ import database from "../../../src/Database/Database";
 import {expect} from "@jest/globals";
 import {authorizer, error_handler} from "../../../src/API/backend/middleware";
 import jwt from "koa-jwt";
+import hw_interface from "../../../src/hw_interface";
 
 
 describe('platform API tests', () => {
@@ -54,12 +55,18 @@ describe('platform API tests', () => {
         }
     } as any as database
 
+    let hw = {
+        get_version(component: string) {
+            return component + "_veasfdd";
+        }
+    } as any as hw_interface;
+
     // Error handling middleware
     app.use(error_handler);
     app.use(jwt({ secret: 'secret', passthrough: true }));
     app.use(authorizer())
 
-    let rtr = new platform_router("secret", db)
+    let rtr = new platform_router("secret", db, hw);
     app.use(rtr.router.routes())
     app.use(rtr.router.allowedMethods());
 
@@ -123,6 +130,28 @@ describe('platform API tests', () => {
                 expect(results.pw_hash).not.toBeNull();
                 expect(results.pw_hash.startsWith("$argon2id$v=19$m=32768,t=4,p=2")).toBeTruthy()
                 expect(results.role).toBe("admin2");
+            });
+    });
+
+    test('get_server_version', async () => {
+
+        return request(app.callback())
+            .get('/platform/versions/server')
+            .set('Authorization', `Bearer ${bearer_token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(response.text).toBe("test_ver");
+            });
+    });
+
+    test('get_driver_version', async () => {
+
+        return request(app.callback())
+            .get('/platform/versions/driver')
+            .set('Authorization', `Bearer ${bearer_token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(response.text).toBe("driver_veasfdd");
             });
     });
 
@@ -209,6 +238,7 @@ describe('platform API tests', () => {
             expect(token_content.iat).toBeLessThanOrEqual(Date.now());
         });
     });
+
 
     afterAll(() => server.close());
 });

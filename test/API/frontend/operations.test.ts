@@ -503,6 +503,117 @@ describe('Operation API tests', () => {
 
     });
 
+
+    test('emulate_hil', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'hil_emulate').mockImplementation(
+            (arg:any) => {
+                result = arg
+            });
+
+        let hil = {
+            cores:[
+                {
+                    channels: 1,
+                    deployment: {control_address: 0, has_reciprocal: false, rom_address: 0},
+                    id: 'test_producer',
+                    input_data: [],
+                    inputs: [],
+                    memory_init: [
+                        {
+                            is_output: true,
+                            metadata: {signed: false, type: 'float', width: 32},
+                            name: 'mem',
+                            reg_n: [32],
+                            value: [0]
+                        }
+                    ],
+                    options: {comparators: 'full', efi_implementation: 'none'},
+                    order: 1,
+                    outputs: [
+                        {
+                            metadata: {signed: false, type: 'float', width: 32},
+                            name: 'out',
+                            reg_n: [5]
+                        }
+                    ],
+                    program: {
+                        build_settings: {
+                            io: {
+                                inputs: [],
+                                memories: ['mem'],
+                                outputs: ['out']
+                            }
+                        },
+                        content: 'int main(){\n  float mem;\n\n  mem = mem  + 1.0;\n  mem = fti(mem);\n  mem = mem & 0x3ff;\n  mem = itf(mem);\n  \n  float out[2];\n  out[0] = mem + 100.0;\n  out[1] = mem + 1000.0;\n}',
+                        headers: []
+                    },
+                    sampling_frequency: 10000
+                },
+                {
+                    channels: 2,
+                    deployment: {control_address: 0, has_reciprocal: false, rom_address: 0},
+                    id: 'test_consumer',
+                    input_data: [],
+                    inputs: [],
+                    memory_init: [],
+                    options: {comparators: 'full', efi_implementation: 'none'},
+                    order: 2,
+                    outputs: [
+                        {
+                            metadata: {signed: false, type: 'float', width: 32},
+                            name: 'out',
+                            reg_n: [12]
+                        }
+                    ],
+                    program: {
+                        build_settings: {
+                            io: {
+                                inputs: ['input'],
+                                memories: [],
+                                outputs: ['out']
+                            }
+                        },
+                        content: 'int main(){\n  float input;\n  float out = input*3.5;\n}',
+                        headers: []
+                    },
+                    sampling_frequency: 10000
+                }
+            ],
+            interconnect:[
+                {
+                    channels: [
+                        {
+                            destination: {channel: [0], register: [1]},
+                            destination_input: 'input',
+                            length: 2,
+                            name: 'channel',
+                            source: {channel: [0], register: [5]},
+                            source_output: 'out',
+                            type: 'scatter_transfer'
+                        }
+                    ],
+                    destination: 'test_consumer',
+                    source: 'test_producer'
+                }
+            ],
+            emulation_time:1,
+            deployment_mode:false,
+        };
+
+        return request(app.callback())
+            .post('/operations/hil/emulate')
+            .set('Authorization', `Bearer ${token}`)
+            .send(hil)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(hil);
+            });
+
+    });
+
     test('hil_select_output', async () => {
         let router = rtr as any;
         let result = 0;
@@ -646,6 +757,26 @@ describe('Operation API tests', () => {
     });
 
     test('implement_filter', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.filter_backend, 'implement_filter').mockImplementation(
+            (arg:any) => {
+                result = arg
+            });
+
+
+        return request(app.callback())
+            .get('/operations/filter_implement/23')
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(23);
+            });
+
+    });
+
+    test('apply_filter', async () => {
         let router = rtr as any;
         let result = 0;
         const spy = jest.spyOn(router.filter_backend, 'implement_filter').mockImplementation(

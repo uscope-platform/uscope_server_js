@@ -1,6 +1,7 @@
 import FiltersBackend from "../../../src/API/backend/filters";
 import database from "../../../src/Database/Database";
 import {expect} from "@jest/globals";
+import hw_interface from "../../../src/hw_interface";
 
 
 describe('filters backend test', () => {
@@ -51,7 +52,8 @@ describe('filters backend test', () => {
             },
         }
     } as any as database
-    let backend = new FiltersBackend(db);
+
+    let backend = new FiltersBackend(db, {} as hw_interface);
 
 
     test('design_lp', async () => {

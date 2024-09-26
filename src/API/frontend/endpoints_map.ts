@@ -17,6 +17,7 @@ interface api_map {
             scope_address:string,
             dma_disable:string,
             hil_deploy:string,
+            hil_emulate:string,
             hil_select_output:string,
             hil_set_input:string,
             hil_start:string,
@@ -119,7 +120,6 @@ interface api_map {
             add: string,
             edit: string,
             delete: string
-            run:string
         }
     },
     application:{
@@ -175,6 +175,7 @@ let endpoints_map : api_map = {
             dma_disable:'/plot/dma_disable',
 
             hil_deploy: '/hil/deploy',
+            hil_emulate: '/hil/emulate',
             hil_select_output: '/hil/select_out',
             hil_set_input: '/hil/set_input',
             hil_start:'/hil/start',
@@ -217,7 +218,7 @@ let endpoints_map : api_map = {
             onboarding: '/onboarding',
             db_dump: '/database/dump',
             db_restore: '/database/restore',
-            versions: '/versions'
+            versions: '/versions/:component'
         }
     },
 
@@ -253,8 +254,7 @@ let endpoints_map : api_map = {
             get:"/:id",
             add:"/:id",
             edit:"/:id",
-            delete:"/:id",
-            run:"/run"
+            delete:"/:id"
         }
     },
 

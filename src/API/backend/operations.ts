@@ -16,8 +16,8 @@ export default class OperationsBackend {
     private hw_if: hw_interface;
     public db: database;
 
-    constructor(driver_host: string, driver_port: number, db: database) {
-        this.hw_if = new hw_interface(driver_host, driver_port);
+    constructor(db: database, hw: hw_interface) {
+        this.hw_if = hw;
         this.db = db;
     }
 
@@ -88,6 +88,13 @@ export default class OperationsBackend {
         return this.hw_if.deploy_hil(hil);
     }
 
+    public async get_version(component:string): Promise<string> {
+        return this.hw_if.get_version(component);
+    }
+
+    public async hil_emulate(hil:emulator_model): Promise<any>{
+        return this.hw_if.emulate_hil(hil);
+    }
 
     public async get_clocks(): Promise<any>{
         let ret : number[] = [];

@@ -1,7 +1,7 @@
 import {
     acquisition_status,
     channel_statuses, clock_info,
-    dma_status,
+    dma_status, hil_address_map,
     scope_address,
     select_hil_output, set_hil_inputs
 } from "./data_model/operations_model";
@@ -40,10 +40,6 @@ export default class hw_interface {
         return 0;
     }
 
-    public async set_channel_widths(widths:number[]){}
-
-    public async set_channel_signs(signs:boolean){}
-
     public async set_scaling_factors(factors:number[]){}
 
     public async set_channel_status(status:channel_statuses){}
@@ -54,9 +50,9 @@ export default class hw_interface {
 
     public async apply_filter(taps:number[], filter_address:number){}
 
-    public async get_version(component:string){}
-
-    public async set_scope_data(scope_data:object){}
+    public async get_version(component:string): Promise<string>{
+        return ""
+    }
 
     public async deploy_hil(spec:object){}
 
@@ -83,7 +79,21 @@ export default class hw_interface {
 
     public async set_input(in_obj:set_hil_inputs){}
 
-
     public async emulate_hil(spec:object){}
+
+    public async set_debug_level(level:string){}
+
+    public async get_debug_level(): Promise<string>{
+        return "";
+    }
+
+    public async set_hil_address_map(addr_map:hil_address_map){}
+
+    public async get_hil_address_map(): Promise<hil_address_map>{
+        return {} as hil_address_map;
+    }
+
+    public async disable_scope_dma(status:boolean){}
+
 
 }

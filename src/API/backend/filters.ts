@@ -1,5 +1,6 @@
 import database from "../../Database/Database";
 import {spawnSync} from "node:child_process";
+import hw_interface from "../../hw_interface";
 
 
 let filter_designer =`
@@ -135,10 +136,12 @@ if __name__ == '__main__':
 
 export default class FiltersBackend {
     public db: database;
+    public hw_if: hw_interface;
 
 
-    constructor(db: database) {
+    constructor(db: database, hw:hw_interface) {
         this.db = db;
+        this.hw_if = hw;
     }
 
     public async design_filter(id:number) {
@@ -157,7 +160,12 @@ export default class FiltersBackend {
         return {taps:result[0], response:result[1]};
     }
 
-
+    public async apply_filter(id:number, addr:number){
+        let filter =await this.db.filters.get_filter(id);
+        if(filter.ideal_taps.length !==0){
+         return this.hw_if.apply_filter(filter.quantized_taps, addr);
+        }
+    }
 }
 
 

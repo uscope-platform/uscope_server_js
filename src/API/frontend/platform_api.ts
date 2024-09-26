@@ -5,6 +5,7 @@ import Authenticator from '../backend/authentication'
 import database from "../../Database/Database";
 import {auto_login_object, db_dump, user_login_object} from "../../data_model/platform_model";
 import endpoints_map from "./endpoints_map";
+import hw_interface from "../../hw_interface";
 
 interface user_add_request {
     user:string,
@@ -16,10 +17,12 @@ class platform_router {
     public router: Router;
     private auth: Authenticator;
     private db: database;
+    private hw_if:hw_interface;
 
-    constructor(secret:string, db: database) {
+    constructor(secret:string, db: database, hw: hw_interface) {
         this.auth = new Authenticator(secret, db)
         this.db = db;
+        this.hw_if = hw;
         this.router = new Router({
             prefix: endpoints_map.platform.prefix
         });
@@ -74,6 +77,13 @@ class platform_router {
 
 
         this.router.get(endpoints_map.platform.endpoints.versions, async (ctx:Koa.Context, next:Koa.Next) =>{
+
+            ctx.type = 'text';
+            if(ctx.params.component == "server"){
+                ctx.body = "test_ver";
+            } else {
+                ctx.body = await this.hw_if.get_version(ctx.params.component);
+            }
             ctx.status = 200;
         })
 

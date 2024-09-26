@@ -10,6 +10,7 @@ import register_write_model, {
 } from "../../data_model/operations_model";
 import emulator_model from "../../data_model/emulator_model";
 import FiltersBackend from "../backend/filters";
+import hw_interface from "../../hw_interface";
 
 class operations_router {
     public router: Router;
@@ -19,8 +20,9 @@ class operations_router {
 
     constructor(db: database, driver_host:string, driver_port:number) {
         this.db = db
-        this.ops_backend = new OperationsBackend(driver_host, driver_port, db);
-        this.filter_backend = new FiltersBackend(db);
+        let hw = new hw_interface(driver_host, driver_port)
+        this.ops_backend = new OperationsBackend(db, hw);
+        this.filter_backend = new FiltersBackend(db,hw);
 
         this.router = new Router({
             prefix: endpoints_map.operations.prefix
@@ -202,6 +204,18 @@ class operations_router {
         });
 
 
+
+        this.router.post(endpoints_map.operations.endpoints.hil_emulate, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let status = <emulator_model>ctx.request.body;
+                ctx.response.body = await this.ops_backend.hil_emulate(status);
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.message = error
+                ctx.status = 501
+                next()
+            }
+        });
 
         this.router.post(endpoints_map.operations.endpoints.hil_deploy, async (ctx:Koa.Context, next:Koa.Next) => {
             try{
