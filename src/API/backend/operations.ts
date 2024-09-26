@@ -5,7 +5,7 @@ import bitstream_model from "../../data_model/bitstreams_model";
 import hw_interface from "../../hw_interface";
 import register_write_model, {
     acquisition_status,
-    channel_statuses, clock_info, dma_status,
+    channel_statuses, clock_info,
     programs_info, scope_address, select_hil_output, set_hil_inputs
 } from "../../data_model/operations_model";
 import database from "../../Database/Database";
@@ -64,7 +64,7 @@ export default class OperationsBackend {
         return this.hw_if.set_scope_address(addr);
     }
 
-    public async set_dma_disable(status:dma_status): Promise<any>{
+    public async set_dma_disable(status:boolean): Promise<any>{
         return this.hw_if.set_dma_disable(status);
     }
 

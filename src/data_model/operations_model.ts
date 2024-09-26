@@ -50,10 +50,6 @@ export interface   scope_address {
 }
 
 
-export interface dma_status {
-    status:boolean
-}
-
 export interface set_hil_inputs {
     address:number[],
     core:string,

@@ -5,7 +5,7 @@ import endpoints_map from "./endpoints_map";
 import OperationsBackend from "../backend/operations";
 import register_write_model, {
     acquisition_status,
-    channel_statuses, clock_info, dma_status,
+    channel_statuses, clock_info,
     programs_info, scope_address, select_hil_output, set_hil_inputs
 } from "../../data_model/operations_model";
 import emulator_model from "../../data_model/emulator_model";
@@ -193,7 +193,7 @@ class operations_router {
 
         this.router.post(endpoints_map.operations.endpoints.dma_disable, async (ctx:Koa.Context, next:Koa.Next) => {
             try{
-                let status = <dma_status>ctx.request.body;
+                let status = <boolean>ctx.request.body;
                 ctx.response.body = await this.ops_backend.set_dma_disable(status);
                 ctx.status = 200;
             } catch(error:any){
@@ -304,9 +304,6 @@ class operations_router {
                 next()
             }
         });
-
-
-
     }
 }
 

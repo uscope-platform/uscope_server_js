@@ -1,7 +1,7 @@
 import {
     acquisition_status,
     channel_statuses, clock_info,
-    dma_status, hil_address_map,
+    hil_address_map,
     scope_address,
     select_hil_output, set_hil_inputs
 } from "./data_model/operations_model";
@@ -56,10 +56,6 @@ export default class hw_interface {
 
     public async deploy_hil(spec:object){}
 
-    public async select_out(spec:object){}
-
-    public async set_in(spec:object){}
-
     public async start_hil(){}
 
     public async stop_hil(){}
@@ -73,7 +69,7 @@ export default class hw_interface {
 
     public async set_scope_address(address:scope_address){}
 
-    public async set_dma_disable(address:dma_status){}
+    public async set_dma_disable(address:boolean){}
 
     public async select_output(out:select_hil_output){}
 
@@ -92,8 +88,5 @@ export default class hw_interface {
     public async get_hil_address_map(): Promise<hil_address_map>{
         return {} as hil_address_map;
     }
-
-    public async disable_scope_dma(status:boolean){}
-
 
 }
