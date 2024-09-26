@@ -9,7 +9,7 @@ import jwt from "koa-jwt"
 
 
 
-describe('script API tests', () => {
+describe('script API error handling tests', () => {
 
 
     const app = new Koa();

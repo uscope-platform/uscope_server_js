@@ -7,7 +7,6 @@ import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
 import bitstream_router from "../../../src/API/frontend/bitstreams_api";
 import fs from "node:fs";
-import bitstream_model from "../../../src/data_model/bitstreams_model";
 import {createHash} from "node:crypto";
 
 

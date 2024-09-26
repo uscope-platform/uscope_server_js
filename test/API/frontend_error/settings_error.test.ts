@@ -9,7 +9,7 @@ import SettingsBackend from "../../../src/API/backend/settings";
 
 
 
-describe('Settings API tests', () => {
+describe('Settings API error handling tests', () => {
 
     const app = new Koa();
 

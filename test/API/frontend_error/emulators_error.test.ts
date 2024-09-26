@@ -9,7 +9,7 @@ import emulators_router from "../../../src/API/frontend/emulators_api";
 
 
 
-describe('emulators API tests', () => {
+describe('emulators API error handling tests', () => {
 
 
     const app = new Koa();

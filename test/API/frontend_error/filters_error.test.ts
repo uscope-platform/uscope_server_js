@@ -9,7 +9,7 @@ import filters_router from "../../../src/API/frontend/filters_api";
 
 
 
-describe('filters API tests', () => {
+describe('filters API error handling tests', () => {
 
 
     const app = new Koa();
