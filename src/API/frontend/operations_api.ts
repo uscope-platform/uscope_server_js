@@ -10,7 +10,8 @@ import register_write_model, {
 } from "../../data_model/operations_model";
 import emulator_model from "../../data_model/emulator_model";
 import FiltersBackend from "../backend/filters";
-import hw_interface from "../../hw_interface";
+import {filter_apply_model} from "../../data_model/filters_model";
+
 
 class operations_router {
     public router: Router;
@@ -18,11 +19,10 @@ class operations_router {
     private ops_backend: OperationsBackend;
     private filter_backend: FiltersBackend;
 
-    constructor(db: database, driver_host:string, driver_port:number) {
+    constructor(db: database, ops:OperationsBackend, flt:FiltersBackend) {
         this.db = db
-        let hw = new hw_interface(driver_host, driver_port)
-        this.ops_backend = new OperationsBackend(db, hw);
-        this.filter_backend = new FiltersBackend(db,hw);
+        this.ops_backend = ops;
+        this.filter_backend = flt;
 
         this.router = new Router({
             prefix: endpoints_map.operations.prefix
@@ -37,9 +37,8 @@ class operations_router {
                 await this.ops_backend.load_application(app, bitstream);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -52,9 +51,8 @@ class operations_router {
                 }
                 ctx.status = 200;
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next();
             }
         });
 
@@ -66,9 +64,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.read_register(address);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -77,9 +74,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.get_clocks();
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -90,9 +86,8 @@ class operations_router {
                 await this.ops_backend.set_clock(data);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -102,9 +97,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.compile_program(data);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
 
         });
@@ -115,9 +109,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.apply_program(data);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -126,9 +119,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.fetch_data();
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -138,9 +130,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.set_channel_status(data);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -150,9 +141,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.set_scaling_factors(data);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -161,9 +151,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.get_acquisition();
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -173,9 +162,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.set_acquisition(status);
                 ctx.status = 200;
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         })
 
@@ -185,9 +173,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.set_scope_address(status);
                 ctx.status = 200;
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -197,9 +184,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.set_dma_disable(status);
                 ctx.status = 200;
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -211,9 +197,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.hil_emulate(status);
                 ctx.status = 200;
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -223,9 +208,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.hil_deploy(status);
                 ctx.status = 200;
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -236,9 +220,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.hil_set_input(status);
                 ctx.status = 200;
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -248,9 +231,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.hil_select_output(status);
                 ctx.status = 200;
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -261,9 +243,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.hil_start();
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -273,9 +254,8 @@ class operations_router {
                 ctx.response.body = await this.ops_backend.hil_stop();
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -286,9 +266,8 @@ class operations_router {
                 ctx.response.body = await this.filter_backend.design_filter(id);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -299,9 +278,20 @@ class operations_router {
                 ctx.response.body = await this.filter_backend.implement_filter(id);
                 ctx.status = 200
             } catch(error:any){
-                ctx.message = error
+                ctx.body = error
                 ctx.status = 501
-                next()
+            }
+        });
+
+
+        this.router.post(endpoints_map.operations.endpoints.filter_apply, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let req = <filter_apply_model>ctx.request.body;
+                ctx.response.body = await this.filter_backend.apply_filter(req.id, req.address);
+                ctx.status = 200
+            } catch(error:any){
+                ctx.body = error
+                ctx.status = 501
             }
         });
     }

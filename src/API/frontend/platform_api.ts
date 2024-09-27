@@ -30,13 +30,11 @@ class platform_router {
         this.router.get(endpoints_map.platform.endpoints.get_users, async (ctx:Koa.Context, next:Koa.Next) => {
             ctx.body = await this.db.platform.load_all();
             ctx.status = 200;
-            next();
         });
 
         this.router.get(endpoints_map.platform.endpoints.onboarding, async (ctx:Koa.Context, next: Koa.Next)=>{
             ctx.body = !(await this.db.platform.has_users());
             ctx.status = 200;
-            next();
         })
 
         this.router.post(endpoints_map.platform.endpoints.onboarding, async (ctx:Koa.Context, next: Koa.Next)=>{
@@ -46,7 +44,6 @@ class platform_router {
                 await this.auth.create_user(body.user, body.password, body.role);
             }
             ctx.status = 200;
-            next();
         })
 
         this.router.post(endpoints_map.platform.endpoints.add_user, async (ctx:Koa.Context, next:Koa.Next) => {
@@ -54,13 +51,11 @@ class platform_router {
 
             await this.auth.create_user(body.user, body.password, body.role);
             ctx.status = 200;
-            next();
         });
 
         this.router.delete(endpoints_map.platform.endpoints.remove_user, async (ctx:Koa.Context, next:Koa.Next) => {
             await this.auth.remove_user(ctx.params.name);
             ctx.status = 200;
-            next();
         });
 
         this.router.post(endpoints_map.platform.endpoints.manual_login, async (ctx:Koa.Context, next:Koa.Next) =>{

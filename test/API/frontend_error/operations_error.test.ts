@@ -8,13 +8,14 @@ import fs from "node:fs";
 import {createHash} from "node:crypto";
 import request from "supertest";
 import {expect} from "@jest/globals";
-import OperationsBackend from "../../../src/API/backend/operations";
 import hw_interface from "../../../src/hw_interface";
+import OperationsBackend from "../../../src/API/backend/operations";
 import FiltersBackend from "../../../src/API/backend/filters";
+import {spawnSync} from "node:child_process";
 
 
 
-describe('Operation API tests', () => {
+describe('Operation API Error handling tests', () => {
 
 
     let data = fs.readFileSync(__dirname + "/../../data/mock.bit");
@@ -78,12 +79,89 @@ describe('Operation API tests', () => {
     let driver_host = "";
     let driver_port = 0;
 
-    let hw = new hw_interface(driver_host, driver_port);
-    let flt = new FiltersBackend(db,hw);
-    let ops = new OperationsBackend(db, hw);
+
+    let ops = {
+
+        load_application: () =>{
+            throw "ops error 0"
+        },
+        fetch_data: () =>{
+            throw "ops error 1"
+        },
+        read_register: () =>{
+            throw "ops error 2"
+        },
+        write_register: () =>{
+            throw "ops error 3"
+        },
+        compile_program: () =>{
+            throw "ops error 4"
+        },
+        set_scaling_factors: () =>{
+            throw "ops error 5"
+        },
+        set_channel_status: () =>{
+            throw "ops error 6"
+        },
+        get_acquisition: () =>{
+            throw "ops error 7"
+        },
+        set_acquisition: () =>{
+            throw "ops error 8"
+        },
+        set_scope_address: () =>{
+            throw "ops error 9"
+        },
+        set_dma_disable: () =>{
+            throw "ops error 10"
+        },
+        hil_select_output: () =>{
+            throw "ops error 11"
+        },
+        hil_set_input: () =>{
+            throw "ops error 12"
+        },
+        hil_start: () =>{
+            throw "ops error 13"
+        },
+        hil_stop: () =>{
+            throw "ops error 14"
+        },
+        hil_deploy: () =>{
+            throw "ops error 15"
+        },
+        get_version: () =>{
+            throw "ops error 16"
+        },
+        hil_emulate: () =>{
+            throw "ops error 17"
+        },
+        get_clocks: () =>{
+            throw "ops error 18"
+        },
+        set_clock: () =>{
+            throw "ops error 19"
+        },
+        apply_program: () =>{
+            throw "ops error 20"
+        }
+
+    } as any as OperationsBackend;
+
+    let flt = {
+        design_filter: () =>{
+        throw "flt error 0"
+        },
+        implement_filter: () =>{
+        throw "flt error 1"
+        },
+        apply_filter: () =>{
+            throw "flt error 2"
+        }
+    } as any as FiltersBackend;
 
     let rtr = new operations_router(db,ops, flt);
-    app.use(rtr.router.routes());
+    app.use(rtr.router.routes())
     app.use(rtr.router.allowedMethods());
 
     let server = app.listen(3009);
@@ -91,23 +169,27 @@ describe('Operation API tests', () => {
     let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTQwNDQ4NjJ9.3FCjAmBgEUuAlFqL7goWpwuu0OH6ldyTA--BLjyzIOE";
 
     test('load_application', async () => {
-        let router = rtr as any;
-        let mock_results = {app:{}, bit:{data:{}}};
-        const spy = jest.spyOn(router.ops_backend, 'load_application').mockImplementation(
-            (app:any, bit:any) => {
-                mock_results.app = app;
-                mock_results.bit = bit;
-            });
+
         return request(app.callback())
             .get('/operations/load_application/1')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(results).toStrictEqual( {app_id:1, bitstream:"test_bitstream"})
-                expect(spy).toBeCalledTimes(1);
-                expect(mock_results.app).toStrictEqual(init_app);
-                expect(data.equals(<Buffer>mock_results.bit.data)).toBeTruthy();
+                expect(response.status).toBe(501);
+                expect(response.text).toBe("ops error 0");
             });
+    });
+
+    test('read_register', async () => {
+        let result = 0;
+
+        return request(app.callback())
+            .get('/operations/read_register/54231231')
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 2");
+            });
+
     });
 
     test('write_register', async () => {
@@ -127,55 +209,19 @@ describe('Operation API tests', () => {
             value: 123
         }
         ]
-        let router = rtr as any;
-        let mock_results :any[] = [];
-        const spy = jest.spyOn(router.ops_backend, 'write_register').mockImplementation(
-            (write_op:any) => {
-                mock_results.push(write_op);
-            });
-
         return request(app.callback())
             .post('/operations/write_registers')
             .set('Authorization', `Bearer ${token}`)
             .send(write_in)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(2);
-                expect(mock_results).toStrictEqual(write_in);
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 3");
             });
 
     });
 
-
-    test('read_register', async () => {
-        let router = rtr as any;
-        let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'read_register').mockImplementation(
-            (address:any) : number => {
-                result = address
-                return 4213;
-            });
-
-        return request(app.callback())
-            .get('/operations/read_register/54231231')
-            .set('Authorization', `Bearer ${token}`)
-            .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(response.text).toStrictEqual("4213");
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(54231231);
-            });
-
-    });
 
     test('compile_program', async () => {
-        let router = rtr as any;
-        let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'compile_program').mockImplementation(
-            (program:any) => {
-                result = program
-            });
-
         let prog_info = {
             id:1,
             content: "void main(){\n\n float a;\nfloat b;\n float c = add(a, b);\n}",
@@ -192,21 +238,16 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .send(prog_info)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(prog_info);
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 4");
             });
 
     });
 
 
     test('apply_program', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'apply_program').mockImplementation(
-            (prog:any) => {
-                result = prog
-            });
+
         let prog_info = {
             id: 1,
             content: "void main(){\n\n float a;\nfloat b;\n float c = add(a, b);\n}",
@@ -236,9 +277,8 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .send(prog_info)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(prog_info);
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 20");
             });
 
     });
@@ -246,19 +286,13 @@ describe('Operation API tests', () => {
 
 
     test('fetch_data', async () => {
-        let router = rtr as any;
-        const spy = jest.spyOn(router.ops_backend, 'fetch_data').mockImplementation(
-            () : number[] => {
-                return [1.5, 2.0, 3.0, 4.0, 5.0]
-            });
 
         return request(app.callback())
             .get('/operations/plot/data')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(response.text).toStrictEqual("[1.5,2,3,4,5]");
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 1");
             });
 
     });
@@ -267,12 +301,6 @@ describe('Operation API tests', () => {
 
 
     test('set_scaling_factors', async () => {
-        let router = rtr as any;
-        let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'set_scaling_factors').mockImplementation(
-            (sfs:any) => {
-                result = sfs
-            });
 
         let sfs = [1, 1.5, 2, -5.4, 1, 0];
 
@@ -281,20 +309,14 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .send(sfs)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(sfs);
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 5");
             });
 
     });
 
     test('set_channel_statuses', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'set_channel_status').mockImplementation(
-            (sfs:any) => {
-                result = sfs
-            });
 
         let statuses = {'0': false, '1': true, '2': true, '3': true, '4': true, '5': true};
 
@@ -303,39 +325,27 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .send(statuses)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(statuses);
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 6");
             });
 
     });
 
 
     test('get_acquisition', async () => {
-        let router = rtr as any;
-        const spy = jest.spyOn(router.ops_backend, 'get_acquisition').mockImplementation(
-            () : string => {
-                return "wait_trigger"
-            });
 
         return request(app.callback())
             .get('/operations/plot/acquisition')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(response.text).toStrictEqual("wait_trigger");
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 7");
             });
 
     });
 
     test('set_acquisition', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'set_acquisition').mockImplementation(
-            (arg:any) => {
-                result = arg
-            });
 
         let acq = {
             level: 0,
@@ -352,41 +362,28 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .send(acq)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(acq);
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 8");
             });
 
     });
 
     test('set_dma_disable', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'set_dma_disable').mockImplementation(
-            (arg:any) => {
-                result = arg
-            });
 
         return request(app.callback())
             .post('/operations/plot/dma_disable')
             .set('Authorization', `Bearer ${token}`)
             .send({status:true})
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual({status:true});
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 10");
             });
 
     });
 
     test('address', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'set_scope_address').mockImplementation(
-            (arg:any) => {
-                result = arg
-            });
-
         let acq = {'address': 18316853248, 'dma_buffer_offset': 520};
 
         return request(app.callback())
@@ -394,20 +391,14 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .send(acq)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(acq);
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 9");
             });
 
     });
 
     test('deploy_hil', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'hil_deploy').mockImplementation(
-            (arg:any) => {
-                result = arg
-            });
 
         let hil = {
             cores:[
@@ -504,21 +495,15 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .send(hil)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(hil);
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 15");
             });
 
     });
 
 
     test('emulate_hil', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'hil_emulate').mockImplementation(
-            (arg:any) => {
-                result = arg
-            });
 
         let hil = {
             cores:[
@@ -615,20 +600,14 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .send(hil)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(hil);
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 17");
             });
 
     });
 
     test('hil_select_output', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'hil_select_output').mockImplementation(
-            (arg:any) => {
-                result = arg
-            });
 
         let  in_obj = {'address': [1], 'core': 'DAB', 'value': 1205};
 
@@ -637,21 +616,14 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .send(in_obj)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(in_obj);
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 11");
             });
 
     });
 
     test('hil_set_input', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'hil_set_input').mockImplementation(
-            (arg:any) => {
-                result = arg
-            });
-
         let  in_obj ={'channel': 0, 'output': {'address': 41, 'channel': 0, 'name': 'VSI.v_out(1,0)', 'output': 'v_out', 'source': 'VSI'}};
 
         return request(app.callback())
@@ -659,43 +631,34 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .send(in_obj)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(in_obj);
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("ops error 12");
             });
 
     });
 
     test('start_hil', async () => {
-        let router = rtr as any;
-        const spy = jest.spyOn(router.ops_backend, 'hil_start').mockImplementation(
-            () : string => {
-                return "wait_trigger"
-            });
+
 
         return request(app.callback())
             .get('/operations/hil/start')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(response.status).toBe(501);
+                expect(response.text).toBe("ops error 13");
             });
 
     });
 
     test('stop_hil', async () => {
-        let router = rtr as any;
-        const spy = jest.spyOn(router.ops_backend, 'hil_stop').mockImplementation(
-            () : string => {
-                return "wait_trigger"
-            });
+
 
         return request(app.callback())
             .get('/operations/hil/stop')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(response.status).toBe(501);
+                expect(response.text).toBe("ops error 14");
             });
 
     });
@@ -703,31 +666,21 @@ describe('Operation API tests', () => {
 
 
     test('get_clocks', async () => {
-        let router = rtr as any;
-        const spy = jest.spyOn(router.ops_backend, 'get_clocks').mockImplementation(
-            () : number[] => {
-                return [1999.1, 0, 123, 45]
-            });
 
         return request(app.callback())
             .get('/operations/clock')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(response.text).toStrictEqual("[1999.1,0,123,45]");
+                expect(response.status).toBe(501);
+                expect(response.text).toBe("ops error 18");
             });
 
     });
 
 
     test('set_clocks', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.ops_backend, 'set_clock').mockImplementation(
-            (arg:any) => {
-                result = arg
-            });
+
 
         let clk_obj = {id:"test", value:1293.13, is_primary:false}
 
@@ -736,9 +689,8 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .send(clk_obj)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(clk_obj);
+                expect(response.status).toBe(501);
+                expect(response.text).toBe("ops error 19");
             });
 
     });
@@ -746,62 +698,40 @@ describe('Operation API tests', () => {
 
 
     test('design_filter', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.filter_backend, 'design_filter').mockImplementation(
-            (arg:any) => {
-                result = arg
-            });
 
         return request(app.callback())
             .get('/operations/filter_design/4')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(4);
+                expect(response.status).toBe(501);
+                expect(response.text).toBe("flt error 0");
             });
 
     });
 
     test('implement_filter', async () => {
-        let router = rtr as any;
         let result = 0;
-        const spy = jest.spyOn(router.filter_backend, 'implement_filter').mockImplementation(
-            (arg:any) => {
-                result = arg
-            });
 
 
         return request(app.callback())
             .get('/operations/filter_implement/23')
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result).toStrictEqual(23);
+                expect(response.status).toBe(501);
+                expect(response.text).toBe("flt error 1");
             });
 
     });
 
     test('apply_filter', async () => {
-        let router = rtr as any;
-        let result = {} as any;
-        const spy = jest.spyOn(router.filter_backend, 'apply_filter').mockImplementation(
-            (id:any, addr:any) => {
-                result ={i:id, a:addr}
-            });
-
-
         return request(app.callback())
             .post('/operations/filter_apply')
             .set('Authorization', `Bearer ${token}`)
-            .send({id:2, address:3123})
+            .send({id:4, addr:1324})
             .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
-                expect(result.i).toStrictEqual(2);
-                expect(result.a).toStrictEqual(3123);
+                expect(response.status).toBe(501);
+                expect(response.text).toBe("flt error 2");
             });
 
     });

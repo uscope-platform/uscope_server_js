@@ -14,3 +14,9 @@ export interface filter_edit_model {
     field:string,
     value:string
 }
+
+
+export interface filter_apply_model {
+    id:number,
+    address:number
+}

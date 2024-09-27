@@ -131,7 +131,8 @@ let rules : rules_map = {
         hil_start:'operator',
         hil_stop:'operator',
         filter_design:'operator',
-        filter_implement:'operator'
+        filter_implement:'operator',
+        filter_apply:'operator'
     },
     script:{
         hash:'operator',
