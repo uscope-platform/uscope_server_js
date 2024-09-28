@@ -22,9 +22,9 @@ export default class OperationsBackend {
     }
 
     public async load_application(app:application_model, bit:bitstream_model) {
-        const fs_path = "/lib/firmware/" + app.bitstream;
+        const fs_path =  process.env.BITSTREAMS_DIR + "/" + app.bitstream;
         this.refresh_bitfile(bit, fs_path);
-        await this.hw_if.load_bitstream(fs_path);
+        return await this.hw_if.load_bitstream(fs_path);
     }
 
     public async fetch_data() : Promise<number[]>{
@@ -124,12 +124,14 @@ export default class OperationsBackend {
     }
 
     private refresh_bitfile(bitfile: bitstream_model, path:string) {
-
-        let old_data = fs.readFileSync(path);
-        let old_hash = createHash('sha256').update(old_data).digest('hex');
-        if(old_hash !== bitfile.hash){
-            fs.writeFileSync(path, bitfile.data);
+        if(fs.existsSync(path)){
+            let old_data = fs.readFileSync(path);
+            let old_hash = createHash('sha256').update(old_data).digest('hex');
+            if(old_hash === bitfile.hash){
+                return;
+            }
         }
+        fs.writeFileSync(path, bitfile.data);
     }
 
 
