@@ -45,7 +45,6 @@ class peripherals_router {
             } catch(error:any){
                 ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 

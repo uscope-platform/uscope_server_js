@@ -14,10 +14,6 @@ interface response_body{
     response_code:number
 }
 
-interface driver_response {
-    cmd:string;
-    body:response_body
-}
 export default class hw_interface {
     private socket: Request;
 
@@ -41,8 +37,7 @@ export default class hw_interface {
     }
 
     public async read_data(): Promise<read_data_response> {
-        let resp : read_data_response = await this.send_command(commands.scope.read_data,{});
-        return resp;
+        return await this.send_command(commands.scope.read_data,{});
     }
 
     public async get_acquisition_status() : Promise<string> {

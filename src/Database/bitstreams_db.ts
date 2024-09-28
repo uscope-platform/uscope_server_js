@@ -1,11 +1,10 @@
 import postgres from "postgres";
 import bitstream_model from "../data_model/bitstreams_model";
 import {createHash} from "node:crypto";
-import peripheral_model from "../data_model/peripheral_model";
 
 class bitstreams_db {
-    private db: postgres.Sql;
-    private schema: string;
+    private readonly db: postgres.Sql;
+    private readonly schema: string;
 
     constructor(d: postgres.Sql, schema: string) {
         this.db = d;
@@ -13,7 +12,7 @@ class bitstreams_db {
     }
 
     public async close(): Promise<void>{
-        this.db.end();
+       await this.db.end();
     }
 
     public async get_version(): Promise<string> {
@@ -49,7 +48,7 @@ class bitstreams_db {
         let file_hash = createHash('sha256').update(bit.data).digest('hex');
 
         // @ts-ignore
-        const res: any = await this.db`
+        await this.db`
             insert into ${this.db(this.schema)}.bitstreams (
                 id,
                 path,

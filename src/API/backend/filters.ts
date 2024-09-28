@@ -11,7 +11,7 @@ let filter_designer =`
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -154,8 +154,6 @@ export default class FiltersBackend {
     public async implement_filter(id:number) {
         let filter = this.db.filters.get_filter(id);
         let raw_res = spawnSync("/usr/bin/python3", ['-c', filter_designer,  "implement", JSON.stringify(filter)])
-        let y = String(raw_res.stderr);
-        let x = String(raw_res.stdout);
         let result = JSON.parse(String(raw_res.stdout));
         return {taps:result[0], response:result[1]};
     }

@@ -8,7 +8,6 @@ import filters_db from "./filters_db";
 import emulators_db from "./emulators_db";
 import peripherals_db from "./peripherals_db";
 import Applications_db from "./applications_db";
-import {promises} from "node:dns";
 import bitstreams_db from "./bitstreams_db";
 import {db_dump} from "../data_model/platform_model";
 
@@ -24,7 +23,7 @@ class database {
     public bitstreams: bitstreams_db;
     public platform: platform_db;
     db: postgres.Sql;
-    private schema: string;
+    private readonly schema: string;
 
 
      constructor(host: string, username:string, password:string, schema:string) {
@@ -475,7 +474,7 @@ class database {
 
     public async create_stored_procedures(): Promise<void>{
         try {
-            let res = await this.db`
+            await this.db`
             select pg_get_functiondef('${sql(this.schema)}.update_version()'::regprocedure);
          `
         } catch (err){

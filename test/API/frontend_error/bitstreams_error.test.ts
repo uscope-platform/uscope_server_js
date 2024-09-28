@@ -73,7 +73,7 @@ describe('bitstream API error handlong tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 12");
+                expect(response.text).toStrictEqual("generic db error 11");
             });
     });
 

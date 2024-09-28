@@ -2,8 +2,8 @@ import postgres from "postgres";
 import {application_model} from "../data_model/application_model";
 
 class applications_db {
-    private db: postgres.Sql;
-    private schema: string;
+    private readonly db: postgres.Sql;
+    private readonly schema: string;
 
     constructor(d: postgres.Sql, schema: string) {
         this.db = d;
@@ -11,7 +11,7 @@ class applications_db {
     }
 
     public async close(): Promise<void>{
-        this.db.end();
+        await this.db.end();
     }
 
     public async get_version(): Promise<string> {
@@ -26,13 +26,12 @@ class applications_db {
             select * from ${this.db(this.schema)}.applications
         `;
 
-         let converted_res =<application_model[]><unknown>res.map((app)=>{
+        return <application_model[]><unknown>res.map((app)=>{
              if (typeof app.clock_frequency === "string") {
                  app.clock_frequency = parseInt(app.clock_frequency)
              }
             return app;
         })
-        return converted_res;
     }
 
     public async get_application(id:number) : Promise<application_model> {
@@ -57,7 +56,7 @@ class applications_db {
     private async upsert_application(app:application_model) : Promise<any> {
 
         // @ts-ignore
-        const res: any = await this.db`
+        await this.db`
             INSERT INTO ${this.db(this.schema)}.applications (
                 id,
                 application_name, 

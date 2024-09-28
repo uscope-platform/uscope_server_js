@@ -15,7 +15,7 @@ class CustomError extends Error {
 }
 
 export default class Authenticator {
-    private secret: string
+    private readonly secret: string
     private db: database
     constructor(s:string, d: database) {
         this.secret = s;
@@ -64,7 +64,7 @@ export default class Authenticator {
             let hashed_validator =await this.validate_auto_token(login.validator)
             if(timingSafeEqual(Buffer.from(hashed_validator), Buffer.from(token.validator))){
                 let user = await this.db.platform.get_user(query_res[0].username)
-                let access_token = await this.generate_token(user.username, user.role);
+                let access_token =  this.generate_token(user.username, user.role);
                 let ret = <auth_response>{}
                 ret.access_token = access_token
                 ret.role = user.role
@@ -110,7 +110,6 @@ export default class Authenticator {
 
         const uint_validator = new TextEncoder().encode(token);
         let processed_validator = await crypto.subtle.digest("SHA-256", uint_validator)
-        const decoder = new TextDecoder('utf-8');
         return Array.prototype.map.call(new Uint8Array(processed_validator), x => ('00' + x.toString(16)).slice(-2)).join('');
     }
 

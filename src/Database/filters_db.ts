@@ -3,8 +3,8 @@ import filter_model from "../data_model/filters_model";
 
 
 class filters_db {
-    private db: postgres.Sql;
-    private schema: string;
+    private readonly db: postgres.Sql;
+    private readonly schema: string;
 
     constructor(d: postgres.Sql, schema: string) {
         this.db = d;
@@ -12,7 +12,7 @@ class filters_db {
     }
 
     public async close(): Promise<void>{
-        this.db.end();
+        await this.db.end();
     }
 
     public async get_version(): Promise<string> {
@@ -39,7 +39,7 @@ class filters_db {
     public async add_filter(app:filter_model) : Promise<any> {
 
         // @ts-ignore
-        const res: any = await this.db`
+        await this.db`
             insert into ${this.db(this.schema)}.filters (
                 id,
                 name,

@@ -1,12 +1,10 @@
 import postgres from "postgres";
-import peripheral_model from "../data_model/peripheral_model";
 import emulator_model from "../data_model/emulator_model";
-import filter_model from "../data_model/filters_model";
 
 
 class emulators_db {
-    private db: postgres.Sql;
-    private schema: string;
+    private readonly db: postgres.Sql;
+    private readonly schema: string;
 
     constructor(d: postgres.Sql, schema: string) {
         this.db = d;
@@ -14,7 +12,7 @@ class emulators_db {
     }
 
     public async close(): Promise<void>{
-        this.db.end();
+        await this.db.end();
     }
 
     public async get_version(): Promise<string> {
@@ -41,7 +39,7 @@ class emulators_db {
     public async add_emulator(emu:emulator_model) : Promise<any> {
 
         // @ts-ignore
-        const res: any = await this.db`
+        await this.db`
             insert into ${this.db(this.schema)}.emulators (
                 id,
                 name,

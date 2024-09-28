@@ -36,7 +36,6 @@ class bitstream_router {
             } catch(error:any){
                 ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -45,13 +44,11 @@ class bitstream_router {
         this.router.get(endpoints_map.bitstream.endpoints.get, async (ctx:Koa.Context, next:Koa.Next) => {
             try{
                 let id = parseInt(ctx.params.id);
-                let obj = <bitstream_model>await this.db.bitstreams.get_bitstream(id);
-                ctx.body = obj;
+                ctx.body =  <bitstream_model>await this.db.bitstreams.get_bitstream(id);
                 ctx.status = 200
             } catch(error:any){
                 ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -64,7 +61,6 @@ class bitstream_router {
             } catch(error:any){
                 ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -77,7 +73,6 @@ class bitstream_router {
             } catch(error:any){
                 ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 
@@ -89,7 +84,6 @@ class bitstream_router {
             } catch(error:any){
                 ctx.body = error
                 ctx.status = 501
-                next()
             }
         });
 

@@ -1,10 +1,9 @@
 import postgres from "postgres";
 import script_model from "../data_model/script_model";
-import {application_model} from "../data_model/application_model";
 
 class scripts_db {
-    private db: postgres.Sql;
-    private schema: string;
+    private readonly db: postgres.Sql;
+    private readonly schema: string;
 
     constructor(d: postgres.Sql, schema: string) {
         this.db = d;
@@ -12,7 +11,7 @@ class scripts_db {
     }
 
     public async close(): Promise<void>{
-        this.db.end();
+        await this.db.end();
     }
 
     public async get_version(): Promise<string> {
@@ -46,7 +45,7 @@ class scripts_db {
     public async add_script(app:script_model) : Promise<any> {
 
         // @ts-ignore
-        const res: any = await this.db`
+        await this.db`
             insert into ${this.db(this.schema)}.scripts (
                 id,
                 name,

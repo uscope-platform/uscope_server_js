@@ -35,7 +35,6 @@ export function authorizer() {
             }
         }
 
-        let a = endpoints_map[api_class].endpoints;
         // THE CHECK IS DONE IN TWO PASS TO HAVE PERFECT MATCHES OVERRIDE PARAMETRIZED ONES
         for(let item in endpoints_map[api_class].endpoints){
             let found_endpoint = endpoints_map[api_class].endpoints[item]

@@ -7,10 +7,10 @@ import {application_edit_model, application_model} from "../../data_model/applic
 class applications_router {
     public router: Router;
     public db: database;
-    private item_types_map:{
+    private readonly item_types_map:{
         [index: string]: any;
     }
-    private item_id_map:{
+    private readonly item_id_map:{
         [index: string]: any;
     }
     constructor(db: database) {
@@ -92,7 +92,6 @@ class applications_router {
 
         this.router.patch(endpoints_map.application.endpoints.edit, async (ctx:Koa.Context, next:Koa.Next) => {
             try{
-                let id = parseInt(ctx.params.id);
                 let e = <application_edit_model>ctx.request.body;
                 switch (e.action){
                     case "add":
@@ -177,13 +176,13 @@ class applications_router {
             delete app.miscellaneous[e.item]
         }else if(e.object === "selected_script" || e.object === "selected_program"){
 
-            var index = app[this.item_types_map[e.object]].indexOf(e.item);
+            let index = app[this.item_types_map[e.object]].indexOf(e.item);
             if (index !== -1) {
                 app[this.item_types_map[e.object]].splice(index, 1);
             }
 
         } else {
-            var index = app[this.item_types_map[e.object]].findIndex((val:any)=>{
+            let index = app[this.item_types_map[e.object]].findIndex((val:any)=>{
                 return val[this.item_id_map[e.object]] == e.item;
             });
             if (index !== -1) {
