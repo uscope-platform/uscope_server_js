@@ -122,30 +122,29 @@ export default class hw_interface {
         return await this.send_command(commands.core.apply_program, {address: core_address, program: program})
     }
 
-    public async apply_filter(taps:number[], filter_address:number){
-
-    }
-
-    public async deploy_hil(spec:object){
-
-    }
-
     public async set_acquisition(arg:acquisition_status){
-
-    }
-
-    public async select_output(out:select_hil_output){
-
-    }
-
-    public async set_input(in_obj:set_hil_inputs){
-
+        return await this.send_command(commands.scope.set_acquisition, arg);
     }
 
     public async emulate_hil(spec:object){
-
+        return await this.send_command(commands.core.emulate_hil, spec);
     }
 
+    public async deploy_hil(spec:object){
+        return await this.send_command(commands.core.deploy_hil, spec);
+    }
+
+    public async select_output(out:select_hil_output){
+        return await this.send_command(commands.core.hil_select_out, out);
+    }
+
+    public async set_input(in_obj:set_hil_inputs){
+        return await this.send_command(commands.core.hil_set_in, in_obj)
+    }
+
+    public async apply_filter(taps:number[], filter_address:number){
+        return await this.send_command(commands.control.apply_filter, {address:filter_address, taps:taps});
+    }
 
 
 }

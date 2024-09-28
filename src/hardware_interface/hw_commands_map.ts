@@ -8,7 +8,7 @@ interface hw_commands_map {
             load_bitstream:string,
             register_write:string,
             register_read:string,
-            apply_flter:string
+            apply_filter:string
         },
         scope:{
             read_data:string,
@@ -49,7 +49,7 @@ let commands :hw_commands_map = {
         load_bitstream:"load_bitstream",
         register_write:"register_write",
         register_read:"register_read",
-        apply_flter:"apply_flter"
+        apply_filter:"apply_filter"
     },
     scope:{
         read_data:"read_data",

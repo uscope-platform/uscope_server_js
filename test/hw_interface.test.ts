@@ -1,6 +1,6 @@
 import hw_interface from "../src/hardware_interface/hw_interface";
 import {expect} from "@jest/globals"
-import {programs_info} from "../src/data_model/operations_model";
+import {programs_info, select_hil_output, set_hil_inputs} from "../src/data_model/operations_model";
 
 describe('Hardware interface test', () => {
 
@@ -223,6 +223,241 @@ describe('Hardware interface test', () => {
         let resp = await hw.apply_program([131073, 12, 12, 12, 397345, 12], 0x500000000);
         expect(resp).toBeUndefined();
     });
+
+
+    test('apply program', async () => {
+        let acq = {
+            level: 0,
+            level_type: 'int',
+            mode: 'continuous',
+            prescaler: 0,
+            source: 1,
+            trigger: 'rising_edge',
+            trigger_point: 200
+        };
+
+        let resp = await hw.set_acquisition(acq);
+        expect(resp).toBeUndefined();
+    });
+
+
+
+
+    test('deploy_hil', async () => {
+        let hil = {
+            cores: [
+                {
+                    id: "test",
+                    order: 0,
+                    input_data: [],
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "out",
+                            metadata:{
+                                type: "float",
+                                width:32,
+                                signed:true
+                            },
+                            reg_n: [
+                                5
+                            ]
+                        }
+                    ],
+                    memory_init: [
+                        {
+                            name: "mem",
+                            metadata:{
+                                type: "float",
+                                width:32,
+                                signed:true
+                            },
+                            is_output: true,
+                            reg_n: 4,
+                            value: 14
+                        },
+                        {
+                            name: "mem_2",
+                            metadata:{
+                                type: "integer",
+                                width:16,
+                                signed:true
+                            },
+                            is_output: true,
+                            reg_n: 3,
+                            value: 12
+                        }
+                    ],
+                    channels: 1,
+                    options: {
+                        comparators: "reducing",
+                        efi_implementation: "none"
+                    },
+                    program: {
+                        content: "int main(){\n  float mem;\n  float mem_2;\n  float out = mem + mem_2;\n}",
+                        build_settings: {
+                            io: {
+                                inputs: [],
+                                memories: ["mem", "mem_2"],
+                                outputs: ["out"]
+                            }
+                        },
+                        headers: []
+                    },
+                    sampling_frequency: 1,
+                    deployment: {
+                        has_reciprocal: false,
+                        control_address: 18316525568,
+                        rom_address: 17179869184
+                    }
+                }
+            ],
+            interconnect: [],
+            emulation_time: 2,
+            deployment_mode: false
+        }
+
+
+        await hw.set_hil_address_map({
+            bases: {
+                controller: 0x443c00000,
+                cores_control: 0x443c10000,
+                cores_inputs: 8192,
+                cores_rom:  0x4443c20000,
+                hil_control:  0x443c30000,
+                scope_mux:  0x443c40000
+            },
+            offsets: {
+                controller: 4096,
+                cores_control: 65536,
+                cores_inputs: 4096,
+                cores_rom: 268435456,
+                dma: 4096,
+                hil_tb: 0
+            }
+        });
+        let resp = await hw.deploy_hil(hil);
+        expect(resp).toBeUndefined();
+    });
+
+    test('emulate hil ', async () => {
+        let hil = {
+            cores: [
+                {
+                    id: "test",
+                    order: 0,
+                    input_data: [],
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "out",
+                            metadata:{
+                                type: "float",
+                                width:32,
+                                signed:true
+                            },
+                            reg_n: [
+                                5
+                            ]
+                        }
+                    ],
+                    memory_init: [
+                        {
+                            name: "mem",
+                            metadata:{
+                                type: "float",
+                                width:32,
+                                signed:true
+                            },
+                            is_output: true,
+                            reg_n: 4,
+                            value: 14
+                        },
+                        {
+                            name: "mem_2",
+                            metadata:{
+                                type: "integer",
+                                width:16,
+                                signed:true
+                            },
+                            is_output: true,
+                            reg_n: 3,
+                            value: 12
+                        }
+                    ],
+                    channels: 1,
+                    options: {
+                        comparators: "reducing",
+                        efi_implementation: "none"
+                    },
+                    program: {
+                        content: "int main(){\n  float mem;\n  float mem_2;\n  float out = mem + mem_2;\n}",
+                        build_settings: {
+                            io: {
+                                inputs: [],
+                                memories: ["mem", "mem_2"],
+                                outputs: ["out"]
+                            }
+                        },
+                        headers: []
+                    },
+                    sampling_frequency: 1,
+                    deployment: {
+                        has_reciprocal: false,
+                        control_address: 18316525568,
+                        rom_address: 17179869184
+                    }
+                }
+            ],
+            interconnect: [],
+            emulation_time: 2,
+            deployment_mode: false
+        }
+
+
+        let resp = await hw.emulate_hil(hil);
+        expect(resp).toStrictEqual({
+            code: 1,
+            duplicates: "",
+            results: "{\"test\":{\"error_code\":\"\",\"outputs\":{\"mem\":{\"0\":[[14.0,14.0]]},\"mem_2\":{\"0\":[[12,12]]},\"out\":{\"0\":[[14.0,14.0]]}}},\"timebase\":[0.0]}",
+            results_valid: true
+        });
+    });
+
+
+    test('select output', async () => {
+        let out: select_hil_output = {
+            channel: 1,
+            output: {
+                address:5,
+                name:"out",
+                output:"out",
+                channel:0,
+                source:"test"
+            }
+        };
+
+        let resp = await hw.select_output(out);
+        expect(resp).toBeUndefined();
+    });
+
+    test('set_input', async () => {
+        let i :set_hil_inputs= {
+            address:[2],
+            core:"test",
+            value:23414
+        };
+
+        let resp = await hw.set_input(i);
+        expect(resp).toBeUndefined();
+    });
+
+    test('apply_filter', async () => {
+
+        let resp = await hw.apply_filter([12341,1234,1234], 0x443c00000);
+        expect(resp).toBeUndefined();
+    });
+
 
 });
 
