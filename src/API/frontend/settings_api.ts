@@ -7,6 +7,7 @@ import {hil_address_map} from "../../data_model/operations_model";
 class settings_router{
     public router: Router;
     private backend: SettingsBackend;
+
     constructor(backed: SettingsBackend) {
         this.backend = backed;
 

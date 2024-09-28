@@ -7,6 +7,7 @@ import {expect} from "@jest/globals";
 import settings_router from "../../../src/API/frontend/settings_api";
 import {hil_address_map} from "../../../src/data_model/operations_model";
 import SettingsBackend from "../../../src/API/backend/settings";
+import hw_interface from "../../../src/hardware_interface/hw_interface";
 
 
 
@@ -25,7 +26,9 @@ describe('Settings API tests', () => {
 
     let driver_host = "";
     let driver_port = 0;
-    let rtr = new settings_router(new SettingsBackend(driver_host, driver_port));
+
+    let hw_if = new hw_interface(driver_host, driver_port);
+    let rtr = new settings_router(new SettingsBackend(hw_if));
     app.use(rtr.router.routes())
     app.use(rtr.router.allowedMethods());
 

@@ -2,9 +2,9 @@
   "name": "uscope_server_js",
   "version": "1.0.0",
   "description": "",
-  "main": "src/app.ts",
+  "main": "src/uscope_server.ts",
   "scripts": {
-    "start": "nodemon src/app.ts",
+    "start": "nodemon src/uscope_server.ts",
     "test_parallel": "jest test/API",
     "test_serial": "jest test/database --runInBand",
     "test": "npm run test_parallel & npm run test_serial"

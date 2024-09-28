@@ -4,8 +4,8 @@ import {hil_address_map} from "../../data_model/operations_model";
 
 export default class SettingsBackend {
     private hw_if: hw_interface;
-    constructor(driver_host: string, driver_port: number) {
-        this.hw_if = new hw_interface(driver_host, driver_port);
+    constructor(hw: hw_interface) {
+        this.hw_if = hw;
     }
 
     public async set_debug_level(level:string): Promise<any>{
