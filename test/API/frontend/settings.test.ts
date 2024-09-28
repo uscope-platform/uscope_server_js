@@ -39,7 +39,6 @@ describe('Settings API tests', () => {
     test('get_debug_level', async () => {
 
         let router = rtr as any;
-        let mock_results :any[] = [];
         const spy = jest.spyOn(router.backend, 'get_debug_level').mockImplementation(
             () : string => {
                 return "minimal"
