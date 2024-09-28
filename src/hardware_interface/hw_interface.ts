@@ -34,8 +34,7 @@ export default class hw_interface {
         let raw_resp = await this.socket.receive();
         let resp = <response_body>unpack(raw_resp[0]).body;
         if(resp.response_code != 1){
-            // TODO: HANDle errors
-            throw "not implemented yet";
+            throw resp.data;
         } else{
             return resp.data;
         }
@@ -115,22 +114,37 @@ export default class hw_interface {
         return await this.send_command(commands.platform.get_clock,{is_primary:is_primary, id:id});
     }
 
-    public async compile_program(program:object){}
+    public async compile_program(program:object){
+        return await this.send_command(commands.core.compile_program, program);
+    }
 
-    public async apply_program(program:number[], core_address:number){}
+    public async apply_program(program:number[], core_address:number){
+        return await this.send_command(commands.core.apply_program, {address: core_address, program: program})
+    }
 
+    public async apply_filter(taps:number[], filter_address:number){
 
-    public async apply_filter(taps:number[], filter_address:number){}
+    }
 
-    public async deploy_hil(spec:object){}
+    public async deploy_hil(spec:object){
 
-    public async set_acquisition(arg:acquisition_status){}
+    }
 
-    public async select_output(out:select_hil_output){}
+    public async set_acquisition(arg:acquisition_status){
 
-    public async set_input(in_obj:set_hil_inputs){}
+    }
 
-    public async emulate_hil(spec:object){}
+    public async select_output(out:select_hil_output){
+
+    }
+
+    public async set_input(in_obj:set_hil_inputs){
+
+    }
+
+    public async emulate_hil(spec:object){
+
+    }
 
 
 

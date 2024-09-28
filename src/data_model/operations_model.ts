@@ -16,7 +16,8 @@ interface io_info {
     address:number,
     associated_io:string,
     name:string,
-    type:string
+    type:string,
+    common_io:boolean
 }
 
 export interface programs_info {

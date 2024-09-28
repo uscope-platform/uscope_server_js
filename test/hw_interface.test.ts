@@ -1,5 +1,6 @@
 import hw_interface from "../src/hardware_interface/hw_interface";
-import {expect} from "@jest/globals";
+import {expect} from "@jest/globals"
+import {programs_info} from "../src/data_model/operations_model";
 
 describe('Hardware interface test', () => {
 
@@ -172,6 +173,57 @@ describe('Hardware interface test', () => {
         let resp = await hw.get_clock(0, true);
         expect(resp).toBe(126000000);
     });
+
+
+    test('compile program success', async () => {
+        let prog :programs_info= {
+            id:1,
+            headers:[],
+            type:"C",
+            core_address:0x443c00000,
+            hash:"21324",
+            content:"void main(){float a; float b; float c; c = a+b;}",
+            io:[
+                {name:"a",associated_io:"a", address:1, type:"input", common_io:false},
+                {name:"b",associated_io:"b", address:2, type:"input", common_io:false},
+                {name:"c",associated_io:"c", address:3, type:"output", common_io:false},
+            ]
+        }
+
+        let resp = await hw.compile_program(prog);
+        expect(resp).toStrictEqual({hex: [131073, 12, 12, 12, 397345, 12], status: "ok"});
+    });
+
+    test('compile program error', async () => {
+        let prog :programs_info= {
+            id:1,
+            headers:[],
+            type:"C",
+            core_address:0x443c00000,
+            hash:"21324",
+            content:"void main(){float a; float b; float c; casde = a+2ab;}",
+            io:[
+                {name:"a",associated_io:"a", address:1, type:"input", common_io:false},
+                {name:"b",associated_io:"b", address:2, type:"input", common_io:false},
+                {name:"c",associated_io:"c", address:3, type:"output", common_io:false},
+            ]
+        }
+
+        let resp = await hw.compile_program(prog);
+        expect(resp).toStrictEqual({
+            error: "extraneous input 'ab' expecting ';'",
+            status: "error"
+        });
+    });
+
+
+
+    test('apply program', async () => {
+
+        let resp = await hw.apply_program([131073, 12, 12, 12, 397345, 12], 0x500000000);
+        expect(resp).toBeUndefined();
+    });
+
 });
 
 
