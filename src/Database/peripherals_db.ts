@@ -1,5 +1,6 @@
 import postgres from "postgres";
 import peripheral_model from "../data_model/peripheral_model";
+import emulator_model from "../data_model/emulator_model";
 
 
 class peripherals_db {
@@ -23,9 +24,10 @@ class peripherals_db {
     }
 
     public async load_all() : Promise<peripheral_model[]> {
-        return this.db<peripheral_model[]>`
+        let per = await this.db<peripheral_model[]>`
             select * from ${this.db(this.schema)}.peripherals
         `;
+        return <peripheral_model[]>per.map((p)=>{return p;});
     }
 
     public async get_peripheral(id:number) : Promise<peripheral_model> {

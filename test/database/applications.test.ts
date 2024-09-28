@@ -78,7 +78,6 @@ describe('applications_database_tests',  () => {
         await db.applications.add_application(apps[1]);
         let res = await db.applications.load_all();
         expect(res).toEqual(apps);
-
     });
 
     test('get_application', async () => {

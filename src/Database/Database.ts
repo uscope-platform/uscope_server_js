@@ -60,7 +60,13 @@ class database {
      }
 
      public async restore(obj:db_dump):Promise<any>{
-        // TODO: implement db restore
+         for(let app of obj.applications) await this.applications.add_application(app);
+         for(let flt of obj.filters) await this.filters.add_filter(flt);
+         for(let scr of obj.scripts) await this.scripts.add_script(scr);
+         for(let per of obj.peripherals) await this.peripherals.add_peripheral(per);
+         for(let prg of obj.programs) await this.programs.add_program(prg);
+         for(let emu of obj.emulators) await this.emulators.add_emulator(emu);
+         for(let bit of obj.bitstreams) await this.bitstreams.add_bitstream(bit);
      }
 
      public async close():Promise<void> {

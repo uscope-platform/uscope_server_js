@@ -1,6 +1,7 @@
 import postgres from "postgres";
 import bitstream_model from "../data_model/bitstreams_model";
 import {createHash} from "node:crypto";
+import peripheral_model from "../data_model/peripheral_model";
 
 class bitstreams_db {
     private db: postgres.Sql;
@@ -23,9 +24,10 @@ class bitstreams_db {
     }
 
     public async load_all() : Promise<bitstream_model[]> {
-        return this.db<bitstream_model[]>`
+        let bit = await this.db<bitstream_model[]>`
             select * from ${this.db(this.schema)}.bitstreams
         `;
+        return <bitstream_model[]>bit.map((b)=>{return b;});
     }
 
     public async get_bitstream(id:number) : Promise<bitstream_model> {

@@ -1,6 +1,7 @@
 import postgres from "postgres";
 import peripheral_model from "../data_model/peripheral_model";
 import emulator_model from "../data_model/emulator_model";
+import filter_model from "../data_model/filters_model";
 
 
 class emulators_db {
@@ -24,9 +25,10 @@ class emulators_db {
     }
 
     public async load_all() : Promise<emulator_model[]> {
-        return this.db<emulator_model[]>`
+        let emu = await this.db<emulator_model[]>`
             select * from ${this.db(this.schema)}.emulators
         `;
+        return <emulator_model[]>emu.map((e)=>{return e;});
     }
 
     public async get_emulator(id:number) : Promise<emulator_model> {

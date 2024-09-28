@@ -23,9 +23,10 @@ class filters_db {
     }
 
     public async load_all() : Promise<filter_model[]> {
-        return this.db<filter_model[]>`
+       let flt = await this.db<filter_model[]>`
             select * from ${this.db(this.schema)}.filters
         `;
+        return <filter_model[]>flt.map((f)=>{return f;});
     }
 
     public async get_filter(id:number) : Promise<filter_model> {
