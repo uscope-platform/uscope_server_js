@@ -16,7 +16,6 @@ describe('Settings API tests', () => {
     const app = new Koa();
 
     app.use(bodyParser());
-    let results = {app_id:0, bitstream:""};
 
 
     // Error handling middleware
@@ -59,7 +58,6 @@ describe('Settings API tests', () => {
     test('set_debug_level', async () => {
 
         let router = rtr as any;
-        let mock_results :any[] = [];
         let result = "";
         const spy = jest.spyOn(router.backend, 'set_debug_level').mockImplementation(
             (arg:any)  => {
