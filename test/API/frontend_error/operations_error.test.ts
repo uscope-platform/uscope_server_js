@@ -8,10 +8,8 @@ import fs from "node:fs";
 import {createHash} from "node:crypto";
 import request from "supertest";
 import {expect} from "@jest/globals";
-import hw_interface from "../../../src/hw_interface";
 import OperationsBackend from "../../../src/API/backend/operations";
 import FiltersBackend from "../../../src/API/backend/filters";
-import {spawnSync} from "node:child_process";
 
 
 

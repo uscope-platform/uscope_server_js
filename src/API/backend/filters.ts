@@ -1,6 +1,6 @@
 import database from "../../Database/Database";
 import {spawnSync} from "node:child_process";
-import hw_interface from "../../hw_interface";
+import hw_interface from "../../hardware_interface/hw_interface";
 
 
 let filter_designer =`

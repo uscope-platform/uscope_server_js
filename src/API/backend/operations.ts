@@ -2,7 +2,7 @@ import {application_model} from "../../data_model/application_model";
 import fs from "node:fs";
 import {createHash} from "node:crypto";
 import bitstream_model from "../../data_model/bitstreams_model";
-import hw_interface from "../../hw_interface";
+import hw_interface from "../../hardware_interface/hw_interface";
 import register_write_model, {
     acquisition_status,
     channel_statuses, clock_info,
@@ -27,7 +27,7 @@ export default class OperationsBackend {
         return await this.hw_if.load_bitstream(fs_path);
     }
 
-    public async fetch_data() : Promise<number[]>{
+    public async fetch_data() : Promise<read_data_response>{
         return await this.hw_if.read_data();
     }
 
@@ -99,7 +99,7 @@ export default class OperationsBackend {
     public async get_clocks(): Promise<any>{
         let ret : number[] = [];
         for(let i = 0; i<4; i++){
-            ret.push(await this.hw_if.get_clock(i.toString(), true));
+            ret.push(await this.hw_if.get_clock(i, true));
         }
         return ret;
     }

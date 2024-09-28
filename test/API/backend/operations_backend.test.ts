@@ -1,7 +1,7 @@
 
 import database from "../../../src/Database/Database";
 import {expect} from "@jest/globals";
-import hw_interface from "../../../src/hw_interface";
+import hw_interface from "../../../src/hardware_interface/hw_interface";
 import OperationsBackend from "../../../src/API/backend/operations";
 import register_write_model, {
     acquisition_status, clock_info,
@@ -434,13 +434,13 @@ describe('operations backend test', () => {
     test('get_clocks', async () => {
         let res =await backend.get_clocks();
         expect(res).toStrictEqual([21342123, 21342123, 21342123, 21342123]);
-        expect(args).toStrictEqual(["0","1", "2", "3"]);
+        expect(args).toStrictEqual([0,1, 2, 3]);
     });
 
 
     test('set_clock', async () => {
         let a : clock_info = {
-            id:"0",
+            id:0,
             value:1234,
             is_primary:false
         }

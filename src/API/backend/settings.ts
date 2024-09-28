@@ -1,5 +1,5 @@
 
-import hw_interface from "../../hw_interface";
+import hw_interface from "../../hardware_interface/hw_interface";
 import {hil_address_map} from "../../data_model/operations_model";
 
 export default class SettingsBackend {

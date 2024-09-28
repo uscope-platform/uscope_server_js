@@ -9,7 +9,7 @@ import {createHash} from "node:crypto";
 import request from "supertest";
 import {expect} from "@jest/globals";
 import OperationsBackend from "../../../src/API/backend/operations";
-import hw_interface from "../../../src/hw_interface";
+import hw_interface from "../../../src/hardware_interface/hw_interface";
 import FiltersBackend from "../../../src/API/backend/filters";
 
 

@@ -5,7 +5,7 @@ import Authenticator from '../backend/authentication'
 import database from "../../Database/Database";
 import {auto_login_object, db_dump, user_login_object} from "../../data_model/platform_model";
 import endpoints_map from "./endpoints_map";
-import hw_interface from "../../hw_interface";
+import hw_interface from "../../hardware_interface/hw_interface";
 
 interface user_add_request {
     user:string,

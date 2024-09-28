@@ -70,7 +70,7 @@ export interface select_hil_output {
 }
 
 export interface clock_info {
-    id: string,
+    id: number,
     value: number,
     is_primary:boolean
 }
