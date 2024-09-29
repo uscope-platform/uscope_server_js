@@ -22,12 +22,15 @@ import cors from '@koa/cors';
 
 const app = new Koa();
 
+
+let jwt_secret = "super secret v2"
+
 // middleware
 app.use(bodyParser());
 
 // Error handling middleware
 app.use(error_handler);
-app.use(jwt({ secret: 'secret', passthrough: true }));
+app.use(jwt({ secret: jwt_secret, passthrough: true }));
 app.use(authorizer())
 
 let db = new database("localhost", "uscope", "test", "uscope")
@@ -77,7 +80,7 @@ let set_rtr = new settings_router(set);
 app.use(set_rtr.router.routes());
 app.use(set_rtr.router.allowedMethods());
 
-let plt_rtr = new platform_router("super secret", db, hw_if);
+let plt_rtr = new platform_router(jwt_secret, db, hw_if);
 app.use(plt_rtr.router.routes());
 app.use(plt_rtr.router.allowedMethods());
 
