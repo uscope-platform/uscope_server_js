@@ -11,6 +11,7 @@ import {expect} from "@jest/globals";
 import OperationsBackend from "../../../src/API/backend/operations";
 import hw_interface from "../../../src/hardware_interface/hw_interface";
 import FiltersBackend from "../../../src/API/backend/filters";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 
@@ -98,8 +99,10 @@ describe('Operation API tests', () => {
                 mock_results.app = app;
                 mock_results.bit = bit;
             });
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.load_application;
+        path = path.replace(":id", "1")
         return request(app.callback())
-            .get('/operations/load_application/1')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -135,7 +138,7 @@ describe('Operation API tests', () => {
             });
 
         return request(app.callback())
-            .post('/operations/write_registers')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.write_registers)
             .set('Authorization', `Bearer ${token}`)
             .send(write_in)
             .then((response)=>{
@@ -156,8 +159,11 @@ describe('Operation API tests', () => {
                 return 4213;
             });
 
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.read_register;
+        path = path.replace(":address", "54231231")
+
         return request(app.callback())
-            .get('/operations/read_register/54231231')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -188,7 +194,7 @@ describe('Operation API tests', () => {
             type: "C"
         }
         return request(app.callback())
-            .post('/operations/compile_program')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.compile_program)
             .set('Authorization', `Bearer ${token}`)
             .send(prog_info)
             .then((response)=>{
@@ -230,9 +236,11 @@ describe('Operation API tests', () => {
             core_address: "0x83c000000",
             hash: "499168ac9423d43da383435da3a0737b09f200b2"
         }
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.apply_program;
+        path.replace(":id", "1")
 
         return request(app.callback())
-            .post('/operations/apply_program/1')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(prog_info)
             .then((response)=>{
@@ -253,7 +261,7 @@ describe('Operation API tests', () => {
             });
 
         return request(app.callback())
-            .get('/operations/plot/data')
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.fetch_data)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -277,7 +285,7 @@ describe('Operation API tests', () => {
         let sfs = [1, 1.5, 2, -5.4, 1, 0];
 
         return request(app.callback())
-            .post('/operations/plot/channel_scaling')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.scaling_factors)
             .set('Authorization', `Bearer ${token}`)
             .send(sfs)
             .then((response)=>{
@@ -299,7 +307,7 @@ describe('Operation API tests', () => {
         let statuses = {'0': false, '1': true, '2': true, '3': true, '4': true, '5': true};
 
         return request(app.callback())
-            .post('/operations/plot/channel_status')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.set_channel_status)
             .set('Authorization', `Bearer ${token}`)
             .send(statuses)
             .then((response)=>{
@@ -319,7 +327,7 @@ describe('Operation API tests', () => {
             });
 
         return request(app.callback())
-            .get('/operations/plot/acquisition')
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.acquisition)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -348,7 +356,7 @@ describe('Operation API tests', () => {
         };
 
         return request(app.callback())
-            .post('/operations/plot/acquisition')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.acquisition)
             .set('Authorization', `Bearer ${token}`)
             .send(acq)
             .then((response)=>{
@@ -368,7 +376,7 @@ describe('Operation API tests', () => {
             });
 
         return request(app.callback())
-            .post('/operations/plot/dma_disable')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.dma_disable)
             .set('Authorization', `Bearer ${token}`)
             .send({status:true})
             .then((response)=>{
@@ -390,7 +398,7 @@ describe('Operation API tests', () => {
         let acq = {'address': 18316853248, 'dma_buffer_offset': 520};
 
         return request(app.callback())
-            .post('/operations/plot/address')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.scope_address)
             .set('Authorization', `Bearer ${token}`)
             .send(acq)
             .then((response)=>{
@@ -500,7 +508,7 @@ describe('Operation API tests', () => {
         };
 
         return request(app.callback())
-            .post('/operations/hil/deploy')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_deploy)
             .set('Authorization', `Bearer ${token}`)
             .send(hil)
             .then((response)=>{
@@ -611,7 +619,7 @@ describe('Operation API tests', () => {
         };
 
         return request(app.callback())
-            .post('/operations/hil/emulate')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_emulate)
             .set('Authorization', `Bearer ${token}`)
             .send(hil)
             .then((response)=>{
@@ -633,7 +641,7 @@ describe('Operation API tests', () => {
         let  in_obj = {'address': [1], 'core': 'DAB', 'value': 1205};
 
         return request(app.callback())
-            .post('/operations/hil/select_out')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_select_output)
             .set('Authorization', `Bearer ${token}`)
             .send(in_obj)
             .then((response)=>{
@@ -655,7 +663,7 @@ describe('Operation API tests', () => {
         let  in_obj ={'channel': 0, 'output': {'address': 41, 'channel': 0, 'name': 'VSI.v_out(1,0)', 'output': 'v_out', 'source': 'VSI'}};
 
         return request(app.callback())
-            .post('/operations/hil/set_input')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_set_input)
             .set('Authorization', `Bearer ${token}`)
             .send(in_obj)
             .then((response)=>{
@@ -674,7 +682,7 @@ describe('Operation API tests', () => {
             });
 
         return request(app.callback())
-            .get('/operations/hil/start')
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_start)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -691,7 +699,7 @@ describe('Operation API tests', () => {
             });
 
         return request(app.callback())
-            .get('/operations/hil/stop')
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_stop)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -710,7 +718,7 @@ describe('Operation API tests', () => {
             });
 
         return request(app.callback())
-            .get('/operations/clock')
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.clock)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -732,7 +740,7 @@ describe('Operation API tests', () => {
         let clk_obj = {id:"test", value:1293.13, is_primary:false}
 
         return request(app.callback())
-            .post('/operations/clock')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.clock)
             .set('Authorization', `Bearer ${token}`)
             .send(clk_obj)
             .then((response)=>{
@@ -752,9 +760,10 @@ describe('Operation API tests', () => {
             (arg:any) => {
                 result = arg
             });
-
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.filter_design;
+        path = path.replace(":id", "4")
         return request(app.callback())
-            .get('/operations/filter_design/4')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -772,9 +781,11 @@ describe('Operation API tests', () => {
                 result = arg
             });
 
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.filter_implement;
+        path = path.replace(":id", "23")
 
         return request(app.callback())
-            .get('/operations/filter_implement/23')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -794,7 +805,7 @@ describe('Operation API tests', () => {
 
 
         return request(app.callback())
-            .post('/operations/filter_apply')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.filter_apply)
             .set('Authorization', `Bearer ${token}`)
             .send({id:2, address:3123})
             .then((response)=>{

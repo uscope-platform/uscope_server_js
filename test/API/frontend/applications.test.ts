@@ -113,7 +113,9 @@ describe('applications API tests', () => {
     });
 
     test('get', async () => {
-        let url = endpoints_map.application.prefix + '/1';
+
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.get;
+        url = url.replace(":id", "1");
         return request(app.callback())
             .get(url)
             .set('Authorization', `Bearer ${token}`)
@@ -147,8 +149,10 @@ describe('applications API tests', () => {
                 "3":100e6,
             }
         }
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.add;
+        url = url.replace(":id", "5");
         return request(app.callback())
-            .post('/application/5')
+            .post(url)
             .set('Authorization', `Bearer ${token}`)
             .send(app_obj)
             .then((response)=>{
@@ -158,8 +162,10 @@ describe('applications API tests', () => {
     });
 
     test('delete', async () => {
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.delete;
+        url = url.replace(":id", "4");
         return request(app.callback())
-            .delete('/application/4')
+            .delete(url)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -177,8 +183,11 @@ describe('applications API tests', () => {
         };
 
         let edit = {application:1, item:chg, action:"add", object:"channel_group"};
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.edit;
+        url = url.replace(":id", "1");
+
         return request(app.callback())
-            .patch('/application/1')
+            .patch(url)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -229,8 +238,11 @@ describe('applications API tests', () => {
 
     test('edit_add_item_misc', async () => {
         let edit = {application:1, item:{name:"test param", value:125}, action:"add", object:"misc"};
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.edit;
+        url = url.replace(":id", "1");
+
         return request(app.callback())
-            .patch('/application/1')
+            .patch(url)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -288,8 +300,11 @@ describe('applications API tests', () => {
             action:"edit",
             object:"channel_group"
         };
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.edit;
+        url = url.replace(":id", "1");
+
         return request(app.callback())
-            .patch('/application/1')
+            .patch(url)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -344,9 +359,11 @@ describe('applications API tests', () => {
             action:"edit",
             object:"misc"
         };
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.edit;
+        url = url.replace(":id", "1");
 
         return request(app.callback())
-            .patch('/application/1')
+            .patch(url)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -401,9 +418,11 @@ describe('applications API tests', () => {
             action:"edit",
             object:"misc"
         };
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.edit;
+        url = url.replace(":id", "1");
 
         return request(app.callback())
-            .patch('/application/1')
+            .patch(url)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -454,9 +473,11 @@ describe('applications API tests', () => {
             action:"remove",
             object:"misc"
         };
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.edit;
+        url = url.replace(":id", "1");
 
         return request(app.callback())
-            .patch('/application/1')
+            .patch(url)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -506,8 +527,11 @@ describe('applications API tests', () => {
             object:"channel_group"
         };
 
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.edit;
+        url = url.replace(":id", "1");
+
         return request(app.callback())
-            .patch('/application/1')
+            .patch(url)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -560,8 +584,11 @@ describe('applications API tests', () => {
             object:"misc"
         };
 
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.edit;
+        url = url.replace(":id", "1");
+
         return request(app.callback())
-            .patch('/application/1')
+            .patch(url)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -616,8 +643,10 @@ describe('applications API tests', () => {
             object:"misc"
         };
 
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.edit;
+        url = url.replace(":id", "1");
         return request(app.callback())
-            .patch('/application/1')
+            .patch(url)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -674,8 +703,10 @@ describe('applications API tests', () => {
             object:"misc"
         };
 
+        let url = endpoints_map.application.prefix + endpoints_map.bitstream.endpoints.edit;
+        url = url.replace(":id", "1");
         return request(app.callback())
-            .patch('/application/1')
+            .patch(url)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{

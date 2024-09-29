@@ -10,6 +10,7 @@ import request from "supertest";
 import {expect} from "@jest/globals";
 import OperationsBackend from "../../../src/API/backend/operations";
 import FiltersBackend from "../../../src/API/backend/filters";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 
@@ -73,9 +74,6 @@ describe('Operation API Error handling tests', () => {
     app.use(error_handler);
     app.use(jwt({ secret: 'secret', passthrough: true }));
     app.use(authorizer())
-
-    let driver_host = "";
-    let driver_port = 0;
 
 
     let ops = {
@@ -168,8 +166,10 @@ describe('Operation API Error handling tests', () => {
 
     test('load_application', async () => {
 
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.load_application;
+        path = path.replace(":id", "1");
         return request(app.callback())
-            .get('/operations/load_application/1')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -178,10 +178,10 @@ describe('Operation API Error handling tests', () => {
     });
 
     test('read_register', async () => {
-        let result = 0;
-
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.read_register;
+        path = path.replace(":address", "54231231");
         return request(app.callback())
-            .get('/operations/read_register/54231231')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -208,7 +208,7 @@ describe('Operation API Error handling tests', () => {
         }
         ]
         return request(app.callback())
-            .post('/operations/write_registers')
+            .post( endpoints_map.operations.prefix + endpoints_map.operations.endpoints.write_registers)
             .set('Authorization', `Bearer ${token}`)
             .send(write_in)
             .then((response)=>{
@@ -232,7 +232,7 @@ describe('Operation API Error handling tests', () => {
             type: "C"
         }
         return request(app.callback())
-            .post('/operations/compile_program')
+            .post( endpoints_map.operations.prefix + endpoints_map.operations.endpoints.compile_program)
             .set('Authorization', `Bearer ${token}`)
             .send(prog_info)
             .then((response)=>{
@@ -244,8 +244,6 @@ describe('Operation API Error handling tests', () => {
 
 
     test('apply_program', async () => {
-        let result = 0;
-
         let prog_info = {
             id: 1,
             content: "void main(){\n\n float a;\nfloat b;\n float c = add(a, b);\n}",
@@ -269,9 +267,10 @@ describe('Operation API Error handling tests', () => {
             core_address: "0x83c000000",
             hash: "499168ac9423d43da383435da3a0737b09f200b2"
         }
-
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.apply_program;
+        path = path.replace(":id", "1");
         return request(app.callback())
-            .post('/operations/apply_program/1')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(prog_info)
             .then((response)=>{
@@ -286,7 +285,7 @@ describe('Operation API Error handling tests', () => {
     test('fetch_data', async () => {
 
         return request(app.callback())
-            .get('/operations/plot/data')
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.fetch_data)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -303,7 +302,7 @@ describe('Operation API Error handling tests', () => {
         let sfs = [1, 1.5, 2, -5.4, 1, 0];
 
         return request(app.callback())
-            .post('/operations/plot/channel_scaling')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.scaling_factors)
             .set('Authorization', `Bearer ${token}`)
             .send(sfs)
             .then((response)=>{
@@ -314,12 +313,11 @@ describe('Operation API Error handling tests', () => {
     });
 
     test('set_channel_statuses', async () => {
-        let result = 0;
 
         let statuses = {'0': false, '1': true, '2': true, '3': true, '4': true, '5': true};
 
         return request(app.callback())
-            .post('/operations/plot/channel_status')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.set_channel_status)
             .set('Authorization', `Bearer ${token}`)
             .send(statuses)
             .then((response)=>{
@@ -333,7 +331,7 @@ describe('Operation API Error handling tests', () => {
     test('get_acquisition', async () => {
 
         return request(app.callback())
-            .get('/operations/plot/acquisition')
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.acquisition)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -343,7 +341,6 @@ describe('Operation API Error handling tests', () => {
     });
 
     test('set_acquisition', async () => {
-        let result = 0;
 
         let acq = {
             level: 0,
@@ -356,7 +353,7 @@ describe('Operation API Error handling tests', () => {
         };
 
         return request(app.callback())
-            .post('/operations/plot/acquisition')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.acquisition)
             .set('Authorization', `Bearer ${token}`)
             .send(acq)
             .then((response)=>{
@@ -367,10 +364,9 @@ describe('Operation API Error handling tests', () => {
     });
 
     test('set_dma_disable', async () => {
-        let result = 0;
 
         return request(app.callback())
-            .post('/operations/plot/dma_disable')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.dma_disable)
             .set('Authorization', `Bearer ${token}`)
             .send({status:true})
             .then((response)=>{
@@ -381,11 +377,10 @@ describe('Operation API Error handling tests', () => {
     });
 
     test('address', async () => {
-        let result = 0;
         let acq = {'address': 18316853248, 'dma_buffer_offset': 520};
 
         return request(app.callback())
-            .post('/operations/plot/address')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.scope_address)
             .set('Authorization', `Bearer ${token}`)
             .send(acq)
             .then((response)=>{
@@ -396,8 +391,6 @@ describe('Operation API Error handling tests', () => {
     });
 
     test('deploy_hil', async () => {
-        let result = 0;
-
         let hil = {
             cores:[
                 {
@@ -489,7 +482,7 @@ describe('Operation API Error handling tests', () => {
         };
 
         return request(app.callback())
-            .post('/operations/hil/deploy')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_deploy)
             .set('Authorization', `Bearer ${token}`)
             .send(hil)
             .then((response)=>{
@@ -501,8 +494,6 @@ describe('Operation API Error handling tests', () => {
 
 
     test('emulate_hil', async () => {
-        let result = 0;
-
         let hil = {
             cores:[
                 {
@@ -594,7 +585,7 @@ describe('Operation API Error handling tests', () => {
         };
 
         return request(app.callback())
-            .post('/operations/hil/emulate')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_emulate)
             .set('Authorization', `Bearer ${token}`)
             .send(hil)
             .then((response)=>{
@@ -605,12 +596,11 @@ describe('Operation API Error handling tests', () => {
     });
 
     test('hil_select_output', async () => {
-        let result = 0;
 
         let  in_obj = {'address': [1], 'core': 'DAB', 'value': 1205};
 
         return request(app.callback())
-            .post('/operations/hil/select_out')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_select_output)
             .set('Authorization', `Bearer ${token}`)
             .send(in_obj)
             .then((response)=>{
@@ -621,11 +611,10 @@ describe('Operation API Error handling tests', () => {
     });
 
     test('hil_set_input', async () => {
-        let result = 0;
         let  in_obj ={'channel': 0, 'output': {'address': 41, 'channel': 0, 'name': 'VSI.v_out(1,0)', 'output': 'v_out', 'source': 'VSI'}};
 
         return request(app.callback())
-            .post('/operations/hil/set_input')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_set_input)
             .set('Authorization', `Bearer ${token}`)
             .send(in_obj)
             .then((response)=>{
@@ -639,7 +628,7 @@ describe('Operation API Error handling tests', () => {
 
 
         return request(app.callback())
-            .get('/operations/hil/start')
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_start)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -652,7 +641,7 @@ describe('Operation API Error handling tests', () => {
 
 
         return request(app.callback())
-            .get('/operations/hil/stop')
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_stop)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -666,7 +655,7 @@ describe('Operation API Error handling tests', () => {
     test('get_clocks', async () => {
 
         return request(app.callback())
-            .get('/operations/clock')
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.clock)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -677,13 +666,11 @@ describe('Operation API Error handling tests', () => {
 
 
     test('set_clocks', async () => {
-        let result = 0;
-
 
         let clk_obj = {id:"test", value:1293.13, is_primary:false}
 
         return request(app.callback())
-            .post('/operations/clock')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.clock)
             .set('Authorization', `Bearer ${token}`)
             .send(clk_obj)
             .then((response)=>{
@@ -696,10 +683,10 @@ describe('Operation API Error handling tests', () => {
 
 
     test('design_filter', async () => {
-        let result = 0;
-
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.filter_design
+        path = path.replace(":id", '4')
         return request(app.callback())
-            .get('/operations/filter_design/4')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -709,11 +696,10 @@ describe('Operation API Error handling tests', () => {
     });
 
     test('implement_filter', async () => {
-        let result = 0;
-
-
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.filter_implement
+        path = path.replace(":id", '23')
         return request(app.callback())
-            .get('/operations/filter_implement/23')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -724,7 +710,7 @@ describe('Operation API Error handling tests', () => {
 
     test('apply_filter', async () => {
         return request(app.callback())
-            .post('/operations/filter_apply')
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.filter_apply)
             .set('Authorization', `Bearer ${token}`)
             .send({id:4, addr:1324})
             .then((response)=>{

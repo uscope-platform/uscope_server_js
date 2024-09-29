@@ -16,6 +16,9 @@ import FiltersBackend from "./API/backend/filters";
 import OperationsBackend from "./API/backend/operations";
 import SettingsBackend from "./API/backend/settings";
 import hw_interface from "./hardware_interface/hw_interface";
+import platform_router from "./API/frontend/platform_api";
+
+import cors from '@koa/cors';
 
 const app = new Koa();
 
@@ -74,4 +77,11 @@ let set_rtr = new settings_router(set);
 app.use(set_rtr.router.routes());
 app.use(set_rtr.router.allowedMethods());
 
-let server = app.listen(3000);
+let plt_rtr = new platform_router("super secret", db, hw_if);
+app.use(plt_rtr.router.routes());
+app.use(plt_rtr.router.allowedMethods());
+
+
+app.use(cors())
+console.log("SERVER READY");
+let server = app.listen(6969);

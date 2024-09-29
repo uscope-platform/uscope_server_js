@@ -24,16 +24,16 @@ describe('applications API error handling tests', () => {
             load_all:() =>{
                 throw "generic db error 1";
             },
-            get_application:(id:number) =>{
+            get_application:() =>{
                 throw "generic db error 2";
             },
-            add_application:(flt:any) =>{
+            add_application:() =>{
                 throw "generic db error 3";
             },
-            update_application_field: (application: any) =>{
+            update_application_field: () =>{
                 throw "generic db error 4";
             },
-            remove_application:(id:number) =>{
+            remove_application:() =>{
                 throw "generic db error 5";
             }
         }
@@ -76,9 +76,10 @@ describe('applications API error handling tests', () => {
     });
 
     test('get', async () => {
-        let url = endpoints_map.application.prefix + '/1';
+        let path = endpoints_map.application.prefix + endpoints_map.application.endpoints.get;
+        path = path.replace(":id", "1");
         return request(app.callback())
-            .get(url)
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -90,8 +91,10 @@ describe('applications API error handling tests', () => {
         let app_obj = {
 
         };
+        let path = endpoints_map.application.prefix + endpoints_map.application.endpoints.add;
+        path = path.replace(":id", "5");
         return request(app.callback())
-            .post('/application/5')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(app_obj)
             .then((response)=>{
@@ -101,8 +104,10 @@ describe('applications API error handling tests', () => {
     });
 
     test('delete', async () => {
+        let path = endpoints_map.application.prefix + endpoints_map.application.endpoints.delete;
+        path = path.replace(":id", "4");
         return request(app.callback())
-            .delete('/application/4')
+            .delete(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -120,8 +125,10 @@ describe('applications API error handling tests', () => {
         };
 
         let edit = {application: 1, item: chg, action: "add", object: "channel_group"};
+        let path = endpoints_map.application.prefix + endpoints_map.application.endpoints.get;
+        path = path.replace(":id", "1");
         return request(app.callback())
-            .patch('/application/1')
+            .patch(path)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response) => {

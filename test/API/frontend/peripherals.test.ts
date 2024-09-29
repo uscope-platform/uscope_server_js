@@ -6,6 +6,7 @@ import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
 import peripherals_router from "../../../src/API/frontend/peripherals_api";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 
@@ -135,7 +136,7 @@ describe('peripherals API tests', () => {
 
     test('hash', async () => {
         return request(app.callback())
-            .get('/peripheral/hash')
+            .get(endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.hash)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -145,7 +146,7 @@ describe('peripherals API tests', () => {
 
     test('load_all', async () => {
         return request(app.callback())
-            .get('/peripheral/load_all')
+            .get(endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.load_all)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -154,8 +155,10 @@ describe('peripherals API tests', () => {
     });
 
     test('get', async () => {
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.get;
+        path = path.replace(":id", "1")
         return request(app.callback())
-            .get('/peripheral/1')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -171,8 +174,10 @@ describe('peripherals API tests', () => {
             registers:[],
             parametric:false
         }
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.add;
+        path = path.replace(":id", "54")
         return request(app.callback())
-            .post('/peripheral/54')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(peripheral_obj)
             .then((response)=>{
@@ -186,8 +191,10 @@ describe('peripherals API tests', () => {
             id:54,
             peripheral_name: 'new peripheral_' + 54
         }
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.add;
+        path = path.replace(":id", "54")
         return request(app.callback())
-            .post('/peripheral/54')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(peripheral_obj)
             .then((response)=>{
@@ -198,8 +205,10 @@ describe('peripherals API tests', () => {
 
     test('edit', async () => {
         let edit = {script:4, field:"parametric", value:false};
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
+        path = path.replace(":id", "54")
         return request(app.callback())
-            .patch('/peripheral/54')
+            .patch(path)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -209,8 +218,10 @@ describe('peripherals API tests', () => {
     });
 
     test('delete', async () => {
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.delete;
+        path = path.replace(":id", "54")
         return request(app.callback())
-            .delete('/peripheral/54')
+            .delete(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);

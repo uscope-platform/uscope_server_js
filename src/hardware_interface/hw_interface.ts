@@ -8,6 +8,7 @@ import {
 import {Request} from "zeromq";
 import {unpack} from "msgpackr";
 import commands from "./hw_commands_map";
+import {read_data_response} from "../data_model/driver_responses_model";
 
 interface response_body{
     data:any,

@@ -8,6 +8,7 @@ import {expect} from "@jest/globals";
 import {authorizer, error_handler} from "../../../src/API/backend/middleware";
 import jwt from "koa-jwt";
 import hw_interface from "../../../src/hardware_interface/hw_interface";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 describe('platform API tests', () => {
@@ -29,7 +30,7 @@ describe('platform API tests', () => {
             add_user:(username:string, pw_hash:string, role:string) =>{
                 results = {user:username, pw_hash:pw_hash, role:role};
             },
-            get_user:(username:string)=>{
+            get_user:()=>{
                 return{
                     username: "test",
                     pw_hash: "$argon2id$v=19$m=32768,t=4,p=2$1m3bhIs18w/uuUCqW3ssOQ$EWndqvVWrX30DrVIxuM1HQuSdXq53DH9OM44zFC6oIDwAq4DGtMjvueiRyN6BU7EN/o",
@@ -75,7 +76,7 @@ describe('platform API tests', () => {
     test('add_user', async () => {
         let user_obj = {user:"test_user",password:"test", role:"admin"}
         return request(app.callback())
-            .post('/platform/user')
+            .post(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.add_user)
             .set('Authorization', `Bearer ${bearer_token}`)
             .send(user_obj)
             .then((response)=>{
@@ -88,8 +89,10 @@ describe('platform API tests', () => {
     });
 
     test('remove_user', async () => {
+        let path = endpoints_map.platform.prefix + endpoints_map.platform.endpoints.remove_user;
+        path = path.replace(":name", "test_delete")
         return request(app.callback())
-            .delete('/platform/user/test_delete')
+            .delete(path)
             .set('Authorization', `Bearer ${bearer_token}`)
             .then((response)=>{
             expect(response.status).toBe(200);
@@ -99,7 +102,7 @@ describe('platform API tests', () => {
 
     test('load_all users', async () => {
         return request(app.callback())
-            .get('/platform/user')
+            .get(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.get_users)
             .set('Authorization', `Bearer ${bearer_token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -109,7 +112,7 @@ describe('platform API tests', () => {
 
     test('onboarding_get', async () => {
         return request(app.callback())
-            .get('/platform/onboarding')
+            .get(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.onboarding)
             .set('Authorization', `Bearer ${bearer_token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -121,7 +124,7 @@ describe('platform API tests', () => {
     test('onboarding_post', async () => {
         let user_obj = {user:"test_user2",password:"test2", role:"admin2"}
         return request(app.callback())
-            .post('/platform/onboarding')
+            .post(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.onboarding)
             .set('Authorization', `Bearer ${bearer_token}`)
             .send(user_obj)
             .then((response)=>{
@@ -134,9 +137,10 @@ describe('platform API tests', () => {
     });
 
     test('get_server_version', async () => {
-
+        let path = endpoints_map.platform.prefix + endpoints_map.platform.endpoints.versions;
+        path = path.replace(":component", "server")
         return request(app.callback())
-            .get('/platform/versions/server')
+            .get(path)
             .set('Authorization', `Bearer ${bearer_token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -145,9 +149,10 @@ describe('platform API tests', () => {
     });
 
     test('get_driver_version', async () => {
-
+        let path = endpoints_map.platform.prefix + endpoints_map.platform.endpoints.versions;
+        path = path.replace(":component", "driver")
         return request(app.callback())
-            .get('/platform/versions/driver')
+            .get(path)
             .set('Authorization', `Bearer ${bearer_token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -163,7 +168,7 @@ describe('platform API tests', () => {
             login_type: "user"
         }
 
-        return request(app.callback()).post('/platform/login/manual').send(user_obj).then((response)=>{
+        return request(app.callback()).post(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.manual_login).send(user_obj).then((response)=>{
             expect(response.status).toBe(200);
             let result = response.body;
             expect(result.role).toBe("admin")
@@ -183,7 +188,10 @@ describe('platform API tests', () => {
             login_type: "user"
         }
 
-        return request(app.callback()).post('/platform/login/manual').send(user_obj).then((response)=>{
+        return request(app.callback())
+            .post(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.manual_login)
+            .send(user_obj)
+            .then((response)=>{
             expect(response.status).toBe(401);
             expect(response.text).toBe("Login failed");
         });
@@ -198,7 +206,10 @@ describe('platform API tests', () => {
             login_type: "user"
         }
 
-        return request(app.callback()).post('/platform/login/manual').send(user_obj).then((response)=>{
+        return request(app.callback())
+            .post(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.manual_login)
+            .send(user_obj)
+            .then((response)=>{
             expect(response.status).toBe(200);
 
             let result = response.body;
@@ -227,7 +238,10 @@ describe('platform API tests', () => {
             "validator": "d8f411f4a88f6e862bde1b8419572a15a1de506e058c4c1ba53800ee7469b29ad698ce4ea35f035da768e6f2964ecdb57583e7aad6a16fcec2f9f65554d9733d",
             login_type: "automated"
         }
-        return request(app.callback()).post('/platform/login/auto').send(user_obj).then((response)=>{
+        return request(app.callback())
+            .post(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.auto_login)
+            .send(user_obj)
+            .then((response)=>{
             expect(response.status).toBe(200);
             let result = response.body;
             expect(result.role).toBe("admin");

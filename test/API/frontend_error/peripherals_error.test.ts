@@ -6,6 +6,7 @@ import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
 import peripherals_router from "../../../src/API/frontend/peripherals_api";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 
@@ -23,16 +24,16 @@ describe('peripherals API error handling tests', () => {
             load_all:() =>{
                 throw "generic db error 41";
             },
-            get_peripheral:(id:number) =>{
+            get_peripheral:() =>{
                 throw "generic db error 42";
             },
-            add_peripheral:(scr:any) =>{
+            add_peripheral:() =>{
                 throw "generic db error 43";
             },
-            update_peripheral_field: (id:number, field_name: string, field_value:any) =>{
+            update_peripheral_field: () =>{
                 throw "generic db error 44";
             },
-            remove_peripheral:(id:number) =>{
+            remove_peripheral:() =>{
                 throw "generic db error 45";
             }
         }
@@ -54,7 +55,7 @@ describe('peripherals API error handling tests', () => {
 
     test('hash', async () => {
         return request(app.callback())
-            .get('/peripheral/hash')
+            .get(endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.hash)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -64,7 +65,7 @@ describe('peripherals API error handling tests', () => {
 
     test('load_all', async () => {
         return request(app.callback())
-            .get('/peripheral/load_all')
+            .get(endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.load_all)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -73,8 +74,10 @@ describe('peripherals API error handling tests', () => {
     });
 
     test('get', async () => {
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.get;
+        path = path.replace(":id", "1")
         return request(app.callback())
-            .get('/peripheral/1')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -90,8 +93,10 @@ describe('peripherals API error handling tests', () => {
             registers:[],
             parametric:false
         }
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.add;
+        path = path.replace(":id", "54")
         return request(app.callback())
-            .post('/peripheral/54')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(peripheral_obj)
             .then((response)=>{
@@ -102,8 +107,10 @@ describe('peripherals API error handling tests', () => {
 
     test('edit', async () => {
         let edit = {script:4, field:"parametric", value:false};
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
+        path = path.replace(":id", "54")
         return request(app.callback())
-            .patch('/peripheral/54')
+            .patch(path)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -113,8 +120,10 @@ describe('peripherals API error handling tests', () => {
     });
 
     test('delete', async () => {
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.delete;
+        path = path.replace(":id", "54")
         return request(app.callback())
-            .delete('/peripheral/54')
+            .delete(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);

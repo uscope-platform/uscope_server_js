@@ -1,6 +1,6 @@
-interface scope_data_object {
+export interface scope_data_object {
     channel:number,
     data: number[]
 }
 
-type read_data_response = scope_data_object[];
+export type read_data_response = scope_data_object[];

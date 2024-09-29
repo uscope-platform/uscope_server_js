@@ -8,6 +8,7 @@ import settings_router from "../../../src/API/frontend/settings_api";
 import {hil_address_map} from "../../../src/data_model/operations_model";
 import SettingsBackend from "../../../src/API/backend/settings";
 import hw_interface from "../../../src/hardware_interface/hw_interface";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 
@@ -44,7 +45,7 @@ describe('Settings API tests', () => {
             });
 
         return request(app.callback())
-            .get('/settings/debug_level')
+            .get(endpoints_map.settings.prefix + endpoints_map.settings.endpoints.debug_level)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -67,7 +68,7 @@ describe('Settings API tests', () => {
 
 
         return request(app.callback())
-            .post('/settings/debug_level')
+            .post(endpoints_map.settings.prefix + endpoints_map.settings.endpoints.debug_level)
             .set('Authorization', `Bearer ${token}`)
             .send("minimal")
             .then((response)=>{
@@ -89,7 +90,7 @@ describe('Settings API tests', () => {
             });
 
         return request(app.callback())
-            .get('/settings/hil_address_map')
+            .get(endpoints_map.settings.prefix + endpoints_map.settings.endpoints.hil_address_map)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -112,7 +113,7 @@ describe('Settings API tests', () => {
         let a_map = {'bases': {'controller': 18316591104, 'cores_control': 18316656640, 'cores_inputs': 8192, 'cores_rom': 21474836480, 'hil_control': 18316525568, 'scope_mux': 18316853248}, 'offsets': {'controller': 4096, 'cores_control': 65536, 'cores_inputs': 4096, 'cores_rom': 268435456, 'dma': 4096, 'hil_tb': 0}};
 
         return request(app.callback())
-            .post('/settings/hil_address_map')
+            .post(endpoints_map.settings.prefix + endpoints_map.settings.endpoints.hil_address_map)
             .set('Authorization', `Bearer ${token}`)
             .send(a_map)
             .then((response)=>{

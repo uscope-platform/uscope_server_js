@@ -6,6 +6,7 @@ import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
 import emulators_router from "../../../src/API/frontend/emulators_api";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 
@@ -24,16 +25,16 @@ describe('emulators API error handling tests', () => {
             load_all:() =>{
                 throw "generic db error 21";
             },
-            get_emulator:(id:number) =>{
+            get_emulator:() =>{
                 throw "generic db error 22";
             },
-            add_emulator:(flt:any) =>{
+            add_emulator:() =>{
                 throw "generic db error 23";
             },
-            update_emulator_field: (id:number, field_name: string, field_value:any) =>{
+            update_emulator_field: () =>{
                 throw "generic db error 24";
             },
-            remove_emulator:(id:number) =>{
+            remove_emulator:() =>{
                 throw "generic db error 25";
             }
         }
@@ -55,7 +56,7 @@ describe('emulators API error handling tests', () => {
 
     test('hash', async () => {
         return request(app.callback())
-            .get('/emulator/hash')
+            .get(endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.hash)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -65,7 +66,7 @@ describe('emulators API error handling tests', () => {
 
     test('load_all', async () => {
         return request(app.callback())
-            .get('/emulator/load_all')
+            .get(endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.load_all)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -74,8 +75,10 @@ describe('emulators API error handling tests', () => {
     });
 
     test('get', async () => {
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.get;
+        path = path.replace(":id", "1");
         return request(app.callback())
-            .get('/emulator/1')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -92,8 +95,10 @@ describe('emulators API error handling tests', () => {
             n_cycles:1,
             async_multirate:false
         }
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.add;
+        path = path.replace(":id", "5");
         return request(app.callback())
-            .post('/emulator/5')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(filter_obj)
             .then((response)=>{
@@ -104,8 +109,10 @@ describe('emulators API error handling tests', () => {
 
     test('edit', async () => {
         let edit = {emulator:4, field:"name", value:"tgag"};
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit;
+        path = path.replace(":id", "4");
         return request(app.callback())
-            .patch('/emulator/4')
+            .patch(path)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -115,8 +122,10 @@ describe('emulators API error handling tests', () => {
     });
 
     test('delete', async () => {
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.delete;
+        path = path.replace(":id", "4");
         return request(app.callback())
-            .delete('/emulator/4')
+            .delete(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);

@@ -8,6 +8,7 @@ import jwt from "koa-jwt"
 import bitstream_router from "../../../src/API/frontend/bitstreams_api";
 import fs from "node:fs";
 import {createHash} from "node:crypto";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 
@@ -28,16 +29,16 @@ describe('bitstream API error handlong tests', () => {
             load_all:() =>{
                 throw "generic db error 11"
             },
-            get_bitstream:(id:number) =>{
+            get_bitstream:() =>{
                 throw "generic db error 12"
             },
-            add_bitstream:(scr:any) =>{
+            add_bitstream:() =>{
                 throw "generic db error 13"
             },
-            update_bitstream_field: (id:number, field_name: string, field_value:any) =>{
+            update_bitstream_field: () =>{
                 throw "generic db error 14"
             },
-            remove_bitstream:(id:number) =>{
+            remove_bitstream:() =>{
                 throw "generic db error 15"
             }
         }
@@ -59,7 +60,7 @@ describe('bitstream API error handlong tests', () => {
 
     test('hash', async () => {
         return request(app.callback())
-            .get('/bitstream/hash')
+            .get(endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.hash)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -69,7 +70,7 @@ describe('bitstream API error handlong tests', () => {
 
     test('load_all', async () => {
         return request(app.callback())
-            .get('/bitstream/load_all')
+            .get(endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.load_all)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -78,8 +79,10 @@ describe('bitstream API error handlong tests', () => {
     });
 
     test('get', async () => {
+        let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.get;
+        path = path.replace(':id', '1')
         return request(app.callback())
-            .get('/bitstream/1')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -94,8 +97,10 @@ describe('bitstream API error handlong tests', () => {
                 data: data,
                 hash: hash
             }
+        let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.add;
+        path = path.replace(':id', '3')
         return request(app.callback())
-            .post('/bitstream/3')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(bitstream_obj)
             .then((response)=>{
@@ -106,8 +111,10 @@ describe('bitstream API error handlong tests', () => {
 
     test('edit', async () => {
         let edit = {script:4, field:"path", value:"test edit"};
+        let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.edit;
+        path = path.replace(':id', '3')
         return request(app.callback())
-            .patch('/bitstream/3')
+            .patch(path)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -117,8 +124,10 @@ describe('bitstream API error handlong tests', () => {
     });
 
     test('delete', async () => {
+        let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.delete;
+        path = path.replace(':id', '3')
         return request(app.callback())
-            .delete('/bitstream/3')
+            .delete(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);

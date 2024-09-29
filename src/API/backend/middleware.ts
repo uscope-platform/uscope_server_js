@@ -16,7 +16,8 @@ export let error_handler = async  (ctx:Koa.Context, next: Koa.Next) => {
 
 export function authorizer() {
     return async function (ctx:Koa.Context, next:Koa.Next) {
-        let [api_class, ...rest] = ctx.path.slice(1).split('/')
+        let stripped_route = ctx.path.replace(endpoints_map.global_prefix, "");
+        let [api_class, ...rest] = stripped_route.slice(1).split('/')
         let requested_endpoint = rest.join('/')
 
         for(let item in endpoints_map[api_class].endpoints){

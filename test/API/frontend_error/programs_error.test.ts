@@ -6,6 +6,7 @@ import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
 import programs_router from "../../../src/API/frontend/programs_api";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 
@@ -24,16 +25,16 @@ describe('programs API error handling tests', () => {
             load_all:() =>{
                 throw "generic db error 51";
             },
-            get_program:(id:number) =>{
+            get_program:() =>{
                 throw "generic db error 52";
             },
-            add_program:(scr:any) =>{
+            add_program:() =>{
                 throw "generic db error 53";
             },
-            update_program_field: (id:number, field_name: string, field_value:any) =>{
+            update_program_field: () =>{
                 throw "generic db error 54";
             },
-            remove_program:(id:number) =>{
+            remove_program:() =>{
                 throw "generic db error 55";
             }
         }
@@ -55,7 +56,7 @@ describe('programs API error handling tests', () => {
 
     test('hash', async () => {
         return request(app.callback())
-            .get('/program/hash')
+            .get(endpoints_map.program.prefix + endpoints_map.program.endpoints.hash)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
             expect(response.status).toBe(501);
@@ -65,7 +66,7 @@ describe('programs API error handling tests', () => {
 
     test('load_all', async () => {
         return request(app.callback())
-            .get('/program/load_all')
+            .get(endpoints_map.program.prefix + endpoints_map.program.endpoints.load_all)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -74,8 +75,10 @@ describe('programs API error handling tests', () => {
     });
 
     test('get', async () => {
+        let path = endpoints_map.program.prefix + endpoints_map.program.endpoints.get;
+        path = path.replace(':id', '1')
         return request(app.callback())
-            .get('/program/1')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -94,8 +97,10 @@ describe('programs API error handling tests', () => {
             "cached_bin_version": "",
             "headers": []
         }
+        let path = endpoints_map.program.prefix + endpoints_map.program.endpoints.add;
+        path = path.replace(':id', '3')
         return request(app.callback())
-            .post('/program/3')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(program_obj)
             .then((response)=>{
@@ -106,8 +111,10 @@ describe('programs API error handling tests', () => {
 
     test('edit', async () => {
             let edit = {script:4, field:"content", value:"test_content"};
+        let path = endpoints_map.program.prefix + endpoints_map.program.endpoints.edit;
+        path = path.replace(':id', '4')
             return request(app.callback())
-                .patch('/program/4')
+                .patch(path)
                 .set('Authorization', `Bearer ${token}`)
                 .send(edit)
                 .then((response)=>{
@@ -117,8 +124,10 @@ describe('programs API error handling tests', () => {
     });
 
     test('delete', async () => {
+        let path = endpoints_map.program.prefix + endpoints_map.program.endpoints.delete;
+        path = path.replace(':id', '3')
         return request(app.callback())
-            .delete('/program/3')
+            .delete(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);

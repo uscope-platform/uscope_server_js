@@ -9,6 +9,7 @@ import bitstream_router from "../../../src/API/frontend/bitstreams_api";
 import fs from "node:fs";
 import bitstream_model from "../../../src/data_model/bitstreams_model";
 import {createHash} from "node:crypto";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 
@@ -75,7 +76,7 @@ describe('bitstream API tests', () => {
 
     test('hash', async () => {
         return request(app.callback())
-            .get('/bitstream/hash')
+            .get(endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.hash)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -85,7 +86,7 @@ describe('bitstream API tests', () => {
 
     test('load_all', async () => {
         return request(app.callback())
-            .get('/bitstream/load_all')
+            .get(endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.load_all)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -94,8 +95,11 @@ describe('bitstream API tests', () => {
     });
 
     test('get', async () => {
+
+        let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.get;
+        path = path.replace(":id", "1");
         return request(app.callback())
-            .get('/bitstream/1')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
@@ -115,8 +119,11 @@ describe('bitstream API tests', () => {
                 data: data,
                 hash: hash
             }
+
+        let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.add;
+        path = path.replace(":id", "3");
         return request(app.callback())
-            .post('/bitstream/3')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(bitstream_obj)
             .then((response)=>{
@@ -132,9 +139,13 @@ describe('bitstream API tests', () => {
     });
 
     test('edit', async () => {
+
+        let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.edit;
+        path = path.replace(":id", "3");
+
         let edit = {script:4, field:"path", value:"test edit"};
         return request(app.callback())
-            .patch('/bitstream/3')
+            .patch(path)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -144,8 +155,11 @@ describe('bitstream API tests', () => {
     });
 
     test('delete', async () => {
+
+        let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.delete;
+        path = path.replace(":id", "3");
         return request(app.callback())
-            .delete('/bitstream/3')
+            .delete(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);

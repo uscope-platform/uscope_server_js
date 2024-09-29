@@ -1,6 +1,7 @@
 
 interface api_map {
     [index: string]: any;
+    global_prefix:string,
     operations: {
         prefix:string,
         endpoints:{
@@ -137,11 +138,11 @@ interface api_map {
     }
 
 }
-
+let g_prefix = "/uscope"
 let endpoints_map : api_map = {
-
+    global_prefix:g_prefix,
     script:{
-        prefix:"/script",
+        prefix: g_prefix + "/script",
         endpoints:{
             hash:"/hash",
             load_all:"/load_all",
@@ -152,14 +153,14 @@ let endpoints_map : api_map = {
         }
     },
     settings:{
-        prefix:"/settings",
+        prefix: g_prefix + "/settings",
         endpoints:{
             debug_level:'/debug_level',
             hil_address_map:'/hil_address_map',
         }
     },
     operations: {
-        prefix:"/operations",
+        prefix: g_prefix + "/operations",
         endpoints:{
             load_application:"/load_application/:id",
             write_registers:"/write_registers",
@@ -187,7 +188,7 @@ let endpoints_map : api_map = {
         }
     },
     bitstream:{
-        prefix:"/bitstream",
+        prefix: g_prefix + "/bitstream",
         endpoints:{
             hash:"/hash",
             load_all:"/load_all",
@@ -199,7 +200,7 @@ let endpoints_map : api_map = {
     },
 
     program:{
-        prefix:"/program",
+        prefix: g_prefix + "/program",
         endpoints:{
             hash:"/hash",
             load_all:"/load_all",
@@ -210,7 +211,7 @@ let endpoints_map : api_map = {
         }
     },
     platform:{
-        prefix:"/platform",
+        prefix: g_prefix + "/platform",
         endpoints:{
             add_user:'/user',
             get_users:'/user',
@@ -225,7 +226,7 @@ let endpoints_map : api_map = {
     },
 
     peripheral:{
-        prefix:"/peripheral",
+        prefix: g_prefix + "/peripheral",
         endpoints:{
             hash:"/hash",
             load_all:"/load_all",
@@ -237,7 +238,7 @@ let endpoints_map : api_map = {
     },
 
     filter:{
-        prefix:"/filter",
+        prefix: g_prefix + "/filter",
         endpoints:{
             hash:"/hash",
             load_all:"/load_all",
@@ -249,7 +250,7 @@ let endpoints_map : api_map = {
     },
 
     emulator:{
-        prefix:"/emulator",
+        prefix: g_prefix + "/emulator",
         endpoints:{
             hash:"/hash",
             load_all:"/load_all",
@@ -261,7 +262,7 @@ let endpoints_map : api_map = {
     },
 
     application:{
-        prefix:"/application",
+        prefix: g_prefix + "/application",
         endpoints:{
             hash:"/hash",
             load_all:"/load_all",

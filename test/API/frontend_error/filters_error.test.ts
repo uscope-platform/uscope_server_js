@@ -6,6 +6,7 @@ import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
 import filters_router from "../../../src/API/frontend/filters_api";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 
@@ -24,16 +25,16 @@ describe('filters API error handling tests', () => {
             load_all:() =>{
                 throw "generic db error 31"
             },
-            get_filter:(id:number) =>{
+            get_filter:() =>{
                 throw "generic db error 32"
             },
-            add_filter:(flt:any) =>{
+            add_filter:() =>{
                 throw "generic db error 33"
             },
-            update_filter_field: (id:number, field_name: string, field_value:any) =>{
+            update_filter_field: () =>{
                 throw "generic db error 34"
             },
-            remove_filter:(id:number) =>{
+            remove_filter:() =>{
                 throw "generic db error 35"
             }
         }
@@ -55,7 +56,7 @@ describe('filters API error handling tests', () => {
 
     test('hash', async () => {
         return request(app.callback())
-            .get('/filter/hash')
+            .get(endpoints_map.filter.prefix + endpoints_map.filter.endpoints.hash)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -65,7 +66,7 @@ describe('filters API error handling tests', () => {
 
     test('load_all', async () => {
         return request(app.callback())
-            .get('/filter/load_all')
+            .get(endpoints_map.filter.prefix + endpoints_map.filter.endpoints.load_all)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -74,8 +75,10 @@ describe('filters API error handling tests', () => {
     });
 
     test('get', async () => {
+        let path = endpoints_map.filter.prefix + endpoints_map.filter.endpoints.get;
+        path = path.replace(':id', '2')
         return request(app.callback())
-            .get('/filter/2')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -98,8 +101,10 @@ describe('filters API error handling tests', () => {
                 taps_width:16
             }
         }
+        let path = endpoints_map.filter.prefix + endpoints_map.filter.endpoints.add;
+        path = path.replace(':id', '54')
         return request(app.callback())
-            .post('/filter/54')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(filter_obj)
             .then((response)=>{
@@ -110,8 +115,10 @@ describe('filters API error handling tests', () => {
 
     test('edit', async () => {
         let edit = {script:4, field:"name", value:"tgag"};
+        let path = endpoints_map.filter.prefix + endpoints_map.filter.endpoints.edit;
+        path = path.replace(':id', '4')
         return request(app.callback())
-            .patch('/filter/4')
+            .patch(path)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
@@ -121,8 +128,10 @@ describe('filters API error handling tests', () => {
     });
 
     test('delete', async () => {
+        let path = endpoints_map.filter.prefix + endpoints_map.filter.endpoints.delete;
+        path = path.replace(':id', '4')
         return request(app.callback())
-            .delete('/filter/4')
+            .delete(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);

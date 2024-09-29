@@ -6,6 +6,7 @@ import scripts_router from "../../../src/API/frontend/scripts_api";
 import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 
 
@@ -24,16 +25,16 @@ describe('script API error handling tests', () => {
             load_all:() =>{
                 throw "generic db error 61";
             },
-            get_script:(id:number) =>{
+            get_script:() =>{
                 throw "generic db error 62";
             },
-            add_script:(scr:any) =>{
+            add_script:() =>{
                 throw "generic db error 63";
             },
-            update_script_field: (id:number, field_name: string, field_value:any) =>{
+            update_script_field: () =>{
                 throw "generic db error 64";
             },
-            remove_script:(id:number) =>{
+            remove_script:() =>{
                 throw "generic db error 65";
             }
         }
@@ -55,7 +56,7 @@ describe('script API error handling tests', () => {
 
     test('hash', async () => {
         return request(app.callback())
-            .get('/script/hash')
+            .get(endpoints_map.script.prefix + endpoints_map.script.endpoints.hash)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
             expect(response.status).toBe(501);
@@ -65,7 +66,7 @@ describe('script API error handling tests', () => {
 
     test('load_all', async () => {
         return request(app.callback())
-            .get('/script/load_all')
+            .get(endpoints_map.script.prefix + endpoints_map.script.endpoints.load_all)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -74,8 +75,10 @@ describe('script API error handling tests', () => {
     });
 
     test('get', async () => {
+        let path = endpoints_map.script.prefix + endpoints_map.script.endpoints.get;
+        path = path.replace(':id', '1')
         return request(app.callback())
-            .get('/script/1')
+            .get(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
@@ -91,8 +94,10 @@ describe('script API error handling tests', () => {
             "content": "",
             "triggers": ""
         }
+        let path = endpoints_map.script.prefix + endpoints_map.script.endpoints.add;
+        path = path.replace(':id', '3')
         return request(app.callback())
-            .post('/script/3')
+            .post(path)
             .set('Authorization', `Bearer ${token}`)
             .send(script_obj)
             .then((response)=>{
@@ -103,8 +108,10 @@ describe('script API error handling tests', () => {
 
     test('edit', async () => {
             let edit = {script:2, field:"content", value:"test_content"};
+            let path = endpoints_map.script.prefix + endpoints_map.script.endpoints.edit;
+            path = path.replace(':id', '2')
             return request(app.callback())
-                .patch('/script/2')
+                .patch(path)
                 .set('Authorization', `Bearer ${token}`)
                 .send(edit)
                 .then((response)=>{
@@ -114,8 +121,10 @@ describe('script API error handling tests', () => {
     });
 
     test('delete', async () => {
+        let path = endpoints_map.script.prefix + endpoints_map.script.endpoints.delete;
+        path = path.replace(':id', '3')
         return request(app.callback())
-            .delete('/script/3')
+            .delete(path)
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
