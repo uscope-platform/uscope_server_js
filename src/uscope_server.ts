@@ -25,6 +25,8 @@ const app = new Koa();
 
 let jwt_secret = "super secret v2"
 
+app.use(cors())
+
 // middleware
 app.use(bodyParser());
 
@@ -85,6 +87,5 @@ app.use(plt_rtr.router.routes());
 app.use(plt_rtr.router.allowedMethods());
 
 
-app.use(cors())
 console.log("SERVER READY");
 let server = app.listen(6969);
