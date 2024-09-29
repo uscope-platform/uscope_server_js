@@ -52,7 +52,7 @@ class platform_db {
         return res[0].exists;
     }
     public async add_auto_token(username:string, token: auto_login_object): Promise<any> {
-        const res = await this.db`
+        await this.db`
             insert into ${this.db(this.schema)}.login_tokens (username,selector, validator, expiry) values
                    (${username}, ${token.selector}, ${token.validator}, ${token.expiry})
         `

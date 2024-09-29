@@ -21,7 +21,7 @@ export interface user_login_object {
 }
 
 export interface auto_login_object {
-    expiry: number,
+    expiry: string,
     validator: string,
     selector: string
     login_type: "automated"

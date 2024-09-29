@@ -40,7 +40,7 @@ describe('platform_database_tests', () => {
     test('add_get_token',async  () => {
         let token:auto_login_object = {
             selector: "eb966af6f07589f9e769e667d5d80d502f7fb509703a54ad9bf592ad6b4c68ca5b7b87b26a5282cad296a91236f275bfd8784a2c6837993061fa796fb68d2648",
-            expiry: 171658415100,
+            expiry: new Date().toUTCString(),
             validator: "14f1097418691f37690a06cb947bafee0f1912aa5f7e228e72f902e55da5af5a",
             login_type: "automated"
         };
@@ -49,8 +49,9 @@ describe('platform_database_tests', () => {
         let res = await db.platform.get_auto_token(token.selector);
         expect(res[0].selector).toBe(token.selector);
         expect(res[0].validator).toBe(token.validator)
-        let res_epoch = new Date(res[0].expiry).getTime() - new Date(res[0].expiry).getTimezoneOffset()*60*1000
-        expect(res_epoch).toBe(token.expiry);
+        let res_epoch =new Date(Date.parse(res[0].expiry))
+        res_epoch.setHours(res_epoch.getHours() +2)
+        expect(res_epoch.toUTCString()).toBe(token.expiry);
     });
 
 

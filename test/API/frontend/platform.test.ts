@@ -221,7 +221,9 @@ describe('platform API tests', () => {
             expect(tokens.user).toBe("test");
             expect(tokens.token.selector).not.toBeNull();
             expect(tokens.token.validator).not.toBeNull();
-            expect(tokens.token.expiry).toBeLessThanOrEqual(Date.now() + 86400 * 30);
+            let date = new Date();
+            date.setDate(date.getDate() + 30);
+            expect(Date.parse(tokens.token.expiry)).toBeLessThanOrEqual(date.getTime());
             expect(result.login_token.selector).toBe(tokens.token.selector)
             expect(result.login_token.expiry).toBe(tokens.token.expiry)
             expect(result.login_token.validator).not.toBeNull()

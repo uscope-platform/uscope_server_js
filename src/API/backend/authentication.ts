@@ -39,7 +39,9 @@ export default class Authenticator {
                 let auto_token = <auto_login_object>{};
                 auto_token.selector = randomBytes(64).toString('hex');
                 let validator = randomBytes(64).toString('hex');
-                auto_token.expiry = Date.now()/1000 + 86400 * 30;
+                let date = new Date();
+                date.setDate(date.getDate() + 30);
+                auto_token.expiry = date.toISOString();
                 auto_token.validator = await this.validate_auto_token(validator)
                 await this.db.platform.add_auto_token(login.user, auto_token)
                 auto_token.validator = validator
@@ -58,7 +60,7 @@ export default class Authenticator {
             throw new CustomError(401, "Login failed")
         } else {
             let token = <auto_login_object>query_res[0]
-            if(Date.now()/1000>=token.expiry){
+            if(Date.now()>=Date.parse(token.expiry)){
                 throw new CustomError(401, "Login failed")
             }
             let hashed_validator =await this.validate_auto_token(login.validator)
