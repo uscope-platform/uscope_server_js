@@ -62,7 +62,7 @@ export default class hw_interface {
     }
 
     public async set_dma_disable(status:boolean){
-        return await this.send_command(commands.scope.disable_scope_dma, {status:status});
+        return await this.send_command(commands.scope.disable_scope_dma, status);
     }
 
     public async load_bitstream(bit:string){
