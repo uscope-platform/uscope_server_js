@@ -368,9 +368,9 @@ describe('operations backend test', () => {
     });
 
     test('set_dma_disable', async () => {
-        let res =await backend.set_dma_disable(false);
+        let res =await backend.set_dma_disable({status:false});
         expect(res).toStrictEqual("ok");
-        expect(args).toStrictEqual(false);
+        expect(args).toStrictEqual({status:false});
     });
 
 

@@ -6,7 +6,7 @@ import hw_interface from "../../hardware_interface/hw_interface";
 import register_write_model, {
     acquisition_status,
     channel_statuses, clock_info,
-    programs_info, scope_address, select_hil_output, set_hil_inputs
+    programs_info, scope_address, select_hil_output, set_hil_inputs, status_object
 } from "../../data_model/operations_model";
 import database from "../../Database/Database";
 import emulator_model from "../../data_model/emulator_model";
@@ -65,7 +65,7 @@ export default class OperationsBackend {
         return this.hw_if.set_scope_address(addr);
     }
 
-    public async set_dma_disable(status:boolean): Promise<any>{
+    public async set_dma_disable(status:status_object): Promise<any>{
         return this.hw_if.set_dma_disable(status);
     }
 

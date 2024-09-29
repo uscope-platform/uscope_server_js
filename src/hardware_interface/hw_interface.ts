@@ -3,7 +3,7 @@ import {
     channel_statuses, clock_info,
     hil_address_map,
     scope_address,
-    select_hil_output, set_hil_inputs
+    select_hil_output, set_hil_inputs, status_object
 } from "../data_model/operations_model";
 import {Request} from "zeromq";
 import {unpack} from "msgpackr";
@@ -61,7 +61,7 @@ export default class hw_interface {
         return await this.send_command(commands.scope.set_scope_address, address);
     }
 
-    public async set_dma_disable(status:boolean){
+    public async set_dma_disable(status:status_object){
         return await this.send_command(commands.scope.disable_scope_dma, status);
     }
 

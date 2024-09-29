@@ -60,7 +60,7 @@ describe('Hardware interface test', () => {
     });
 
     test('set dma disable', async () => {
-        let resp = await hw.set_dma_disable(false);
+        let resp = await hw.set_dma_disable({status:false});
         expect(resp).toBeUndefined();
     });
 

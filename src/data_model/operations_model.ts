@@ -45,6 +45,10 @@ export interface   acquisition_status {
     trigger_point: number
 }
 
+export interface status_object{
+    status:boolean
+}
+
 export interface   scope_address {
     address:number,
     dma_buffer_offset: number

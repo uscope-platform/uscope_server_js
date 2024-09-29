@@ -6,11 +6,12 @@ import OperationsBackend from "../backend/operations";
 import register_write_model, {
     acquisition_status,
     channel_statuses, clock_info,
-    programs_info, scope_address, select_hil_output, set_hil_inputs
+    programs_info, scope_address, select_hil_output, set_hil_inputs, status_object
 } from "../../data_model/operations_model";
 import emulator_model from "../../data_model/emulator_model";
 import FiltersBackend from "../backend/filters";
 import {filter_apply_model} from "../../data_model/filters_model";
+import {stat} from "node:fs";
 
 
 class operations_router {
@@ -180,7 +181,7 @@ class operations_router {
 
         this.router.post(endpoints_map.operations.endpoints.dma_disable, async (ctx:Koa.Context, next:Koa.Next) => {
             try{
-                let status = <boolean>ctx.request.body;
+                let status = <status_object>ctx.request.body;
                 ctx.response.body = await this.ops_backend.set_dma_disable(status);
                 ctx.status = 200;
             } catch(error:any){
