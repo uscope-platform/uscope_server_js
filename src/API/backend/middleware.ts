@@ -60,6 +60,11 @@ export function authorizer() {
                         await next();
                         return;
                     }
+                    if(!ctx.state.hasOwnProperty("user")){
+                        ctx.status = 403;
+                        ctx.body = "Authorization token missing";
+                        return;
+                    }
                     let user_role = roles_hierarchy[ctx.state.user.role];
                     if(user_role <= required_role){
                         await next();
@@ -69,7 +74,7 @@ export function authorizer() {
             }
         }
         
-        ctx.status = 403;
-        ctx.message = "Unauthorized access";
+        ctx.status = 404;
+        ctx.message = "unknown API";
     };
 }
