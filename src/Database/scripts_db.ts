@@ -26,8 +26,6 @@ class scripts_db {
             select * from ${this.db(this.schema)}.scripts
         `;
         return <script_model[]> raw_res.map((scr)=>{
-            scr.script_content = scr.content;
-            delete scr.content;
             return scr;
         })
     }
@@ -37,8 +35,6 @@ class scripts_db {
         const raw_res = await this.db`
             select * from ${this.db(this.schema)}.scripts where id=${id}
         `;
-        raw_res[0].script_content = raw_res[0].content;
-        delete raw_res[0].content;
         return <script_model> raw_res[0];
     }
 
@@ -56,7 +52,7 @@ class scripts_db {
                 ${app.id},
                 ${app.name},
                 ${app.path},
-                ${app.script_content},
+                ${app.content},
                 ${app.triggers}
             )
         `;

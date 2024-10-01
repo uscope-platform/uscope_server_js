@@ -63,7 +63,7 @@ describe('emulator_database_tests', () => {
         id: 2,
         name: "test_script_54",
         path:"",
-        script_content:"cons",
+        content:"cons",
         triggers:"trogger"
     }
 
