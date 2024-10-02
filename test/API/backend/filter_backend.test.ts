@@ -5,9 +5,17 @@ import hw_interface from "../../../src/hardware_interface/hw_interface";
 
 
 describe('filters backend test', () => {
+
+    let update_val = {} as any;
     let db = {
         filters:{
-
+            update_filter_field:(id:number, n:string, val:any)=>{
+                update_val = {
+                    id:id,
+                    name:n,
+                    value:val
+                }
+            },
             get_filter:(id:number) =>{
                 if(id === 1){
                     return  {
@@ -58,24 +66,30 @@ describe('filters backend test', () => {
 
     test('design_lp', async () => {
        let res =await backend.design_filter(1);
-        expect(res.taps).toStrictEqual([0.1320554217647556,
+        expect(update_val.id).toStrictEqual(1);
+        expect(update_val.name).toStrictEqual('ideal_taps');
+        expect(update_val.value).toStrictEqual([0.1320554217647556,
             0.2517104915798938,
             0.30367756571690047,
             0.2517104915798938,
             0.1320554217647556]);
-        expect(res.response.frequency).toHaveLength(2000);
-        expect(res.response.response).toHaveLength(2000);
+        expect(res.frequency).toHaveLength(2000);
+        expect(res.response).toHaveLength(2000);
     });
 
     test('implement_lp', async () => {
+
         let res =await backend.implement_filter(2);
-        expect(res.taps).toStrictEqual([
+
+        expect(update_val.id).toStrictEqual(2);
+        expect(update_val.name).toStrictEqual('quantized_taps');
+        expect(update_val.value).toStrictEqual([
             8654,
             16496,
             19902,
             16496,
             8654]);
-        expect(res.response.frequency).toHaveLength(2000);
-        expect(res.response.response).toHaveLength(2000);
+        expect(res.frequency).toHaveLength(2000);
+        expect(res.response).toHaveLength(2000);
     });
 });

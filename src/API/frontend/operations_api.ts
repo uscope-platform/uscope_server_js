@@ -34,8 +34,12 @@ class operations_router {
             try{
                 let id = parseInt(ctx.params.id);
                 let app =await this.db.applications.get_application(id);
-                let bitstream = await this.db.bitstreams.get_by_path(app.bitstream)
-                await this.ops_backend.load_application(app, bitstream);
+                if(app.bitstream){
+                    let bitstream = await this.db.bitstreams.get_by_path(app.bitstream);
+                    if(bitstream === undefined) throw "Bitstream not found (" + app.bitstream+ ")";
+                    await this.ops_backend.load_application(app, bitstream);
+                }
+
                 ctx.status = 200
             } catch(error:any){
                 ctx.body = error

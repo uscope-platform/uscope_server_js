@@ -145,17 +145,19 @@ export default class FiltersBackend {
     }
 
     public async design_filter(id:number) {
-        let filter = this.db.filters.get_filter(id);
+        let filter = await this.db.filters.get_filter(id);
         let raw_res = spawnSync("/usr/bin/python3", ['-c', filter_designer, "design", JSON.stringify(filter)])
         let result = JSON.parse(String(raw_res.stdout));
-        return { taps: result[0], response: result[1] };
+        await this.db.filters.update_filter_field(id, "ideal_taps", result[0]);
+        return result[1]
     }
 
     public async implement_filter(id:number) {
-        let filter = this.db.filters.get_filter(id);
+        let filter = await this.db.filters.get_filter(id);
         let raw_res = spawnSync("/usr/bin/python3", ['-c', filter_designer,  "implement", JSON.stringify(filter)])
         let result = JSON.parse(String(raw_res.stdout));
-        return {taps:result[0], response:result[1]};
+        await this.db.filters.update_filter_field(id, "quantized_taps", result[0]);
+        return result[1];
     }
 
     public async apply_filter(id:number, addr:number){
