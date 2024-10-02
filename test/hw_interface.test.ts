@@ -14,6 +14,17 @@ describe('Hardware interface test', () => {
         });
     })
 
+    test('set scaling factors', async () => {
+
+        let resp = await hw.set_scaling_factors([1, 1.5, 2, -5.4, 1, 0]);
+        expect(resp).toBeUndefined();
+    });
+
+    test('set channel status', async () => {
+
+        let resp = await hw.set_channel_status( {'0': true, '1': true, '2': true, '3': true, '4': true, '5': true});
+        expect(resp).toBeUndefined();
+    });
 
     test('read_data', async () => {
         let resp = await hw.read_data();
@@ -69,17 +80,6 @@ describe('Hardware interface test', () => {
         expect(resp).toBeUndefined();
     });
 
-    test('set channel status', async () => {
-
-        let resp = await hw.set_channel_status( {'0': true, '1': true, '2': true, '3': true, '4': true, '5': true});
-        expect(resp).toBeUndefined();
-    });
-
-    test('set scaling factors', async () => {
-
-        let resp = await hw.set_scaling_factors([1, 1.5, 2, -5.4, 1, 0]);
-        expect(resp).toBeUndefined();
-    });
 
     test('read register', async () => {
 

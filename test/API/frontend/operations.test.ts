@@ -795,6 +795,29 @@ describe('Operation API tests', () => {
 
     });
 
+    test('get_response', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.filter_backend, 'get_response').mockImplementation(
+            (arg:any) => {
+                result = arg
+            });
+
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.filter_response;
+        path = path.replace(":id", "23")
+
+        return request(app.callback())
+            .get(path)
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(23);
+            });
+
+    });
+
+
     test('apply_filter', async () => {
         let router = rtr as any;
         let result = {} as any;

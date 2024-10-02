@@ -17,7 +17,24 @@ describe('filters backend test', () => {
                 }
             },
             get_filter:(id:number) =>{
-                if(id === 1){
+                if(id === 1) {
+                    return {
+                        id: 1,
+                        name: "Filter 1",
+                        parameters: {
+                            type: "lp",
+                            n_taps: 4,
+                            taps_width: 16,
+                            pass_band_edge_1: 5000,
+                            pass_band_edge_2: 0,
+                            stop_band_edge_1: 10000,
+                            stop_band_edge_2: 0,
+                            sampling_frequency: 50000
+                        },
+                        ideal_taps: [],
+                        quantized_taps: []
+                    }
+                }else if(id === 2){
                     return  {
                         id:1,
                         name: "Filter 1",
@@ -31,7 +48,11 @@ describe('filters backend test', () => {
                             stop_band_edge_2: 0,
                             sampling_frequency: 50000
                         },
-                        ideal_taps: [],
+                        ideal_taps: [0.1320554217647556,
+                            0.2517104915798938,
+                            0.30367756571690047,
+                            0.2517104915798938,
+                            0.1320554217647556],
                         quantized_taps: []
                     }
                 } else {
@@ -53,7 +74,12 @@ describe('filters backend test', () => {
                             0.30367756571690047,
                             0.2517104915798938,
                             0.1320554217647556],
-                        quantized_taps: []
+                        quantized_taps: [
+                            8654,
+                            16496,
+                            19902,
+                            16496,
+                            8654]
                     }
                 }
 
@@ -92,4 +118,15 @@ describe('filters backend test', () => {
         expect(res.frequency).toHaveLength(2000);
         expect(res.response).toHaveLength(2000);
     });
+
+    test('get_response', async () => {
+
+        let res =await backend.get_response(3);
+
+        expect(res.ideal.frequency).toHaveLength(2000);
+        expect(res.ideal.frequency).toHaveLength(2000);
+        expect(res.quantized.frequency).toHaveLength(2000);
+        expect(res.quantized.frequency).toHaveLength(2000);
+    });
+
 });

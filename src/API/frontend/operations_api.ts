@@ -288,6 +288,17 @@ class operations_router {
             }
         });
 
+        this.router.get(endpoints_map.operations.endpoints.filter_response, async (ctx:Koa.Context, next:Koa.Next) => {
+            try{
+                let id = parseInt(ctx.params.id);
+                ctx.response.body = await this.filter_backend.get_response(id);
+                ctx.status = 200
+            } catch(error:any){
+                ctx.body = error
+                ctx.status = 501
+            }
+        });
+
 
         this.router.post(endpoints_map.operations.endpoints.filter_apply, async (ctx:Koa.Context, next:Koa.Next) => {
             try{

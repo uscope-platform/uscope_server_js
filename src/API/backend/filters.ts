@@ -25,6 +25,20 @@ import sys
 import json
 
 
+def get_response_obj(ideal_taps, quant_taps, fs, taps_width):
+    ret = dict()
+    ideal_response = get_plot_data(ideal_taps, fs)
+    ret["ideal"] = dict()
+    ret["ideal"]["frequency"] = ideal_response[0]
+    ret["ideal"]["response"] = ideal_response[1]
+    q_data = np.array(quant_taps) / (2 ** taps_width)
+    q_response = get_plot_data(q_data, fs)
+    ret["quantized"] = dict()
+    ret["quantized"]["frequency"] = q_response[0]
+    ret["quantized"]["response"] = q_response[1]
+    return ret
+
+
 def get_plot_data(taps: np.ndarray, fs: float):
     plot_data = signal.freqz(taps, [1], worN=2000, fs=fs)
     freq = np.squeeze(plot_data[0]).tolist()
@@ -132,6 +146,9 @@ if __name__ == '__main__':
     elif sys.argv[1] == "implement":
         filter = implement_filter(flt_obj['ideal_taps'], flt_obj["parameters"]["taps_width"], flt_obj["parameters"]["sampling_frequency"])
         print(json.dumps(filter))
+    elif sys.argv[1] == "get_response":
+        response = get_response_obj(flt_obj['ideal_taps'], flt_obj['quantized_taps'], flt_obj["parameters"]['sampling_frequency'], flt_obj["parameters"]["taps_width"])
+        print(json.dumps(response))
 `
 
 export default class FiltersBackend {
@@ -159,6 +176,13 @@ export default class FiltersBackend {
         await this.db.filters.update_filter_field(id, "quantized_taps", result[0]);
         return result[1];
     }
+
+    public async get_response(id:number) {
+        let filter = await this.db.filters.get_filter(id);
+        let raw_res = spawnSync("/usr/bin/python3", ['-c', filter_designer,  "get_response", JSON.stringify(filter)])
+        return JSON.parse(String(raw_res.stdout));
+    }
+
 
     public async apply_filter(id:number, addr:number){
         let filter =await this.db.filters.get_filter(id);

@@ -22,6 +22,7 @@ interface rules_map {
         hil_start:string,
         hil_stop:string,
         filter_design:string,
+        filter_response:string,
         filter_implement:string
     }
     script: {
@@ -132,6 +133,7 @@ let rules : rules_map = {
         hil_stop:'operator',
         filter_design:'operator',
         filter_implement:'operator',
+        filter_response:'operator',
         filter_apply:'operator'
     },
     script:{

@@ -25,6 +25,7 @@ interface api_map {
             hil_stop:string,
             filter_design:string,
             filter_implement:string,
+            filter_response:string,
             filter_apply:string
         }
     },
@@ -183,6 +184,7 @@ let endpoints_map : api_map = {
             hil_start:'/hil/start',
             hil_stop:'/hil/stop',
             filter_design:"/filter_design/:id",
+            filter_response:"/filter_response/:id",
             filter_implement:"/filter_implement/:id",
             filter_apply:"/filter_apply",
         }
