@@ -86,7 +86,7 @@ describe('emulator_database_tests', () => {
     let per : peripheral_model =  {
         id:77,
         name:'new peripheral_7',
-        image:"asfasfd",
+        image:"",
         parametric:true,
         registers:[],
         version:"saf"

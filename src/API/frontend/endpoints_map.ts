@@ -233,7 +233,7 @@ let endpoints_map : api_map = {
             hash:"/hash",
             load_all:"/load_all",
             get:"/:id",
-            add:"/:id",
+            add:"/",
             edit:"/:id",
             delete:"/:id"
         }

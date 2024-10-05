@@ -11,7 +11,7 @@ describe('peripherals_database_tests', () => {
         {
             id:1,
             name:'new peripheral_77',
-            image:"asfasfd",
+            image:"",
             parametric:true,
             registers:[],
             version:"saf"
@@ -19,7 +19,7 @@ describe('peripherals_database_tests', () => {
         {
             id:77,
             name:'new peripheral_7',
-            image:"asfasfd",
+            image:"",
             parametric:true,
             registers:[],
             version:"saf"

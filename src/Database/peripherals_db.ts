@@ -50,7 +50,7 @@ class peripherals_db {
             ) values (
                 ${app.id},
                 ${app.name},
-                ${app.image},
+                ${""},
                 ${app.version},
                 ${app.parametric},
                 ${app.registers}
