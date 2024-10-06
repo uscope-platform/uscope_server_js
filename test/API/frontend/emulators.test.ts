@@ -73,7 +73,7 @@ describe('emulators API tests', () => {
             add_emulator:(flt:any) =>{
                 results = flt;
             },
-            update_emulator_field: (id:number, field_name: string, field_value:any) =>{
+            edit_atomic_field: (id:number, field_name: string, field_value:any) =>{
                 results = [id, field_name, field_value];
             },
             remove_emulator:(id:number) =>{

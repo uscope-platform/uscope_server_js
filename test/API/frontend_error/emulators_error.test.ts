@@ -31,7 +31,7 @@ describe('emulators API error handling tests', () => {
             add_emulator:() =>{
                 throw "generic db error 23";
             },
-            update_emulator_field: () =>{
+            edit_atomic_field: () =>{
                 throw "generic db error 24";
             },
             remove_emulator:() =>{
