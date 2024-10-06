@@ -118,6 +118,6 @@ export interface emulator_edit_model {
     id:number,
     field:string,
     action:string,
-    value:object
+    value:any
 }
 

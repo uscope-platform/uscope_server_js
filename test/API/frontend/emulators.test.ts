@@ -7,6 +7,12 @@ import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
 import emulators_router from "../../../src/API/frontend/emulators_api";
 import endpoints_map from "../../../src/API/frontend/endpoints_map";
+import {
+    connection_model,
+    core_model,
+    efi_implementation_type,
+    fcore_comparator_type
+} from "../../../src/data_model/emulator_model";
 
 
 
@@ -62,13 +68,40 @@ describe('emulators API tests', () => {
     let db = {
         emulators:{
             get_version: ():string =>{
-                return "7fe0e405-4b6b-419a-a5f3-3b51fffa8e7e"
+                return "7fe0e405-4b6b-419a-a5f3-3b51fffa8e7e";
             },
             load_all:() =>{
-                return emulators
+                return emulators;
             },
             get_emulator:(id:number) =>{
-                return emulators[id-1]
+                return emulators[id-1];
+            },
+            add_core:(id:number, core:core_model)=>{
+                results = ["add_core", id, core];
+            },
+            update_core:(id:number, core:core_model) =>{
+                results = ["edit_core", id, core];
+            },
+            remove_core:(id:number, core:number) =>{
+                results = ["remove_core", id, core];
+            },
+            add_connection:(id:number, conn:any) =>{
+                results = ["add_connection", id, conn];
+            },
+            remove_connection:(id:number, src:any, dst:any) =>{
+                results = ["remove_connection", id, src, dst];
+            },
+            add_dma_channel:(id:number, src:any, dst:any, obj:any)=>{
+
+                results = ["add_channel", id, src, dst, obj];
+            },
+            edit_dma_channel:(id:number, src:any, dst:any, obj:any)=>{
+
+                results = ["edit_channel", id, src, dst, obj];
+            },
+            remove_dma_channel:(id:number,name:any, src:any, dst:any)=>{
+
+                results = ["remove_channel", id,name, src, dst];
             },
             add_emulator:(flt:any) =>{
                 results = flt;
@@ -175,5 +208,219 @@ describe('emulators API tests', () => {
             });
     });
 
+
+    test('add core', async () => {
+
+        let core :core_model= {
+            name: "test_core",
+            id: 4,
+            order:0,
+            program:"test_program",
+            channels:1,
+            inputs:[],
+            input_data:[],
+            outputs:[],
+            memory_init:[],
+            options:{
+                comparators:fcore_comparator_type.reducing_comparator,
+                efi_implementation:efi_implementation_type.efi_none
+            },
+            sampling_frequency:0,
+            deployment:{
+                rom_address:0,
+                control_address:0,
+                has_reciprocal:false
+            }
+        }
+        let edit = {emulator:4, field:"cores", action:"add", value:core};
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
+        path = path.replace(':id', '4');
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(["add_core", 4, core])
+            });
+    });
+
+    test('edit core', async () => {
+        let core = {
+            name: "test_core2",
+            id: 4,
+            order:0,
+            program:"test_program",
+            channels:1,
+            inputs:[],
+            input_data:[],
+            outputs:[],
+            memory_init:[],
+            options:{
+                comparators:fcore_comparator_type.reducing_comparator,
+                efi_implementation:efi_implementation_type.efi_none
+            },
+            sampling_frequency:0,
+            deployment:{
+                rom_address:0,
+                control_address:0,
+                has_reciprocal:false
+            }
+        }
+        let edit = {emulator:4, field:"cores", action:"edit", value:core};
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
+        path = path.replace(':id', '4');
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(["edit_core", 4, core])
+            });
+    });
+
+    test('remove core', async () => {
+        let edit = {emulator:4, field:"cores", action:"remove", value:6};
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
+        path = path.replace(':id', '4');
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(["remove_core", 4, 6])
+            });
+    });
+
+
+    test('add connection', async () => {
+        let conn :connection_model= {
+            source:"test_src",
+            destination:"test_dst",
+            channels:[
+
+            ]
+        }
+        let edit = {emulator:4, field:"connections", action:"add", value:conn};
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
+        path = path.replace(':id', '4');
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(["add_connection", 4, conn])
+            });
+    });
+
+
+    test('remove connection', async () => {
+        let conn = {
+            source:"test_src",
+            destination:"test_dst",
+        }
+        let edit = {emulator:4, field:"connections", action:"remove", value:conn};
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
+        path = path.replace(':id', '4');
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(["remove_connection", 4, "test_src", "test_dst"])
+            });
+    });
+
+
+    test('add dma_channel', async () => {
+        let ch = {
+            source:"test_src",
+            destination:"test_dst",
+            object:{
+                name:"test_channel_1",
+                type:"scalar_transfer",
+                source:{
+                    channel:[0],
+                    register:[0]
+                },
+                destination: {
+                    channel:[0],
+                    register: [0]
+                },
+                length:1,
+                stride:1
+            }
+        }
+        let edit = {emulator:4, field:"dma_channel", action:"add", value: ch};
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
+        path = path.replace(':id', '4');
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(["add_channel", 4,"test_src","test_dst", ch.object])
+            });
+    });
+
+
+    test('edit dma_channel', async () => {
+        let ch = {
+            source:"test_src",
+            destination:"test_dst",
+            object:{
+                name:"2134",
+                type:"scalar_transfer",
+                source:{
+                    channel:[2],
+                    register:[0]
+                },
+                destination: {
+                    channel:[0],
+                    register: [0]
+                },
+                length:1,
+                stride:1
+            }
+        }
+        let edit = {emulator:4, field:"dma_channel", action:"edit", value: ch};
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
+        path = path.replace(':id', '4');
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(["edit_channel", 4,"test_src","test_dst", ch.object])
+            });
+    });
+
+
+    test('remove dma_channel', async () => {
+        let ch = {
+            name:"5af",
+            source:"test_src",
+            destination:"test_dst",
+        }
+        let edit = {emulator:4, field:"dma_channel", action:"remove", value: ch};
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
+        path = path.replace(':id', '4');
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(["remove_channel", 4,"5af","test_src","test_dst"])
+            });
+    });
+
     afterAll(() => server.close());
 });
+
