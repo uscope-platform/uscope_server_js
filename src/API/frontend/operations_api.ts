@@ -11,7 +11,6 @@ import register_write_model, {
 import emulator_model from "../../data_model/emulator_model";
 import FiltersBackend from "../backend/filters";
 import {filter_apply_model} from "../../data_model/filters_model";
-import {stat} from "node:fs";
 
 
 class operations_router {
@@ -30,7 +29,7 @@ class operations_router {
         });
 
 
-        this.router.get(endpoints_map.operations.endpoints.load_application, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.operations.endpoints.load_application, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 let app =await this.db.applications.get_application(id);
@@ -48,7 +47,7 @@ class operations_router {
         });
 
 
-        this.router.post(endpoints_map.operations.endpoints.write_registers, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.write_registers, async (ctx:Koa.Context) => {
             try{
                 let data = <register_write_model[]>ctx.request.body;
                 for(let item of data){
@@ -62,7 +61,7 @@ class operations_router {
         });
 
 
-        this.router.get(endpoints_map.operations.endpoints.read_register, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.operations.endpoints.read_register, async (ctx:Koa.Context) => {
             try{
                 let address = parseInt(ctx.params.address);
                 ctx.response.status = 200;
@@ -74,7 +73,7 @@ class operations_router {
             }
         });
 
-        this.router.get(endpoints_map.operations.endpoints.clock, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.operations.endpoints.clock, async (ctx:Koa.Context) => {
             try{
                 ctx.response.body = await this.ops_backend.get_clocks();
                 ctx.status = 200
@@ -85,7 +84,7 @@ class operations_router {
         });
 
 
-        this.router.post(endpoints_map.operations.endpoints.clock, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.clock, async (ctx:Koa.Context) => {
             try{
                 let data = <clock_info>ctx.request.body;
                 await this.ops_backend.set_clock(data);
@@ -96,7 +95,7 @@ class operations_router {
             }
         });
 
-        this.router.post(endpoints_map.operations.endpoints.compile_program, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.compile_program, async (ctx:Koa.Context) => {
             try{
                 let data = <programs_info>ctx.request.body;
                 ctx.response.body = await this.ops_backend.compile_program(data);
@@ -108,7 +107,7 @@ class operations_router {
 
         });
 
-        this.router.post(endpoints_map.operations.endpoints.apply_program, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.apply_program, async (ctx:Koa.Context) => {
             try{
                 let data = <programs_info>ctx.request.body;
                 ctx.response.body = await this.ops_backend.apply_program(data);
@@ -119,7 +118,7 @@ class operations_router {
             }
         });
 
-        this.router.get(endpoints_map.operations.endpoints.fetch_data, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.operations.endpoints.fetch_data, async (ctx:Koa.Context) => {
             try{
                 ctx.response.body = await this.ops_backend.fetch_data();
                 ctx.status = 200
@@ -129,7 +128,7 @@ class operations_router {
             }
         });
 
-        this.router.post(endpoints_map.operations.endpoints.set_channel_status, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.set_channel_status, async (ctx:Koa.Context) => {
             try{
                 let data = <channel_statuses>ctx.request.body;
                 ctx.response.body = await this.ops_backend.set_channel_status(data);
@@ -140,7 +139,7 @@ class operations_router {
             }
         });
 
-        this.router.post(endpoints_map.operations.endpoints.scaling_factors, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.scaling_factors, async (ctx:Koa.Context) => {
             try{
                 let data = <number[]>ctx.request.body;
                 ctx.response.body = await this.ops_backend.set_scaling_factors(data);
@@ -151,7 +150,7 @@ class operations_router {
             }
         });
 
-        this.router.get(endpoints_map.operations.endpoints.acquisition, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.operations.endpoints.acquisition, async (ctx:Koa.Context) => {
             try{
                 ctx.response.body = await this.ops_backend.get_acquisition();
                 ctx.status = 200
@@ -161,7 +160,7 @@ class operations_router {
             }
         });
 
-        this.router.post(endpoints_map.operations.endpoints.acquisition, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.acquisition, async (ctx:Koa.Context) => {
             try{
                 let status = <acquisition_status>ctx.request.body;
                 ctx.response.body = await this.ops_backend.set_acquisition(status);
@@ -172,7 +171,7 @@ class operations_router {
             }
         })
 
-        this.router.post(endpoints_map.operations.endpoints.scope_address, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.scope_address, async (ctx:Koa.Context) => {
             try{
                 let status = <scope_address>ctx.request.body;
                 ctx.response.body = await this.ops_backend.set_scope_address(status);
@@ -183,7 +182,7 @@ class operations_router {
             }
         });
 
-        this.router.post(endpoints_map.operations.endpoints.dma_disable, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.dma_disable, async (ctx:Koa.Context) => {
             try{
                 let status = <status_object>ctx.request.body;
                 ctx.response.body = await this.ops_backend.set_dma_disable(status);
@@ -196,7 +195,7 @@ class operations_router {
 
 
 
-        this.router.post(endpoints_map.operations.endpoints.hil_emulate, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.hil_emulate, async (ctx:Koa.Context) => {
             try{
                 let status = <emulator_model>ctx.request.body;
                 ctx.response.body = await this.ops_backend.hil_emulate(status);
@@ -207,7 +206,7 @@ class operations_router {
             }
         });
 
-        this.router.post(endpoints_map.operations.endpoints.hil_deploy, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.hil_deploy, async (ctx:Koa.Context) => {
             try{
                 let status = <emulator_model>ctx.request.body;
                 ctx.response.body = await this.ops_backend.hil_deploy(status);
@@ -219,7 +218,7 @@ class operations_router {
         });
 
 
-        this.router.post(endpoints_map.operations.endpoints.hil_set_input, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.hil_set_input, async (ctx:Koa.Context) => {
             try{
                 let status = <set_hil_inputs>ctx.request.body;
                 ctx.response.body = await this.ops_backend.hil_set_input(status);
@@ -230,7 +229,7 @@ class operations_router {
             }
         });
 
-        this.router.post(endpoints_map.operations.endpoints.hil_select_output, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.hil_select_output, async (ctx:Koa.Context) => {
             try{
                 let status = <select_hil_output>ctx.request.body;
                 ctx.response.body = await this.ops_backend.hil_select_output(status);
@@ -243,7 +242,7 @@ class operations_router {
 
 
 
-        this.router.get(endpoints_map.operations.endpoints.hil_start, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.operations.endpoints.hil_start, async (ctx:Koa.Context) => {
             try{
                 ctx.response.body = await this.ops_backend.hil_start();
                 ctx.status = 200
@@ -254,7 +253,7 @@ class operations_router {
         });
 
 
-        this.router.get(endpoints_map.operations.endpoints.hil_stop, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.operations.endpoints.hil_stop, async (ctx:Koa.Context) => {
             try{
                 ctx.response.body = await this.ops_backend.hil_stop();
                 ctx.status = 200
@@ -265,7 +264,7 @@ class operations_router {
         });
 
 
-        this.router.get(endpoints_map.operations.endpoints.filter_design, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.operations.endpoints.filter_design, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 ctx.response.body = await this.filter_backend.design_filter(id);
@@ -277,7 +276,7 @@ class operations_router {
         });
 
 
-        this.router.get(endpoints_map.operations.endpoints.filter_implement, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.operations.endpoints.filter_implement, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 ctx.response.body = await this.filter_backend.implement_filter(id);
@@ -288,7 +287,7 @@ class operations_router {
             }
         });
 
-        this.router.get(endpoints_map.operations.endpoints.filter_response, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.operations.endpoints.filter_response, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 ctx.response.body = await this.filter_backend.get_response(id);
@@ -300,7 +299,7 @@ class operations_router {
         });
 
 
-        this.router.post(endpoints_map.operations.endpoints.filter_apply, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.operations.endpoints.filter_apply, async (ctx:Koa.Context) => {
             try{
                 let req = <filter_apply_model>ctx.request.body;
                 ctx.response.body = await this.filter_backend.apply_filter(req.id, req.address);

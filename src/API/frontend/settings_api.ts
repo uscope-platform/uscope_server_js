@@ -15,7 +15,7 @@ class settings_router{
             prefix: endpoints_map.settings.prefix
         });
 
-        this.router.get(endpoints_map.settings.endpoints.debug_level, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.settings.endpoints.debug_level, async (ctx:Koa.Context) => {
             try{
                 ctx.type = 'text';
                 ctx.body = await this.backend.get_debug_level();
@@ -27,7 +27,7 @@ class settings_router{
         });
 
 
-        this.router.post(endpoints_map.settings.endpoints.debug_level, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.settings.endpoints.debug_level, async (ctx:Koa.Context) => {
             try{
                 let level = <string>ctx.request.rawBody;
                 await this.backend.set_debug_level(level)
@@ -39,7 +39,7 @@ class settings_router{
         });
 
 
-        this.router.get(endpoints_map.settings.endpoints.hil_address_map, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.settings.endpoints.hil_address_map, async (ctx:Koa.Context) => {
             try{
                 ctx.body = await this.backend.get_hil_map();
                 ctx.status = 200
@@ -50,7 +50,7 @@ class settings_router{
         });
 
 
-        this.router.post(endpoints_map.settings.endpoints.hil_address_map, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.settings.endpoints.hil_address_map, async (ctx:Koa.Context) => {
             try{
                 let level = <hil_address_map>ctx.request.body;
                 await this.backend.set_hil_map(level)

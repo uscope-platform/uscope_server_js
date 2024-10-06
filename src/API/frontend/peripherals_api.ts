@@ -14,7 +14,7 @@ class peripherals_router {
             prefix: endpoints_map.peripheral.prefix
         });
 
-        this.router.get(endpoints_map.peripheral.endpoints.hash, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.peripheral.endpoints.hash, async (ctx:Koa.Context) => {
             try{
                 ctx.response.status = 200;
                 ctx.response.body = await this.db.peripherals.get_version();
@@ -25,7 +25,7 @@ class peripherals_router {
         });
 
 
-        this.router.get(endpoints_map.peripheral.endpoints.load_all, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.peripheral.endpoints.load_all, async (ctx:Koa.Context) => {
             try{
                 ctx.body = await this.db.peripherals.load_all();
                 ctx.status = 200
@@ -37,7 +37,7 @@ class peripherals_router {
 
 
 
-        this.router.get(endpoints_map.peripheral.endpoints.get, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.peripheral.endpoints.get, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 ctx.body = await this.db.peripherals.get_peripheral(id);
@@ -49,7 +49,7 @@ class peripherals_router {
         });
 
 
-        this.router.post(endpoints_map.peripheral.endpoints.add, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.peripheral.endpoints.add, async (ctx:Koa.Context) => {
             try{
                 let  prg = <peripheral_model>ctx.request.body;
                 await this.db.peripherals.add_peripheral(prg)
@@ -60,7 +60,7 @@ class peripherals_router {
             }
         });
 
-        this.router.patch(endpoints_map.peripheral.endpoints.edit, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.patch(endpoints_map.peripheral.endpoints.edit, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 let e = <peripheral_edit_model>ctx.request.body;
@@ -72,7 +72,7 @@ class peripherals_router {
             }
         });
 
-        this.router.delete(endpoints_map.peripheral.endpoints.delete, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.delete(endpoints_map.peripheral.endpoints.delete, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 await this.db.peripherals.remove_peripheral(id)

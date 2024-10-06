@@ -44,7 +44,7 @@ class applications_router {
             prefix: endpoints_map.application.prefix
         });
 
-        this.router.get(endpoints_map.application.endpoints.hash, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.application.endpoints.hash, async (ctx:Koa.Context) => {
             try{
                 ctx.response.status = 200;
                 ctx.response.body = await this.db.applications.get_version();
@@ -55,7 +55,7 @@ class applications_router {
         });
 
 
-        this.router.get(endpoints_map.application.endpoints.load_all, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.application.endpoints.load_all, async (ctx:Koa.Context) => {
             try{
                 ctx.body = await this.db.applications.load_all();
                 ctx.status = 200
@@ -67,7 +67,7 @@ class applications_router {
 
 
 
-        this.router.get(endpoints_map.application.endpoints.get, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.application.endpoints.get, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 ctx.body = await this.db.applications.get_application(id);
@@ -79,7 +79,7 @@ class applications_router {
         });
 
 
-        this.router.post(endpoints_map.application.endpoints.add, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.application.endpoints.add, async (ctx:Koa.Context) => {
             try{
                 let  emu = <application_model>ctx.request.body;
                 await this.db.applications.add_application(emu)
@@ -90,7 +90,7 @@ class applications_router {
             }
         });
 
-        this.router.patch(endpoints_map.application.endpoints.edit, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.patch(endpoints_map.application.endpoints.edit, async (ctx:Koa.Context) => {
             try{
                 let e = <application_edit_model>ctx.request.body;
                 switch (e.action){
@@ -111,7 +111,7 @@ class applications_router {
             }
         });
 
-        this.router.delete(endpoints_map.application.endpoints.delete, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.delete(endpoints_map.application.endpoints.delete, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 await this.db.applications.remove_application(id)

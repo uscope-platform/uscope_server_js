@@ -14,7 +14,7 @@ class bitstream_router {
             prefix: endpoints_map.bitstream.prefix
         });
 
-        this.router.get(endpoints_map.bitstream.endpoints.hash, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.bitstream.endpoints.hash, async (ctx:Koa.Context) => {
             try{
                 ctx.response.status = 200;
                 ctx.response.body = await this.db.bitstreams.get_version();
@@ -26,7 +26,7 @@ class bitstream_router {
         });
 
 
-        this.router.get(endpoints_map.bitstream.endpoints.load_all, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.bitstream.endpoints.load_all, async (ctx:Koa.Context) => {
             try{
                 let raw_res =  await this.db.bitstreams.load_all();
                 ctx.body = raw_res.map((bit: bitstream_model)=>{
@@ -41,7 +41,7 @@ class bitstream_router {
 
 
 
-        this.router.get(endpoints_map.bitstream.endpoints.get, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.bitstream.endpoints.get, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 ctx.body =  <bitstream_model>await this.db.bitstreams.get_bitstream(id);
@@ -53,7 +53,7 @@ class bitstream_router {
         });
 
 
-        this.router.post(endpoints_map.bitstream.endpoints.add, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.bitstream.endpoints.add, async (ctx:Koa.Context) => {
             try{
                 let  bit = <bitstream_model>ctx.request.body;
                 await this.db.bitstreams.add_bitstream(bit)
@@ -64,7 +64,7 @@ class bitstream_router {
             }
         });
 
-        this.router.patch(endpoints_map.bitstream.endpoints.edit, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.patch(endpoints_map.bitstream.endpoints.edit, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 let e = <bitstream_edit_model>ctx.request.body;
@@ -76,7 +76,7 @@ class bitstream_router {
             }
         });
 
-        this.router.delete(endpoints_map.bitstream.endpoints.delete, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.delete(endpoints_map.bitstream.endpoints.delete, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 await this.db.bitstreams.remove_bitstream(id)

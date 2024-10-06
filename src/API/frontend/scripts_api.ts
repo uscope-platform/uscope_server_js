@@ -14,7 +14,7 @@ class scripts_router {
             prefix: endpoints_map.script.prefix
         });
 
-        this.router.get(endpoints_map.script.endpoints.hash, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.script.endpoints.hash, async (ctx:Koa.Context) => {
             try{
                 ctx.response.status = 200;
                 ctx.response.body = await this.db.scripts.get_version();
@@ -25,7 +25,7 @@ class scripts_router {
         });
 
 
-        this.router.get(endpoints_map.script.endpoints.load_all, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.script.endpoints.load_all, async (ctx:Koa.Context) => {
             try{
                 ctx.body = await this.db.scripts.load_all();
                 ctx.status = 200
@@ -37,7 +37,7 @@ class scripts_router {
 
 
 
-        this.router.get(endpoints_map.script.endpoints.get, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.script.endpoints.get, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 ctx.body = await this.db.scripts.get_script(id);
@@ -49,7 +49,7 @@ class scripts_router {
         });
 
 
-        this.router.post(endpoints_map.script.endpoints.add, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.script.endpoints.add, async (ctx:Koa.Context) => {
             try{
                 let  scr = <script_model>ctx.request.body;
                 await this.db.scripts.add_script(scr)
@@ -60,7 +60,7 @@ class scripts_router {
             }
         });
 
-        this.router.patch(endpoints_map.script.endpoints.edit, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.patch(endpoints_map.script.endpoints.edit, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 let e = <script_edit_model>ctx.request.body;
@@ -72,7 +72,7 @@ class scripts_router {
             }
         });
 
-        this.router.delete(endpoints_map.script.endpoints.delete, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.delete(endpoints_map.script.endpoints.delete, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 await this.db.scripts.remove_script(id)

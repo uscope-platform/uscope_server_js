@@ -14,7 +14,7 @@ class programs_router {
             prefix: endpoints_map.program.prefix
         });
 
-        this.router.get(endpoints_map.program.endpoints.hash, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.program.endpoints.hash, async (ctx:Koa.Context) => {
             try{
                 ctx.response.status = 200;
                 ctx.response.body = await this.db.programs.get_version();
@@ -25,7 +25,7 @@ class programs_router {
         });
 
 
-        this.router.get(endpoints_map.program.endpoints.load_all, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.program.endpoints.load_all, async (ctx:Koa.Context) => {
             try{
                 ctx.body = await this.db.programs.load_all();
                 ctx.status = 200
@@ -37,7 +37,7 @@ class programs_router {
 
 
 
-        this.router.get(endpoints_map.program.endpoints.get, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.get(endpoints_map.program.endpoints.get, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 ctx.body = await this.db.programs.get_program(id);
@@ -49,7 +49,7 @@ class programs_router {
         });
 
 
-        this.router.post(endpoints_map.program.endpoints.add, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.post(endpoints_map.program.endpoints.add, async (ctx:Koa.Context) => {
             try{
                 let  prg = <program_model>ctx.request.body;
                 await this.db.programs.add_program(prg)
@@ -60,7 +60,7 @@ class programs_router {
             }
         });
 
-        this.router.patch(endpoints_map.program.endpoints.edit, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.patch(endpoints_map.program.endpoints.edit, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 let e = <program_edit_model>ctx.request.body;
@@ -72,7 +72,7 @@ class programs_router {
             }
         });
 
-        this.router.delete(endpoints_map.program.endpoints.delete, async (ctx:Koa.Context, next:Koa.Next) => {
+        this.router.delete(endpoints_map.program.endpoints.delete, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
                 await this.db.programs.remove_program(id)
