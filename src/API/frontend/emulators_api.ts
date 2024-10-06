@@ -64,7 +64,7 @@ class emulators_router {
             try{
                 let id = parseInt(ctx.params.id);
                 let e = <emulator_edit_model>ctx.request.body;
-                ctx.body = await this.db.emulators.update_emulator_field(id, e.field, e.value);
+                ctx.body = await this.db.emulators.edit_atomic_field(id, e.field, e.value);
                 ctx.status = 200
             } catch(error:any){
                 ctx.body = error

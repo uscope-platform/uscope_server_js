@@ -1,7 +1,11 @@
 import database from "../../src/Database/Database";
 import {expect} from "@jest/globals";
-import emulator_model from "../../src/data_model/emulator_model";
-
+import emulator_model, {
+    connection_model,
+    core_model, dma_channel_model,
+    efi_implementation_type,
+    fcore_comparator_type
+} from "../../src/data_model/emulator_model";
 
 
 describe('emulator_database_tests', () => {
@@ -11,7 +15,7 @@ describe('emulator_database_tests', () => {
             id:1,
             name:'new new emulator',
             emulation_time:100.5,
-            cores:{},
+            cores:[],
             connections:[],
             deployment_mode:false,
         },
@@ -19,7 +23,7 @@ describe('emulator_database_tests', () => {
             id:2,
             name:'test',
             emulation_time:10.2,
-            cores:{},
+            cores:[],
             connections:[],
             deployment_mode:true,
         }
@@ -58,8 +62,139 @@ describe('emulator_database_tests', () => {
         expect(res).toStrictEqual(emu[1]);
     });
 
+
+    test('add_core', async () => {
+        let core :core_model= {
+            name: "test_core",
+            id: 4,
+            order:0,
+            program:"test_program",
+            channels:1,
+            inputs:[],
+            input_data:[],
+            outputs:[],
+            memory_init:[],
+            options:{
+                comparators:fcore_comparator_type.reducing_comparator,
+                efi_implementation:efi_implementation_type.efi_none
+            },
+            sampling_frequency:0,
+            deployment:{
+                rom_address:0,
+                control_address:0,
+                has_reciprocal:false
+            }
+        }
+        await db.emulators.add_core(1, core);
+        let res = await db.emulators.get_emulator(1);
+        expect(res.cores[0]).toStrictEqual(core);
+    });
+
+    test('update_core', async () => {
+         let core :core_model = {
+            name: "test_core_update",
+            id: 4,
+            order:0,
+            program:"test_program",
+            channels:1,
+            inputs:[],
+            input_data:[],
+            outputs:[],
+            memory_init:[],
+            options:{
+                comparators:fcore_comparator_type.reducing_comparator,
+                efi_implementation:efi_implementation_type.efi_none
+            },
+            sampling_frequency:0,
+            deployment:{
+                rom_address:0,
+                control_address:0,
+                has_reciprocal:false
+            }
+        }
+        await db.emulators.update_core(1, core);
+        let res = await db.emulators.get_emulator(1);
+        expect(res.cores).toHaveLength(1);
+        expect(res.cores[0]).toStrictEqual(core);
+    });
+
+    test('remove_core', async () => {
+        await db.emulators.remove_core(1, 4);
+        let res = await db.emulators.get_emulator(1);
+        expect(res.cores).toHaveLength(0);
+    });
+
+    test('add_connection', async () => {
+        let conn :connection_model = {
+            source:"src",
+            destination:"dst",
+            channels:[]
+        }
+        await db.emulators.add_connection(1, conn);
+        let res = await db.emulators.get_emulator(1);
+        expect(res.connections).toHaveLength(1);
+        expect(res.connections[0]).toStrictEqual(conn);
+    });
+
+    test('add_channel', async () => {
+        let ch :dma_channel_model= {
+            name:"test_channel_1",
+            type:"scalar_transfer",
+            source:{
+                channel:[0],
+                register:[0]
+            },
+            destination: {
+                channel:[0],
+                register: [0]
+            },
+            length:1,
+            stride:1
+        }
+        await db.emulators.add_dma_channel(1, ch,"src", "dst");
+        let res = await db.emulators.get_emulator(1);
+        expect(res.connections[0].channels).toHaveLength(1);
+        expect(res.connections[0].channels[0]).toStrictEqual(ch);
+    });
+
+    test('edit_channel', async () => {
+        let ch :dma_channel_model = {
+            name:"test_channel_1",
+            type:"scalar_transfer",
+            source:{
+                channel:[43],
+                register:[21]
+            },
+            destination: {
+                channel:[0],
+                register: [0]
+            },
+            length:1,
+            stride:1
+        }
+        await db.emulators.edit_dma_channel(1, ch,"src", "dst");
+        let res = await db.emulators.get_emulator(1);
+        expect(res.connections[0].channels).toHaveLength(1);
+        expect(res.connections[0].channels[0]).toStrictEqual(ch);
+    });
+
+
+    test('remove_channel', async () => {
+        await db.emulators.remove_dma_channel(1, "test_channel_1", "src", "dst");
+        let res = await db.emulators.get_emulator(1);
+        expect(res.connections[0].channels).toHaveLength(0);
+    });
+
+
+    test('remove_connection', async () => {
+        await  db.emulators.remove_connection(1, "src", "dst");
+        let res = await db.emulators.get_emulator(1);
+        expect(res.connections).toHaveLength(0);
+    });
+
+
     test('update_emulator', async () => {
-        await db.emulators.update_emulator_field(1, "emulation_time", 12);
+        await db.emulators.edit_atomic_field(1, "emulation_time", 12);
         let res = await db.emulators.get_emulator(1);
         expect(res.emulation_time).toBe(12);
     });
@@ -72,7 +207,7 @@ describe('emulator_database_tests', () => {
     });
 
     afterAll(async ()=> {
-        await await db.delete_database();
-        db.close();
+        await db.delete_database();
+        await db.close();
     })
 });

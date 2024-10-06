@@ -30,7 +30,7 @@ describe('emulator_database_tests', () => {
         id:1,
         name:'new new emulator',
         emulation_time:100.5,
-        cores:{},
+        cores:[],
         connections:[],
         deployment_mode:false,
     }
