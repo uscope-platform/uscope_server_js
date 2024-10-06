@@ -7,7 +7,6 @@ import emulator_model, {
     fcore_comparator_type
 } from "../../src/data_model/emulator_model";
 
-
 describe('emulator_database_tests', () => {
 
     let emu: emulator_model[] = [
@@ -88,6 +87,8 @@ describe('emulator_database_tests', () => {
         await db.emulators.add_core(1, core);
         let res = await db.emulators.get_emulator(1);
         expect(res.cores[0]).toStrictEqual(core);
+        core.id = 6;
+        await db.emulators.add_core(1, core);
     });
 
     test('update_core', async () => {
@@ -114,14 +115,15 @@ describe('emulator_database_tests', () => {
         }
         await db.emulators.update_core(1, core);
         let res = await db.emulators.get_emulator(1);
-        expect(res.cores).toHaveLength(1);
+        expect(res.cores).toHaveLength(2);
         expect(res.cores[0]).toStrictEqual(core);
     });
 
     test('remove_core', async () => {
         await db.emulators.remove_core(1, 4);
         let res = await db.emulators.get_emulator(1);
-        expect(res.cores).toHaveLength(0);
+        expect(res.cores).toHaveLength(1);
+        expect(res.cores[0].id).toStrictEqual(6);
     });
 
     test('add_connection', async () => {
@@ -134,6 +136,8 @@ describe('emulator_database_tests', () => {
         let res = await db.emulators.get_emulator(1);
         expect(res.connections).toHaveLength(1);
         expect(res.connections[0]).toStrictEqual(conn);
+        conn.source="test";
+        await db.emulators.add_connection(1, conn);
     });
 
     test('add_channel', async () => {
@@ -155,6 +159,14 @@ describe('emulator_database_tests', () => {
         let res = await db.emulators.get_emulator(1);
         expect(res.connections[0].channels).toHaveLength(1);
         expect(res.connections[0].channels[0]).toStrictEqual(ch);
+        ch.name = "test_repeat";
+        await db.emulators.add_dma_channel(1, ch,"src", "dst");
+        try{
+            await db.emulators.add_dma_channel(1, ch, "123", "323")
+            expect(true).toStrictEqual(false);
+        } catch (e) {
+            expect(e).toStrictEqual("Connection not found");
+        }
     });
 
     test('edit_channel', async () => {
@@ -174,22 +186,36 @@ describe('emulator_database_tests', () => {
         }
         await db.emulators.edit_dma_channel(1, ch,"src", "dst");
         let res = await db.emulators.get_emulator(1);
-        expect(res.connections[0].channels).toHaveLength(1);
+        expect(res.connections[0].channels).toHaveLength(2);
         expect(res.connections[0].channels[0]).toStrictEqual(ch);
+        try{
+            await db.emulators.edit_dma_channel(1, ch,"srwec", "dst");
+            expect(true).toStrictEqual(false);
+        } catch (e) {
+            expect(e).toStrictEqual("Connection not found");
+        }
     });
 
 
     test('remove_channel', async () => {
         await db.emulators.remove_dma_channel(1, "test_channel_1", "src", "dst");
         let res = await db.emulators.get_emulator(1);
-        expect(res.connections[0].channels).toHaveLength(0);
+        expect(res.connections[0].channels).toHaveLength(1);
+        expect(res.connections[0].channels[0].name).toStrictEqual("test_repeat");
+        try{
+            await db.emulators.remove_dma_channel(1, "zazzera", "123", "323")
+            expect(true).toStrictEqual(false);
+        } catch (e) {
+            expect(e).toStrictEqual("Connection not found");
+        }
     });
 
 
     test('remove_connection', async () => {
         await  db.emulators.remove_connection(1, "src", "dst");
         let res = await db.emulators.get_emulator(1);
-        expect(res.connections).toHaveLength(0);
+        expect(res.connections).toHaveLength(1);
+        expect(res.connections[0].source).toStrictEqual("test");
     });
 
 
