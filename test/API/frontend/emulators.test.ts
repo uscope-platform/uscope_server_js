@@ -298,7 +298,7 @@ describe('emulators API tests', () => {
     test('add connection', async () => {
         let conn :connection_model= {
             source:"test_src",
-            target:"test_dst",
+            destination:"test_dst",
             channels:[
 
             ]

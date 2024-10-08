@@ -130,7 +130,7 @@ describe('emulator_database_tests', () => {
     test('add_connection', async () => {
         let conn :connection_model = {
             source:"src",
-            target:"dst",
+            destination:"dst",
             channels:[]
         }
         await db.emulators.add_connection(1, conn);
