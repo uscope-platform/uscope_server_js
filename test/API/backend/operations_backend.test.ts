@@ -407,7 +407,7 @@ describe('operations backend test', () => {
             name:"ters",
             deployment_mode:false,
             connections:[],
-            cores:[],
+            cores:{},
             emulation_time:231
         }
         let res =await backend.hil_deploy(a);
@@ -422,7 +422,7 @@ describe('operations backend test', () => {
             name:"ters",
             deployment_mode:false,
             connections:[],
-            cores:[],
+            cores:{},
             emulation_time:231
         }
         let res =await backend.hil_emulate(a);

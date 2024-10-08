@@ -10,7 +10,7 @@ import endpoints_map from "../../../src/API/frontend/endpoints_map";
 import {
     connection_model,
     core_model,
-    efi_implementation_type,
+    efi_implementation_type, emulator_edit_model,
     fcore_comparator_type
 } from "../../../src/data_model/emulator_model";
 
@@ -183,7 +183,7 @@ describe('emulators API tests', () => {
     });
 
     test('edit', async () => {
-        let edit = {emulator:4, field:"name", value:"tgag"};
+        let edit: emulator_edit_model = {id:4, field:"name", value:"tgag", action:"edit"};
         let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
         path = path.replace(':id', '4');
         return request(app.callback())
@@ -298,7 +298,7 @@ describe('emulators API tests', () => {
     test('add connection', async () => {
         let conn :connection_model= {
             source:"test_src",
-            destination:"test_dst",
+            target:"test_dst",
             channels:[
 
             ]
@@ -417,7 +417,7 @@ describe('emulators API tests', () => {
             .send(edit)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(results).toStrictEqual(["remove_channel", 4,"5af","test_src","test_dst"])
+                expect(results).toStrictEqual(["remove_channel", 4,"test_src","test_dst","5af"])
             });
     });
 

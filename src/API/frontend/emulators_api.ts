@@ -19,6 +19,7 @@ class emulators_router {
                 ctx.response.status = 200;
                 ctx.response.body = await this.db.emulators.get_version();
             } catch(error:any){
+                console.log(error);
                 ctx.response.body = error
                 ctx.response.status = 501
             }
@@ -30,6 +31,7 @@ class emulators_router {
                 ctx.body = await this.db.emulators.load_all();
                 ctx.status = 200
             } catch(error:any){
+                console.log(error);
                 ctx.body = error
                 ctx.status = 501
             }
@@ -43,6 +45,7 @@ class emulators_router {
                 ctx.body = await this.db.emulators.get_emulator(id);
                 ctx.status = 200
             } catch(error:any){
+                console.log(error);
                 ctx.body = error
                 ctx.status = 501
             }
@@ -55,6 +58,7 @@ class emulators_router {
                 await this.db.emulators.add_emulator(emu)
                 ctx.status = 200
             } catch(error:any){
+                console.log(error);
                 ctx.body = error
                 ctx.status = 501
             }
@@ -99,7 +103,7 @@ class emulators_router {
                                 ctx.body = await this.db.emulators.edit_dma_channel(id, e.value.source, e.value.destination, e.value.object);
                                 break;
                             case "remove":
-                                ctx.body = await this.db.emulators.remove_dma_channel(id, e.value.name, e.value.source, e.value.destination);
+                                ctx.body = await this.db.emulators.remove_dma_channel(id, e.value.source, e.value.destination, e.value.name);
                                 break;
                         }
                         break;
@@ -110,6 +114,7 @@ class emulators_router {
 
                 ctx.status = 200
             } catch(error:any){
+                console.log(error);
                 ctx.body = error
                 ctx.status = 501
             }
@@ -121,6 +126,7 @@ class emulators_router {
                 await this.db.emulators.remove_emulator(id)
                 ctx.status = 200
             } catch(error:any){
+                console.log(error);
                 ctx.body = error
                 ctx.status = 501
             }

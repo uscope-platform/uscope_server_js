@@ -99,7 +99,7 @@ export interface dma_channel_model {
 
 export interface connection_model {
     source:string,
-    destination:string,
+    target:string,
     channels:dma_channel_model[],
 
 }
@@ -107,7 +107,9 @@ export interface connection_model {
 export default interface emulator_model {
     id:number,
     name:string,
-    cores:core_model[],
+    cores:{
+        [key:string]: core_model
+    },
     connections:connection_model[],
     emulation_time:number,
     deployment_mode:boolean

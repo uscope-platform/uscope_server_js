@@ -61,27 +61,20 @@ class emulators_db {
     public async add_core(id:number, core:core_model){
         let emu = await this.get_emulator(id);
         let new_cores = emu.cores;
-        new_cores.push(core);
+        new_cores[core.id.toString(10)] = core;
         return await this.update_emulator_field(id, "cores", new_cores);
     }
 
     public async update_core(id:number, core:core_model) {
         let emu = await this.get_emulator(id);
-        let new_cores = emu.cores.map((e: core_model)=>{
-            if(e.id == core.id)
-                return core;
-            else
-                return e;
-        });
-        return await this.update_emulator_field(id, "cores", new_cores);
+        emu.cores[core.id.toString(10)] = core;
+        return await this.update_emulator_field(id, "cores", emu.cores);
     }
 
     public async remove_core(id:number, core_id:number) {
         let emu = await this.get_emulator(id);
-        let new_cores = emu.cores.filter((e:core_model)=>{
-            return e.id != core_id;
-        })
-        return await this.update_emulator_field(id, "cores", new_cores);
+        delete emu.cores[core_id.toString(10)];
+        return await this.update_emulator_field(id, "cores", emu.cores);
     }
 
     public async add_connection(id:number, connection:connection_model){
@@ -92,10 +85,10 @@ class emulators_db {
     }
 
 
-    public async add_dma_channel(id:number, channel:dma_channel_model, src:string, dst:string){
+    public async add_dma_channel(id:number, src:string, dst:string, channel:dma_channel_model){
         let emu = await this.get_emulator(id);
         let conn = emu.connections.filter((e:connection_model)=>{
-            return e.source == src && e.destination == dst;
+            return e.source == src && e.target == dst;
         });
         if(conn.length == 0){
             throw "Connection not found";
@@ -104,10 +97,10 @@ class emulators_db {
         return await this.update_emulator_field(id, "connections", emu.connections);
     }
 
-    public async edit_dma_channel(id:number, channel:dma_channel_model, src:string, dst:string) {
+    public async edit_dma_channel(id:number, src:string, dst:string, channel:dma_channel_model) {
         let emu = await this.get_emulator(id);
         let conn = emu.connections.filter((e:connection_model)=>{
-            return e.source == src && e.destination == dst;
+            return e.source == src && e.target == dst;
         });
         if(conn.length == 0){
             throw "Connection not found";
@@ -122,10 +115,10 @@ class emulators_db {
     }
 
 
-    public async remove_dma_channel(emu_id:number, ch_name: string, src:string, dst:string, ) {
+    public async remove_dma_channel(emu_id:number, src:string, dst:string, ch_name: string) {
         let emu = await this.get_emulator(emu_id);
         let conn = emu.connections.filter((e:connection_model)=>{
-            return e.source == src && e.destination == dst;
+            return e.source == src && e.target == dst;
         });
         if(conn.length == 0){
             throw "Connection not found";
@@ -138,10 +131,10 @@ class emulators_db {
 
     public async remove_connection(id:number, src:string, dst:string) {
         let emu = await this.get_emulator(id);
-        let new_conn = emu.connections.filter((e:connection_model)=>{
-            return e.source !== src || e.destination !== dst;
+        emu.connections = emu.connections.filter((e:connection_model)=>{
+            return e.source !== src || e.target !== dst;
         });
-        return await this.update_emulator_field(id, "connections", new_conn);
+        return await this.update_emulator_field(id, "connections",  emu.connections);
     }
 
     public async edit_atomic_field(id:number, field_name: string, field_value:any): Promise<object>{
