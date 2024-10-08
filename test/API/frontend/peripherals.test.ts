@@ -7,6 +7,7 @@ import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
 import peripherals_router from "../../../src/API/frontend/peripherals_api";
 import endpoints_map from "../../../src/API/frontend/endpoints_map";
+import {field_model, register_model} from "../../../src/data_model/peripheral_model";
 
 
 
@@ -110,6 +111,24 @@ describe('peripherals API tests', () => {
             },
             add_peripheral:(scr:any) =>{
                 results = scr;
+            },
+            add_register:(id:number, reg:any)=>{
+                results = [id, reg];
+            },
+            edit_register:(id:number, reg:any)=>{
+                results = [id, reg];
+            },
+            remove_register:(id:number, reg_id:string)=>{
+                results = [id, reg_id];
+            },
+            add_field:(per_id:number, reg_id:string, field:any)=>{
+                results = [per_id, reg_id, field];
+            },
+            edit_field:(per_id:number, reg_id:string, field:any)=>{
+                results = [per_id, reg_id, field];
+            },
+            remove_field:(per_id:number, reg_id:string, fld_id:string)=>{
+                results = [per_id, reg_id, fld_id];
             },
             update_peripheral_field: (id:number, field_name: string, field_value:any) =>{
                 results = [id, field_name, field_value];
@@ -216,6 +235,122 @@ describe('peripherals API tests', () => {
                 expect(results).toStrictEqual([54, "parametric", false])
             });
     });
+
+
+    test('add_register', async () => {
+        let reg : register_model = {
+            ID:"reg_id",
+            description:"desc",
+            direction:"RW",
+            offset:"0x0",
+            register_name:"reg_name",
+            value:0,
+            fields:[]
+        };
+        let edit = {script:4, field:"register", action:"add", value:reg};
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
+        path = path.replace(":id", "54")
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual([54, reg])
+            });
+    });
+
+    test('edit_register', async () => {
+        let reg : register_model = {
+            ID:"reg_id",
+            description:"desc",
+            direction:"RW",
+            offset:"0x0",
+            register_name:"reg_name",
+            value:0,
+            fields:[]
+        };
+        let edit = {script:4, field:"register", action:"edit", value:reg};
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
+        path = path.replace(":id", "54")
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual([54, reg])
+            });
+    });
+
+    test('remove_register', async () => {
+        let edit = {script:4, field:"register", action:"remove", value:"reg_id"};
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
+        path = path.replace(":id", "54")
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual([54, "reg_id"])
+            });
+    });
+
+    test('add_field', async () => {
+        let fld : field_model = {
+            name:"field",
+            description:"desc",
+            length:1,
+            offset:8
+        };
+        let edit = {script:4, field:"field", action:"add", value: {id:"sfa", object:fld}};
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
+        path = path.replace(":id", "54")
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual([54, "sfa", fld])
+            });
+    });
+
+    test('edit_field', async () => {
+        let fld : field_model = {
+            name:"field",
+            description:"desc",
+            length:1,
+            offset:8
+        };
+        let edit = {script:4, field:"field", action:"edit", value: {id:"sfa", object:fld}};
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
+        path = path.replace(":id", "54")
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual([54, "sfa", fld])
+            });
+    });
+
+    test('remove_field', async () => {
+        let edit = {script:4, field:"field", action:"remove", value: {id:"sfa", object:"fld_id"}};
+        let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
+        path = path.replace(":id", "54")
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual([54, "sfa", "fld_id"])
+            });
+    });
+
 
     test('delete', async () => {
         let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.delete;

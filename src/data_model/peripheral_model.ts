@@ -31,5 +31,6 @@ export default interface peripheral_model {
 export interface peripheral_edit_model {
     id:number,
     field:string,
-    value:string
+    action:string,
+    value:any
 }

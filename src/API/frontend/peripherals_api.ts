@@ -2,7 +2,7 @@ import Router from "koa-router";
 import database from "../../Database/Database";
 import * as Koa from "koa";
 import endpoints_map from "./endpoints_map";
-import peripheral_model, {peripheral_edit_model} from "../../data_model/peripheral_model";
+import peripheral_model, {peripheral_edit_model, register_model} from "../../data_model/peripheral_model";
 
 class peripherals_router {
     public router: Router;
@@ -64,7 +64,37 @@ class peripherals_router {
             try{
                 let id = parseInt(ctx.params.id);
                 let e = <peripheral_edit_model>ctx.request.body;
-                ctx.body = await this.db.peripherals.update_peripheral_field(id, e.field, e.value);
+                switch (e.field){
+                    case "register":
+                        switch (e.action){
+                            case "add":
+                                ctx.body = await this.db.peripherals.add_register(id, <register_model>e.value);
+                                break;
+                            case "edit":
+                                ctx.body = await this.db.peripherals.edit_register(id, <register_model>e.value);
+                                break;
+                            case "remove":
+                                ctx.body = await this.db.peripherals.remove_register(id, e.value);
+                                break;
+                        }
+                        break;
+                    case "field":
+                        switch (e.action){
+                            case "add":
+                                ctx.body = await this.db.peripherals.add_field(id, e.value.id, e.value.object);
+                                break;
+                            case "edit":
+                                ctx.body = await this.db.peripherals.edit_field(id, e.value.id, e.value.object);
+                                break;
+                            case "remove":
+                                ctx.body = await this.db.peripherals.remove_field(id, e.value.id, e.value.object)
+                                break;
+                        }
+                        break;
+                    default:
+                        ctx.body = await this.db.peripherals.update_peripheral_field(id, e.field, e.value);
+                        break;
+                }
                 ctx.status = 200
             } catch(error:any){
                 ctx.body = error

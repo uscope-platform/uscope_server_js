@@ -102,8 +102,8 @@ describe('peripherals_database_tests', () => {
     });
 
 
-    test('delete_register', async () => {
-        await db.peripherals.delete_register(77, "reg_id");
+    test('remove_register', async () => {
+        await db.peripherals.remove_register(77, "reg_id");
         let res = await db.peripherals.get_peripheral(77);
         expect(res.registers).toHaveLength(1);
         expect(res.registers[0].ID).toStrictEqual("reg_id_2");
@@ -152,12 +152,12 @@ describe('peripherals_database_tests', () => {
 
 
     test('delete_field', async () => {
-        await db.peripherals.delete_field(77, "reg_id_2","field");
+        await db.peripherals.remove_field(77, "reg_id_2","field");
         let res = await db.peripherals.get_peripheral(77);
         expect(res.registers[0].fields).toHaveLength(1);
         expect(res.registers[0].fields[0].name).toStrictEqual("field_2");
         try{
-            await db.peripherals.delete_field(77, "zazzera", "field_2");
+            await db.peripherals.remove_field(77, "zazzera", "field_2");
             expect(true).toStrictEqual(false);
         } catch (e) {
             expect(e).toStrictEqual("Register not found");

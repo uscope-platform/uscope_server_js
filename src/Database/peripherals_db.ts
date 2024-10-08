@@ -73,7 +73,7 @@ class peripherals_db {
         return await this.update_peripheral_field(peripheral_id, "registers", p.registers);
     }
 
-    public async delete_register(peripheral_id:number, register_id:string) : Promise<any> {
+    public async remove_register(peripheral_id:number, register_id:string) : Promise<any> {
         let p = await this.get_peripheral(peripheral_id);
         p.registers = p.registers.filter((entry)=>{
             return entry.ID !== register_id;
@@ -108,7 +108,7 @@ class peripherals_db {
         return await this.update_peripheral_field(peripheral_id, "registers", p.registers);
     }
 
-    public async delete_field(peripheral_id:number, register_id: string, field_name:string) : Promise<any> {
+    public async remove_field(peripheral_id:number, register_id: string, field_name:string) : Promise<any> {
         let p = await this.get_peripheral(peripheral_id);
         let reg = p.registers.filter((entry)=>{
             return entry.ID === register_id;
