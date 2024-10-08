@@ -88,7 +88,7 @@ class emulators_db {
     public async add_dma_channel(id:number, src:string, dst:string, channel:dma_channel_model){
         let emu = await this.get_emulator(id);
         let conn = emu.connections.filter((e:connection_model)=>{
-            return e.source == src && e.target == dst;
+            return e.source == src && e.destination == dst;
         });
         if(conn.length == 0){
             throw "Connection not found";
@@ -100,7 +100,7 @@ class emulators_db {
     public async edit_dma_channel(id:number, src:string, dst:string, channel:dma_channel_model) {
         let emu = await this.get_emulator(id);
         let conn = emu.connections.filter((e:connection_model)=>{
-            return e.source == src && e.target == dst;
+            return e.source == src && e.destination == dst;
         });
         if(conn.length == 0){
             throw "Connection not found";
@@ -118,7 +118,7 @@ class emulators_db {
     public async remove_dma_channel(emu_id:number, src:string, dst:string, ch_name: string) {
         let emu = await this.get_emulator(emu_id);
         let conn = emu.connections.filter((e:connection_model)=>{
-            return e.source == src && e.target == dst;
+            return e.source == src && e.destination == dst;
         });
         if(conn.length == 0){
             throw "Connection not found";
@@ -132,7 +132,7 @@ class emulators_db {
     public async remove_connection(id:number, src:string, dst:string) {
         let emu = await this.get_emulator(id);
         emu.connections = emu.connections.filter((e:connection_model)=>{
-            return e.source !== src || e.target !== dst;
+            return e.source !== src || e.destination !== dst;
         });
         return await this.update_emulator_field(id, "connections",  emu.connections);
     }

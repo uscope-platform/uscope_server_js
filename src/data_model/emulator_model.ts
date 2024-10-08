@@ -99,7 +99,7 @@ export interface dma_channel_model {
 
 export interface connection_model {
     source:string,
-    target:string,
+    destination:string,
     channels:dma_channel_model[],
 
 }
