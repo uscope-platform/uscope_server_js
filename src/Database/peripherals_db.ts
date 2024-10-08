@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import peripheral_model from "../data_model/peripheral_model";
+import peripheral_model, {field_model, register_model} from "../data_model/peripheral_model";
 
 
 class peripherals_db {
@@ -56,6 +56,70 @@ class peripherals_db {
                 ${app.registers}
             )
         `;
+    }
+
+    public async add_register(peripheral_id:number, reg:register_model) : Promise<any> {
+        let p = await this.get_peripheral(peripheral_id);
+        p.registers.push(reg);
+        return await this.update_peripheral_field(peripheral_id, "registers", p.registers);
+    }
+
+    public async edit_register(peripheral_id:number, reg:register_model) : Promise<any> {
+        let p = await this.get_peripheral(peripheral_id);
+        p.registers = p.registers.map((entry)=>{
+            if(entry.ID === reg.ID) return reg;
+            else return entry;
+        })
+        return await this.update_peripheral_field(peripheral_id, "registers", p.registers);
+    }
+
+    public async delete_register(peripheral_id:number, register_id:string) : Promise<any> {
+        let p = await this.get_peripheral(peripheral_id);
+        p.registers = p.registers.filter((entry)=>{
+            return entry.ID !== register_id;
+        });
+        return await this.update_peripheral_field(peripheral_id, "registers", p.registers);
+    }
+
+    public async add_field(peripheral_id:number, register_id: string, field:field_model) {
+        let p = await this.get_peripheral(peripheral_id);
+        let reg = p.registers.filter((entry)=>{
+            return entry.ID === register_id;
+        });
+        if(reg.length == 0) {
+            throw "Register not found";
+        }
+        reg[0].fields.push(field);
+        return await this.update_peripheral_field(peripheral_id, "registers", p.registers);
+    }
+
+    public async edit_field(peripheral_id:number, register_id: string, field:field_model): Promise<any>{
+        let p = await this.get_peripheral(peripheral_id);
+        let reg = p.registers.filter((entry)=>{
+            return entry.ID === register_id;
+        });
+        if(reg.length == 0) {
+            throw "Register not found";
+        }
+        reg[0].fields = reg[0].fields.map((entry)=>{
+            if(entry.name === field.name) return field;
+            else return entry;
+        })
+        return await this.update_peripheral_field(peripheral_id, "registers", p.registers);
+    }
+
+    public async delete_field(peripheral_id:number, register_id: string, field_name:string) : Promise<any> {
+        let p = await this.get_peripheral(peripheral_id);
+        let reg = p.registers.filter((entry)=>{
+            return entry.ID === register_id;
+        });
+        if(reg.length == 0) {
+            throw "Register not found";
+        }
+        reg[0].fields = reg[0].fields.filter((entry)=>{
+            return entry.name !== field_name
+        })
+        return await this.update_peripheral_field(peripheral_id, "registers", p.registers);
     }
 
     public async update_peripheral_field(id:number, field_name: string, field_value:any) : Promise<object> {
