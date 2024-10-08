@@ -71,6 +71,6 @@ describe('filters_database_tests', () => {
 
     afterAll(async ()=> {
         await db.delete_database()
-        db.close()
+        await db.close()
     })
 });
