@@ -58,7 +58,7 @@ describe('Operation API Error handling tests', () => {
             }
         },
         bitstreams:{
-            get_by_path:(path:string)=>{
+            get_by_name:(path:string)=>{
                 results.bitstream = path;
                 return {
                     id:2,

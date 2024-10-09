@@ -30,7 +30,7 @@ class bitstream_router {
             try{
                 let raw_res =  await this.db.bitstreams.load_all();
                 ctx.body = raw_res.map((bit: bitstream_model)=>{
-                    return {id:bit.id, path:bit.path};
+                    return {id:bit.id, name:bit.name};
                 })
                 ctx.status = 200
             } catch(error:any){
@@ -55,8 +55,10 @@ class bitstream_router {
 
         this.router.post(endpoints_map.bitstream.endpoints.add, async (ctx:Koa.Context) => {
             try{
-                let  bit = <bitstream_model>ctx.request.body;
-                await this.db.bitstreams.add_bitstream(bit)
+                let  bit = ctx.request.body as any;
+                const enc = new TextEncoder();
+                bit.data = Buffer.from(enc.encode(bit.data).buffer);
+                await this.db.bitstreams.add_bitstream(<bitstream_model>bit);
                 ctx.status = 200
             } catch(error:any){
                 ctx.body = error

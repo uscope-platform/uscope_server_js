@@ -25,13 +25,13 @@ describe('bitstream API tests', () => {
     let bitstreams: bitstream_model[] = [
         {
             id:1,
-            path:'test_1',
+            name:'test_1',
             data: data,
             hash: hash
         },
         {
             id:2,
-            path:'test_2',
+            name:'test_2',
             data: data,
             hash: hash
         }
@@ -90,7 +90,7 @@ describe('bitstream API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(response.body).toStrictEqual([{ id:1, path:'test_1'}, { id:2, path:'test_2'} ])
+                expect(response.body).toStrictEqual([{ id:1, name:'test_1'}, { id:2, name:'test_2'} ])
             });
     });
 
@@ -104,7 +104,7 @@ describe('bitstream API tests', () => {
             .then((response)=>{
                 expect(response.status).toBe(200);
                 expect(response.body.id).toBe(bitstreams[0].id);
-                expect(response.body.path).toBe(bitstreams[0].path);
+                expect(response.body.name).toBe(bitstreams[0].name);
                 let res = response.body.data.data;
                 let check = [...bitstreams[0].data];
                 expect(JSON.stringify(res)).toBe(JSON.stringify(check));
@@ -115,7 +115,7 @@ describe('bitstream API tests', () => {
     test('add', async () => {
         let bitstream_obj = {
                 id:3,
-                path:'test_1',
+                name:'test_1',
                 data: data,
                 hash: hash
             }
@@ -129,8 +129,8 @@ describe('bitstream API tests', () => {
             .then((response)=>{
                 expect(response.status).toBe(200);
                 expect(results.id).toBe(bitstream_obj.id);
-                expect(results.path).toBe(bitstream_obj.path);
-                let res = JSON.stringify(results.data.data);
+                expect(results.name).toBe(bitstream_obj.name);
+                let res = JSON.stringify(results.data);
                 let check = JSON.stringify([...bitstream_obj.data]);
                 let result = res == check;
                 expect(result).toBeTruthy();

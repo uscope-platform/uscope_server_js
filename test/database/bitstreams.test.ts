@@ -12,13 +12,13 @@ describe('bitstreams_database_tests', () => {
     let bit: bitstream_model[] = [
         {
             id:1,
-            path:'test_1',
+            name:'test_1',
             data: data,
             hash: hash
         },
         {
             id:2,
-            path:'test_2',
+            name:'test_2',
             data: data,
             hash: hash
         }
@@ -44,8 +44,8 @@ describe('bitstreams_database_tests', () => {
         await db.bitstreams.add_bitstream(bit[0]);
         let res = await db.bitstreams.get_bitstream(1);
         expect(res.id).toBe(bit[0].id)
-        expect(res.path).toBe(bit[0].path)
-        expect(res.data.equals(bit[0].data)).toBeTruthy();
+        expect(res.name).toBe(bit[0].name)
+        expect((<Buffer>res.data).equals(<Buffer>bit[0].data)).toBeTruthy();
         expect(res.hash).toBe(bit[0].hash)
     });
 
@@ -54,13 +54,13 @@ describe('bitstreams_database_tests', () => {
         let res = await db.bitstreams.load_all();
         expect(res.length).toBe(2);
         expect(res[0].id).toBe(bit[0].id)
-        expect(res[0].path).toBe(bit[0].path)
-        expect(res[0].data.equals(bit[0].data)).toBeTruthy();
+        expect(res[0].name).toBe(bit[0].name)
+        expect((<Buffer>res[0].data).equals(<Buffer>bit[0].data)).toBeTruthy();
         expect(res[0].hash).toBe(bit[0].hash)
 
         expect(res[1].id).toBe(bit[1].id)
-        expect(res[1].path).toBe(bit[1].path)
-        expect(res[1].data.equals(bit[0].data)).toBeTruthy();
+        expect(res[1].name).toBe(bit[1].name)
+        expect((<Buffer>res[1].data).equals(<Buffer>bit[1].data)).toBeTruthy();
         expect(res[1].hash).toBe(bit[1].hash)
 
     });
@@ -69,24 +69,24 @@ describe('bitstreams_database_tests', () => {
         let res = await db.bitstreams.get_bitstream(2);
 
         expect(res.id).toBe(bit[1].id)
-        expect(res.path).toBe(bit[1].path)
-        expect(res.data.equals(bit[1].data)).toBeTruthy();
+        expect(res.name).toBe(bit[1].name)
+        expect((<Buffer>res.data).equals(<Buffer>bit[1].data)).toBeTruthy();
         expect(res.hash).toBe(bit[1].hash)
     });
 
     test('get_bitstream by path', async () => {
-        let res = await db.bitstreams.get_by_path("test_2");
+        let res = await db.bitstreams.get_by_name("test_2");
 
         expect(res.id).toBe(bit[1].id)
-        expect(res.path).toBe(bit[1].path)
-        expect(res.data.equals(bit[1].data)).toBeTruthy();
+        expect(res.name).toBe(bit[1].name)
+        expect((<Buffer>res.data).equals(<Buffer>bit[1].data)).toBeTruthy();
         expect(res.hash).toBe(bit[1].hash)
     });
 
     test('update_emulator', async () => {
-        await db.bitstreams.update_bitstream_field(2, "path", "changed")
+        await db.bitstreams.update_bitstream_field(2, "name", "changed")
         let ret =await db.bitstreams.get_bitstream(2);
-        expect(ret.path).toEqual("changed");
+        expect(ret.name).toEqual("changed");
     });
 
     test('remove_emulator', async () => {

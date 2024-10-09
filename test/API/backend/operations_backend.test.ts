@@ -169,7 +169,7 @@ describe('operations backend test', () => {
             data: Buffer.from("t3affa"),
             hash: "",
             id: 0,
-            path: ""
+            name: ""
         }
 
         let bitstream = "/tmp/test.bit"
@@ -208,7 +208,7 @@ describe('operations backend test', () => {
             data: Buffer.from("t3affa"),
             hash: "5bc0978d11d3a8c01893a0e0b2d40c15081c7c9eb3b6a2e7a84d1babdce76870",
             id: 0,
-            path: ""
+            name: ""
         }
 
         let bitstream = "/tmp/test.bit"
@@ -249,7 +249,7 @@ describe('operations backend test', () => {
             data: Buffer.from("t3affa"),
             hash: "",
             id: 0,
-            path: ""
+            name: ""
         }
 
         let bitstream = "/tmp/test.bit"

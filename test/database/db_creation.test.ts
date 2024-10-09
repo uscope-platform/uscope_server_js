@@ -39,7 +39,7 @@ describe('db_creation_test', () => {
                     "initial_registers_values", "macro", "parameters", "peripherals", "pl_clocks", "miscellaneous",
                     "soft_cores", "filters", "programs", "scripts", "id"
                 ],
-                bitstreams:["id", "path", "data", "hash"],
+                bitstreams:["id", "name", "data", "hash"],
                 data_versions:["table", "version", "last_modified"],
                 emulators:["id", "emulation_time", "cores", "deployment_mode", "connections", "name"],
                 filters:["id", "ideal_taps", "quantized_taps", "name", "parameters"],

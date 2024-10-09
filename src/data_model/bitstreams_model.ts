@@ -1,8 +1,8 @@
 
 export default interface bitstream_model {
     id:number,
-    path:string,
-    data:Buffer,
+    name:string,
+    data:Buffer | string,
     hash:string
 }
 

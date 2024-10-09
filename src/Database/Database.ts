@@ -352,7 +352,7 @@ class database {
             `
             await this.db`
                 alter table ${sql(this.schema)}.bitstreams
-                    add path text    not null
+                    add name text    not null
             `
             await this.db`
                 alter table ${sql(this.schema)}.bitstreams

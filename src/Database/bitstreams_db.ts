@@ -35,9 +35,9 @@ class bitstreams_db {
         `;
         return res[0];
     }
-    public async get_by_path(path:string) : Promise<bitstream_model> {
+    public async get_by_name(name:string) : Promise<bitstream_model> {
         const res = await this.db<bitstream_model[]>`
-            select * from ${this.db(this.schema)}.bitstreams where path=${path}
+            select * from ${this.db(this.schema)}.bitstreams where name=${name}
         `;
         return res[0];
     }
@@ -48,19 +48,20 @@ class bitstreams_db {
         let file_hash = createHash('sha256').update(bit.data).digest('hex');
 
         // @ts-ignore
-        await this.db`
+        let res = await this.db`
             insert into ${this.db(this.schema)}.bitstreams (
                 id,
-                path,
+                name,
                 data,
                 hash
             ) values (
                 ${bit.id},
-                ${bit.path},
+                ${bit.name},
                 ${bit.data}, 
                 ${file_hash}
             )
         `;
+        return res;
     }
 
 

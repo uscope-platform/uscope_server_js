@@ -14,7 +14,7 @@ describe('emulator_database_tests', () => {
 
     let bit: bitstream_model = {
         id:2,
-        path:'test_2',
+        name:'test_2',
         data: Buffer.from("adfeaf"),
         hash: "7588160db403c04aa2dd5a8fa36f799e6d9860040ea0b4c95624d9ef7526c56f"
     }
