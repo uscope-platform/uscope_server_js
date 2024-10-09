@@ -223,7 +223,7 @@ describe('peripherals API tests', () => {
     });
 
     test('edit', async () => {
-        let edit = {script:4, field:"parametric", value:false};
+        let edit = {peripheral:4, field:"parametric", value:false};
         let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
         path = path.replace(":id", "54")
         return request(app.callback())
@@ -247,7 +247,7 @@ describe('peripherals API tests', () => {
             value:0,
             fields:[]
         };
-        let edit = {script:4, field:"register", action:"add", value:reg};
+        let edit = {peripheral:4, field:"register", action:"add", value:reg};
         let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
         path = path.replace(":id", "54")
         return request(app.callback())
@@ -270,7 +270,7 @@ describe('peripherals API tests', () => {
             value:0,
             fields:[]
         };
-        let edit = {script:4, field:"register", action:"edit", value:reg};
+        let edit = {peripheral:4, field:"register", action:"edit", value:reg};
         let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
         path = path.replace(":id", "54")
         return request(app.callback())
@@ -284,7 +284,7 @@ describe('peripherals API tests', () => {
     });
 
     test('remove_register', async () => {
-        let edit = {script:4, field:"register", action:"remove", value:"reg_id"};
+        let edit = {peripheral:4, field:"register", action:"remove", value:"reg_id"};
         let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
         path = path.replace(":id", "54")
         return request(app.callback())
@@ -304,7 +304,7 @@ describe('peripherals API tests', () => {
             length:1,
             offset:8
         };
-        let edit = {script:4, field:"field", action:"add", value: {id:"sfa", object:fld}};
+        let edit = {peripheral:4, field:"field", action:"add", value: {id:"sfa", object:fld}};
         let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
         path = path.replace(":id", "54")
         return request(app.callback())
@@ -324,7 +324,7 @@ describe('peripherals API tests', () => {
             length:1,
             offset:8
         };
-        let edit = {script:4, field:"field", action:"edit", value: {id:"sfa", object:fld}};
+        let edit = {peripheral:4, field:"field", action:"edit", value: {id:"sfa", object:fld}};
         let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
         path = path.replace(":id", "54")
         return request(app.callback())
@@ -338,7 +338,7 @@ describe('peripherals API tests', () => {
     });
 
     test('remove_field', async () => {
-        let edit = {script:4, field:"field", action:"remove", value: {id:"sfa", object:"fld_id"}};
+        let edit = {peripheral:4, field:"field", action:"remove", value: {id:"sfa", object:"fld_id"}};
         let path = endpoints_map.peripheral.prefix + endpoints_map.peripheral.endpoints.edit;
         path = path.replace(":id", "54")
         return request(app.callback())
