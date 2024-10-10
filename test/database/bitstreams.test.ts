@@ -67,7 +67,6 @@ describe('bitstreams_database_tests', () => {
 
     test('get_bitstream', async () => {
         let res = await db.bitstreams.get_bitstream(2);
-
         expect(res.id).toBe(bit[1].id)
         expect(res.name).toBe(bit[1].name)
         expect((<Buffer>res.data).equals(<Buffer>bit[1].data)).toBeTruthy();

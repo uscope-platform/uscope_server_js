@@ -19,7 +19,9 @@ describe('bitstream API tests', () => {
 
     app.use(bodyParser({jsonLimit:'50mb'}));
 
-    let data = fs.readFileSync(__dirname + "/../../data/mock.bit");
+
+    const decoder = new TextDecoder('utf-8');
+    let data = decoder.decode(fs.readFileSync(__dirname + "/../../data/mock.bit"));
     let hash = createHash('sha256').update(data).digest('hex');
 
     let bitstreams: bitstream_model[] = [
@@ -105,9 +107,8 @@ describe('bitstream API tests', () => {
                 expect(response.status).toBe(200);
                 expect(response.body.id).toBe(bitstreams[0].id);
                 expect(response.body.name).toBe(bitstreams[0].name);
-                let res = response.body.data.data;
-                let check = [...bitstreams[0].data];
-                expect(JSON.stringify(res)).toBe(JSON.stringify(check));
+                let has_data = response.body.hasOwnProperty("data");
+                expect(has_data).toBeFalsy();
                 expect(response.body.hash).toBe(bitstreams[0].hash);
             });
     });
@@ -130,9 +131,7 @@ describe('bitstream API tests', () => {
                 expect(response.status).toBe(200);
                 expect(results.id).toBe(bitstream_obj.id);
                 expect(results.name).toBe(bitstream_obj.name);
-                let res = JSON.stringify(results.data);
-                let check = JSON.stringify([...bitstream_obj.data]);
-                let result = res == check;
+                let result = results.data == data;
                 expect(result).toBeTruthy();
                 expect(results.hash).toBe(bitstream_obj.hash);
             });

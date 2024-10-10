@@ -44,7 +44,9 @@ class bitstream_router {
         this.router.get(endpoints_map.bitstream.endpoints.get, async (ctx:Koa.Context) => {
             try{
                 let id = parseInt(ctx.params.id);
-                ctx.body =  <bitstream_model>await this.db.bitstreams.get_bitstream(id);
+                let bit = await this.db.bitstreams.get_bitstream(id) as any;
+                delete bit.data;
+                ctx.body = bit;
                 ctx.status = 200
             } catch(error:any){
                 ctx.body = error
