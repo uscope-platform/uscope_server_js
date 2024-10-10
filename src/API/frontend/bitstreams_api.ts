@@ -45,7 +45,11 @@ class bitstream_router {
             try{
                 let id = parseInt(ctx.params.id);
                 let bit = await this.db.bitstreams.get_bitstream(id) as any;
-                delete bit.data;
+                if(ctx.query["export-bitfile"] !== "true") {
+                    delete bit.data;
+                } else {
+                    bit.data = Buffer.from(bit.data).toString('base64');
+                }
                 ctx.body = bit;
                 ctx.status = 200
             } catch(error:any){
@@ -58,8 +62,7 @@ class bitstream_router {
         this.router.post(endpoints_map.bitstream.endpoints.add, async (ctx:Koa.Context) => {
             try{
                 let  bit = ctx.request.body as any;
-                const enc = new TextEncoder();
-                bit.data = Buffer.from(enc.encode(bit.data).buffer);
+                bit.data = get_decode_file(bit.data);
                 await this.db.bitstreams.add_bitstream(<bitstream_model>bit);
                 ctx.status = 200
             } catch(error:any){
@@ -72,7 +75,12 @@ class bitstream_router {
             try{
                 let id = parseInt(ctx.params.id);
                 let e = <bitstream_edit_model>ctx.request.body;
-                ctx.body = await this.db.bitstreams.update_bitstream_field(id, e.field, e.value);
+
+                if(e.field.name === "data"){
+                    e.field.value= get_decode_file(e.field.value);
+                }
+
+                ctx.body = await this.db.bitstreams.update_bitstream_field(id, e.field.name, e.field.value);
                 ctx.status = 200
             } catch(error:any){
                 ctx.body = error
@@ -91,7 +99,12 @@ class bitstream_router {
             }
         });
 
+        let get_decode_file = (file_content:string) : Buffer =>{
 
+            const base64Data = file_content.replace(/^data:.*;base64,/, '');
+            return Buffer.from(base64Data, 'base64');
+
+        }
     }
 }
 

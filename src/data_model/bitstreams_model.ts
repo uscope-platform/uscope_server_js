@@ -8,6 +8,9 @@ export default interface bitstream_model {
 
 export interface bitstream_edit_model {
     id:number,
-    field:string,
+    field: {
+        name:string,
+        value:any
+    },
     value:string
 }

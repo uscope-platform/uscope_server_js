@@ -17,7 +17,7 @@ class bitstreams_db {
 
     public async get_version(): Promise<string> {
         const res = await this.db`
-            select version from ${this.db(this.schema)}.data_versions where "table"='Applications'
+            select version from ${this.db(this.schema)}.data_versions where "table"='bitstreams'
         `
         return res[0].version;
     }
@@ -67,9 +67,17 @@ class bitstreams_db {
 
     public async update_bitstream_field(id:number, field_name: string, field_value:any) : Promise<object> {
 
-        const res = await this.db`
+
+        let res = await this.db`
             update ${this.db(this.schema)}.bitstreams set ${this.db(field_name)}=${field_value} where id=${id}
         `;
+        if(field_name === "data"){
+            let file_hash = createHash('sha256').update(field_value).digest('hex');
+
+            res = await this.db`
+            update ${this.db(this.schema)}.bitstreams set hash=${file_hash} where id=${id}
+            `;
+        }
         return res[0];
     }
 

@@ -28,7 +28,9 @@ let jwt_secret = "super secret v2"
 app.use(cors())
 
 // middleware
-app.use(bodyParser());
+app.use(bodyParser({
+    jsonLimit:"150mb"
+}));
 
 // Error handling middleware
 app.use(error_handler);
