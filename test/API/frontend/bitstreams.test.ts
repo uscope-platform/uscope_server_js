@@ -19,9 +19,7 @@ describe('bitstream API tests', () => {
 
     app.use(bodyParser({jsonLimit:'50mb'}));
 
-
-    const decoder = new TextDecoder('utf-8');
-    let data = decoder.decode(fs.readFileSync(__dirname + "/../../data/mock.bit"));
+    let data = fs.readFileSync(__dirname + "/../../data/mock.bit");
     let hash = createHash('sha256').update(data).digest('hex');
 
     let bitstreams: bitstream_model[] = [
@@ -117,7 +115,7 @@ describe('bitstream API tests', () => {
         let bitstream_obj = {
                 id:3,
                 name:'test_1',
-                data: data,
+                data: data.toString('base64'),
                 hash: hash
             }
 
@@ -131,7 +129,7 @@ describe('bitstream API tests', () => {
                 expect(response.status).toBe(200);
                 expect(results.id).toBe(bitstream_obj.id);
                 expect(results.name).toBe(bitstream_obj.name);
-                let result = results.data == data;
+                let result = Buffer.from(results.data).toString('base64') == Buffer.from(data).toString('base64')
                 expect(result).toBeTruthy();
                 expect(results.hash).toBe(bitstream_obj.hash);
             });
@@ -142,7 +140,7 @@ describe('bitstream API tests', () => {
         let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.edit;
         path = path.replace(":id", "3");
 
-        let edit = {script:4, field:"path", value:"test edit"};
+        let edit = {script:4, field:{name:"path", value:"test edit"}};
         return request(app.callback())
             .patch(path)
             .set('Authorization', `Bearer ${token}`)

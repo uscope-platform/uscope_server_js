@@ -62,7 +62,7 @@ class bitstream_router {
         this.router.post(endpoints_map.bitstream.endpoints.add, async (ctx:Koa.Context) => {
             try{
                 let  bit = ctx.request.body as any;
-                bit.data = get_decode_file(bit.data);
+                bit.data = get_decoded_file(bit.data);
                 await this.db.bitstreams.add_bitstream(<bitstream_model>bit);
                 ctx.status = 200
             } catch(error:any){
@@ -77,7 +77,7 @@ class bitstream_router {
                 let e = <bitstream_edit_model>ctx.request.body;
 
                 if(e.field.name === "data"){
-                    e.field.value= get_decode_file(e.field.value);
+                    e.field.value= get_decoded_file(e.field.value);
                 }
 
                 ctx.body = await this.db.bitstreams.update_bitstream_field(id, e.field.name, e.field.value);
@@ -99,7 +99,7 @@ class bitstream_router {
             }
         });
 
-        let get_decode_file = (file_content:string) : Buffer =>{
+        let get_decoded_file = (file_content:string) : Buffer =>{
 
             const base64Data = file_content.replace(/^data:.*;base64,/, '');
             return Buffer.from(base64Data, 'base64');

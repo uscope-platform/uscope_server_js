@@ -94,7 +94,7 @@ describe('bitstream API error handlong tests', () => {
         let bitstream_obj = {
                 id:3,
                 path:'test_1',
-                data: data,
+                data:  'data:test;base64,' + data,
                 hash: hash
             }
         let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.add;
