@@ -38,56 +38,58 @@ app.use(jwt({ secret: jwt_secret, passthrough: true }));
 app.use(authorizer())
 
 let db = new database("localhost", "uscope", "test", "uscope")
+db.init_db().then(r => {
 
-let driver_host = "localhost";
-let driver_port = 6666;
+    let driver_host = "localhost";
+    let driver_port = 6666;
 
-let hw_if = new hw_interface(driver_host, driver_port);
+    let hw_if = new hw_interface(driver_host, driver_port);
 
-let flt = new FiltersBackend(db, hw_if);
-let ops = new OperationsBackend(db, hw_if);
-let set = new SettingsBackend(hw_if);
+    let flt = new FiltersBackend(db, hw_if);
+    let ops = new OperationsBackend(db, hw_if);
+    let set = new SettingsBackend(hw_if);
 
-let app_rtr = new applications_router(db)
-app.use(app_rtr.router.routes())
-app.use(app_rtr.router.allowedMethods());
+    let app_rtr = new applications_router(db)
+    app.use(app_rtr.router.routes())
+    app.use(app_rtr.router.allowedMethods());
 
-let bit_rtr = new bitstream_router(db);
-app.use(bit_rtr.router.routes())
-app.use(bit_rtr.router.allowedMethods());
+    let bit_rtr = new bitstream_router(db);
+    app.use(bit_rtr.router.routes())
+    app.use(bit_rtr.router.allowedMethods());
 
-let emu_rtr = new emulators_router(db);
-app.use(emu_rtr.router.routes());
-app.use(emu_rtr.router.allowedMethods());
+    let emu_rtr = new emulators_router(db);
+    app.use(emu_rtr.router.routes());
+    app.use(emu_rtr.router.allowedMethods());
 
-let flt_rtr = new filters_router(db);
-app.use(flt_rtr.router.routes());
-app.use(flt_rtr.router.allowedMethods());
+    let flt_rtr = new filters_router(db);
+    app.use(flt_rtr.router.routes());
+    app.use(flt_rtr.router.allowedMethods());
 
-let op_rtr = new operations_router(db, ops, flt);
-app.use(op_rtr.router.routes());
-app.use(flt_rtr.router.allowedMethods());
+    let op_rtr = new operations_router(db, ops, flt);
+    app.use(op_rtr.router.routes());
+    app.use(flt_rtr.router.allowedMethods());
 
-let per_rtr = new peripherals_router(db);
-app.use(per_rtr.router.routes());
-app.use(per_rtr.router.allowedMethods());
+    let per_rtr = new peripherals_router(db);
+    app.use(per_rtr.router.routes());
+    app.use(per_rtr.router.allowedMethods());
 
-let prog_rtr = new programs_router(db);
-app.use(prog_rtr.router.routes());
-app.use(prog_rtr.router.allowedMethods());
+    let prog_rtr = new programs_router(db);
+    app.use(prog_rtr.router.routes());
+    app.use(prog_rtr.router.allowedMethods());
 
-let scr_rtr = new scripts_router(db);
-app.use(scr_rtr.router.routes());
-app.use(scr_rtr.router.allowedMethods());
+    let scr_rtr = new scripts_router(db);
+    app.use(scr_rtr.router.routes());
+    app.use(scr_rtr.router.allowedMethods());
 
-let set_rtr = new settings_router(set);
-app.use(set_rtr.router.routes());
-app.use(set_rtr.router.allowedMethods());
+    let set_rtr = new settings_router(set);
+    app.use(set_rtr.router.routes());
+    app.use(set_rtr.router.allowedMethods());
 
-let plt_rtr = new platform_router(jwt_secret, db, hw_if);
-app.use(plt_rtr.router.routes());
-app.use(plt_rtr.router.allowedMethods());
+    let plt_rtr = new platform_router(jwt_secret, db, hw_if);
+    app.use(plt_rtr.router.routes());
+    app.use(plt_rtr.router.allowedMethods());
 
 
-console.log("SERVER READY");
-let server = app.listen(6969);
+    console.log("SERVER READY");
+    app.listen(6969);
+});

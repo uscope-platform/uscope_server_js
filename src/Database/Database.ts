@@ -34,6 +34,7 @@ class database {
              username: username,
              password:password
          })
+
          this.schema = schema;
 
          this.applications = new Applications_db(this.db, schema);
@@ -80,19 +81,22 @@ class database {
      }
 
     public async init_db(): Promise<void> {
-        await this.create_schema();
-        await this.create_data_versions();
-        await this.create_stored_procedures();
-        await this.create_users();
-        await this.create_tokens();
-        await this.create_programs();
-        await this.create_scripts();
-        await this.create_applications();
-        await this.create_peripherals();
-        await this.create_emulators();
-        await this.create_bitstreams();
-        await this.create_filters();
-        await this.populate_versions();
+        let db_exists = await this.check_db_existance();
+        if(!db_exists){
+            await this.create_schema();
+            await this.create_data_versions();
+            await this.create_stored_procedures();
+            await this.create_users();
+            await this.create_tokens();
+            await this.create_programs();
+            await this.create_scripts();
+            await this.create_applications();
+            await this.create_peripherals();
+            await this.create_emulators();
+            await this.create_bitstreams();
+            await this.create_filters();
+            await this.populate_versions();
+        }
     }
 
     public async populate_versions():Promise<void> {
@@ -107,21 +111,23 @@ class database {
 
     }
 
+    private async check_db_existance():Promise<boolean>{
+         let resp = await this.db`
+         SELECT schema_name FROM information_schema.schemata WHERE schema_name = ${this.schema};
+         `
+        return resp.length !== 0;
+    }
+
     public async create_schema(): Promise<void> {
-        const ref = await this.db`
-            SELECT schema_name FROM information_schema.schemata WHERE schema_name = ${this.schema};
+        await this.db`
+            CREATE SCHEMA ${sql(this.schema)} AUTHORIZATION uscope;
         `
-        if(ref.length === 0){
-            await this.db`
-                CREATE SCHEMA ${sql(this.schema)} AUTHORIZATION uscope;
-            `
-            await this.db`
-                grant usage on schema ${sql(this.schema)} TO uscope;
-            `
-            await this.db`
-                grant create on schema ${sql(this.schema)} TO uscope;
-            `
-        }
+        await this.db`
+            grant usage on schema ${sql(this.schema)} TO uscope;
+        `
+        await this.db`
+            grant create on schema ${sql(this.schema)} TO uscope;
+        `
     }
 
     public async create_users(): Promise<void> {
