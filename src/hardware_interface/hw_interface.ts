@@ -17,24 +17,36 @@ interface response_body{
 
 export default class hw_interface {
     private socket: Request;
+    private driver_url;
 
     constructor(host: string, port: number) {
-        this.socket = new Request();
-        this.socket.connect("tcp://" + host + ":" + port);
+        this.socket = new Request({
+            receiveTimeout:1500,
+            sendTimeout:1500
+        });
+        this.driver_url = "tcp://" + host + ":" + port;
+        this.socket.connect(this.driver_url);
     }
 
     private async send_command(command:string, args:any): Promise<any> {
-
-        let command_obj = {"cmd": command, "args": args}
-        command = JSON.stringify(command_obj)
-        await this.socket.send(command);
-        let raw_resp = await this.socket.receive();
-        let resp = <response_body>unpack(raw_resp[0]).body;
-        if(resp.response_code != 1){
-            throw resp.data;
-        } else{
-            return resp.data;
+        try {
+            let command_obj = {"cmd": command, "args": args}
+            command = JSON.stringify(command_obj)
+            await this.socket.send(command);
+            let raw_resp = await this.socket.receive();
+            let resp = <response_body>unpack(raw_resp[0]).body;
+            if(resp.response_code != 1){
+                throw resp.data;
+            } else{
+                return resp.data;
+            }
+        } catch (e: any) {
+            if(e.errno === 11){
+             this.socket.close();
+             this.socket.connect(this.driver_url);
+            }
         }
+
     }
 
     public async read_data(): Promise<read_data_response> {
@@ -91,7 +103,23 @@ export default class hw_interface {
     }
 
     public async get_hil_address_map(): Promise<hil_address_map>{
-        return await this.send_command(commands.core.get_hil_address_map, {});
+        let map = <hil_address_map>await this.send_command(commands.core.get_hil_address_map, {});
+
+        map.bases.cores_inputs = Number(map.bases.cores_inputs);
+        map.bases.cores_control = Number(map.bases.cores_control);
+        map.bases.controller = Number(map.bases.controller);
+        map.bases.hil_control = Number(map.bases.hil_control);
+        map.bases.scope_mux = Number(map.bases.scope_mux);
+        map.bases.cores_rom = Number(map.bases.cores_rom);
+
+        map.offsets.hil_tb = Number(map.offsets.hil_tb);
+        map.offsets.controller = Number(map.offsets.controller);
+        map.offsets.dma = Number(map.offsets.dma);
+        map.offsets.cores_rom = Number(map.offsets.cores_rom);
+        map.offsets.cores_inputs = Number(map.offsets.cores_inputs);
+        map.offsets.cores_control = Number(map.offsets.cores_control);
+
+        return map;
     }
 
     public async start_hil(){
