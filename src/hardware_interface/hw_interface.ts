@@ -41,10 +41,7 @@ export default class hw_interface {
                 return resp.data;
             }
         } catch (e: any) {
-            if(e.errno === 11){
-             this.socket.close();
-             this.socket.connect(this.driver_url);
-            }
+           process.exit(-1)
         }
 
     }
