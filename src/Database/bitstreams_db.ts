@@ -48,7 +48,7 @@ class bitstreams_db {
         let file_hash = createHash('sha256').update(bit.data).digest('hex');
 
         // @ts-ignore
-        let res = await this.db`
+        return this.db`
             insert into ${this.db(this.schema)}.bitstreams (
                 id,
                 name,
@@ -61,7 +61,6 @@ class bitstreams_db {
                 ${file_hash}
             )
         `;
-        return res;
     }
 
 

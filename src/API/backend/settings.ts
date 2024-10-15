@@ -21,7 +21,7 @@ export default class SettingsBackend {
         return this.hw_if.set_hil_address_map(map);
     }
 
-    public async get_hil_map(): Promise<any>{
+    public async get_hil_map(): Promise<hil_address_map>{
         return this.hw_if.get_hil_address_map();
     }
 }
