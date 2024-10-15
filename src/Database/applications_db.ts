@@ -77,7 +77,7 @@ class applications_db {
             ) values (
                 ${app.id},
                 ${app.application_name},
-                ${app.clock_frequency},
+                ${0},
                 ${app.bitstream},
                 ${app.channels},
                 ${app.channel_groups},

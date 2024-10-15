@@ -81,8 +81,8 @@ class applications_router {
 
         this.router.post(endpoints_map.application.endpoints.add, async (ctx:Koa.Context) => {
             try{
-                let  emu = <application_model>ctx.request.body;
-                await this.db.applications.add_application(emu)
+                let  app = <application_model>ctx.request.body;
+                await this.db.applications.add_application(app)
                 ctx.status = 200
             } catch(error:any){
                 ctx.body = error
