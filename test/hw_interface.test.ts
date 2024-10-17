@@ -129,12 +129,12 @@ describe('Hardware interface test', () => {
 
         let a_map = {
             bases: {
-                controller: 0x443c00000n,
-                cores_control: 0x443c10000n,
+                controller: 0x443c00000,
+                cores_control: 0x443c10000,
                 cores_inputs: 8192,
-                cores_rom:  0x443c20000n,
-                hil_control:  0x443c30000n,
-                scope_mux:  0x443c40000n
+                cores_rom:  0x443c20000,
+                hil_control:  0x443c30000,
+                scope_mux:  0x443c40000
             },
             offsets: {
                 controller: 4096,

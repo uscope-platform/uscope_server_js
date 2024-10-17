@@ -41,7 +41,7 @@ describe('emulator_database_tests', () => {
         bitstream:"",
         channels:[],
         channel_groups:[],
-        clock_frequency:100000000,
+        clock_frequency:0,
         initial_registers_values:[],
         macro:[],
         parameters:[],
