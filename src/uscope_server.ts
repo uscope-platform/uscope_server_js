@@ -49,7 +49,6 @@ if(process.env.DATABASE_HOST) {
 db.init_db().then(r => {
     let hw_if : hw_interface;
     if(process.env.DRIVER_HOST && process.env.DRIVER_PORT) {
-
         hw_if = new hw_interface(process.env.DRIVER_HOST, parseInt(process.env.DRIVER_PORT));
     } else {
 
@@ -103,5 +102,5 @@ db.init_db().then(r => {
 
 
     console.log("SERVER READY");
-    app.listen(6969);
+    app.listen(8989);
 });
