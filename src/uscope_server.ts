@@ -37,13 +37,25 @@ app.use(error_handler);
 app.use(jwt({ secret: jwt_secret, passthrough: true }));
 app.use(authorizer())
 
-let db = new database("localhost", "uscope", "test", "uscope")
+let db : database;
+
+if(process.env.DATABASE_HOST) {
+    db = new database(process.env.DATABASE_HOST, "uscope", "test", "uscope")
+} else {
+    console.log("DATABASE_HOST environment variable doesn't exist");
+    process.exit(4);
+}
+
 db.init_db().then(r => {
+    let hw_if : hw_interface;
+    if(process.env.DRIVER_HOST && process.env.DRIVER_PORT) {
 
-    let driver_host = "localhost";
-    let driver_port = 6666;
+        hw_if = new hw_interface(process.env.DRIVER_HOST, parseInt(process.env.DRIVER_PORT));
+    } else {
 
-    let hw_if = new hw_interface(driver_host, driver_port);
+        console.log("DRIVER_HOST or DRIVER_PORT environment variable doesn't exist");
+        process.exit(4);
+    }
 
     let flt = new FiltersBackend(db, hw_if);
     let ops = new OperationsBackend(db, hw_if);
