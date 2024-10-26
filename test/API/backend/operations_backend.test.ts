@@ -45,7 +45,7 @@ describe('operations backend test', () => {
                 }
             },
             update_program_field: (i:any, n:any, v:any)=>{
-                db_call_args = {id:i, name:n, value:v};
+                db_call_args.push({id:i, name:n, value:v});
             }
         }
     } as any as database;
@@ -480,7 +480,8 @@ describe('operations backend test', () => {
         await backend.apply_program(a);
         expect(args.hex).toStrictEqual([1, 69, 444]);
         expect(args.addr).toStrictEqual(21134);
-        expect(db_call_args).toStrictEqual({id:44, name:"cached_bin_version", value:"htrsgv"})
+        expect(db_call_args[0]).toStrictEqual({id:44, name:"hex", value:[1, 69,444]})
+        expect(db_call_args[1]).toStrictEqual({id:44, name:"cached_bin_version", value:"21324"})
     });
 
 
@@ -501,6 +502,7 @@ describe('operations backend test', () => {
 
     afterEach(() => {
         args = [] as any;
+        db_call_args = [] as any;
     });
 
 
