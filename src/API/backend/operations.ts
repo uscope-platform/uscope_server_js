@@ -41,9 +41,6 @@ export default class OperationsBackend {
         return await this.hw_if.write_register(reg);
     }
 
-    public async compile_program(prog:programs_info) : Promise<any> {
-        return await this.hw_if.compile_program(prog);
-    }
 
     public async set_scaling_factors(factors:number[]) : Promise<any> {
         return await this.hw_if.set_scaling_factors(factors);
@@ -109,18 +106,23 @@ export default class OperationsBackend {
         return this.hw_if.set_clock(info);
     }
 
+    public async compile_program(prog:programs_info) : Promise<any> {
+        return await this.hw_if.compile_program(prog);
+    }
+
     public async apply_program(prog:programs_info) : Promise<any> {
         let p_obj =await this.db.programs.get_program(prog.id)
 
         if(prog.hash === p_obj.cached_bin_version){
             return this.hw_if.apply_program(p_obj.hex, prog.core_address);
         } else {
-            let bin = await this.compile_program(prog);
+            let bin = await this.hw_if.compile_program(prog);
             if(bin.status ==="error"){
                 return {status:"failed", error:bin.error}
             }
             await this.hw_if.apply_program(bin.hex, prog.core_address);
-            await this.db.programs.update_program_field(prog.id, "cached_bin_version", bin.hash);
+            await this.db.programs.update_program_field(prog.id, "hex", bin.hex);
+            await this.db.programs.update_program_field(prog.id, "cached_bin_version", prog.hash);
         }
     }
 

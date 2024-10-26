@@ -17,7 +17,7 @@ interface response_body{
 
 export default class hw_interface {
     private socket: Request;
-    private driver_url;
+    private readonly driver_url :string;
 
     constructor(host: string, port: number) {
         this.socket = new Request({
@@ -41,7 +41,8 @@ export default class hw_interface {
                 return resp.data;
             }
         } catch (e: any) {
-           process.exit(-1)
+            console.log(e);
+            process.exit(-1)
         }
 
     }

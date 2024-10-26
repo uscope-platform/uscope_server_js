@@ -52,6 +52,8 @@ class programs_router {
         this.router.post(endpoints_map.program.endpoints.add, async (ctx:Koa.Context) => {
             try{
                 let  prg = <program_model>ctx.request.body;
+                prg.cached_bin_version = "";
+                prg.hex = [];
                 await this.db.programs.add_program(prg)
                 ctx.status = 200
             } catch(error:any){

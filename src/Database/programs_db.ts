@@ -45,7 +45,7 @@ class programs_db {
         return <program_model>res[0];
     }
 
-    public async add_program(app:program_model) : Promise<any> {
+    public async add_program(prog:program_model) : Promise<any> {
 
         // @ts-ignore
         await this.db`
@@ -59,14 +59,14 @@ class programs_db {
                 cached_bin_version,
                 build_settings
             ) values (
-                ${app.id},
-                ${app.name},
-                ${app.content},
-                ${app.type},
-                ${app.headers},
-                ${app.hex},
-                ${app.cached_bin_version},
-                ${app.build_settings}
+                ${prog.id},
+                ${prog.name},
+                ${prog.content},
+                ${prog.type},
+                ${prog.headers},
+                ${prog.hex},
+                ${prog.cached_bin_version},
+                ${prog.build_settings}
             )
         `;
     }
