@@ -29,8 +29,8 @@ class settings_router{
 
         this.router.post(endpoints_map.settings.endpoints.debug_level, async (ctx:Koa.Context) => {
             try{
-                let level = <string>ctx.request.rawBody;
-                await this.backend.set_debug_level(level)
+                let level = <any>ctx.request.rawBody;
+                await this.backend.set_debug_level(<string>level.level)
                 ctx.status = 200
             } catch(error:any){
                 ctx.body = error
