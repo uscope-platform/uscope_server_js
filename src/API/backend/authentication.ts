@@ -2,6 +2,7 @@ import database from "../../Database/Database";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import {randomBytes, timingSafeEqual} from "node:crypto";
+import {subtle} from "node:crypto";
 import {auth_response, auto_login_object, user_login_object} from "../../data_model/platform_model";
 
 class CustomError extends Error {
@@ -111,7 +112,7 @@ export default class Authenticator {
     private async validate_auto_token(token:string): Promise<string>{
 
         const uint_validator = new TextEncoder().encode(token);
-        let processed_validator = await crypto.subtle.digest("SHA-256", uint_validator)
+        let processed_validator = await subtle.digest("SHA-256", uint_validator);
         return Array.prototype.map.call(new Uint8Array(processed_validator), x => ('00' + x.toString(16)).slice(-2)).join('');
     }
 
