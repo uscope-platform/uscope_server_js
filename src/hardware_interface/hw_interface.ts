@@ -21,8 +21,8 @@ export default class hw_interface {
 
     constructor(host: string, port: number) {
         this.socket = new Request({
-            receiveTimeout:1500,
-            sendTimeout:1500
+            receiveTimeout:8500,
+            sendTimeout:8500
         });
         this.driver_url = "tcp://" + host + ":" + port;
         this.socket.connect(this.driver_url);
