@@ -70,7 +70,7 @@ describe('Settings API tests', () => {
         return request(app.callback())
             .post(endpoints_map.settings.prefix + endpoints_map.settings.endpoints.debug_level)
             .set('Authorization', `Bearer ${token}`)
-            .send("minimal")
+            .send({level:"minimal"})
             .then((response)=>{
                 expect(response.status).toBe(200);
                 expect(spy).toBeCalledTimes(1);
@@ -128,9 +128,11 @@ describe('Settings API tests', () => {
 
     afterEach(() => {
         // restore the spy created with spyOn
-        jest.restoreAllMocks();
+        jest.clearAllMocks();
     });
 
 
-    afterAll(() => server.close());
+    afterAll(() =>{
+        server.close()
+    } );
 });

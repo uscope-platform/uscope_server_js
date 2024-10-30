@@ -40,7 +40,7 @@ describe('platform_database_tests', () => {
     test('add_get_token',async  () => {
         let token:auto_login_object = {
             selector: "eb966af6f07589f9e769e667d5d80d502f7fb509703a54ad9bf592ad6b4c68ca5b7b87b26a5282cad296a91236f275bfd8784a2c6837993061fa796fb68d2648",
-            expiry: new Date().toUTCString(),
+            expiry: "Wed, 30 Oct 2024 14:41:30 GMT",
             validator: "14f1097418691f37690a06cb947bafee0f1912aa5f7e228e72f902e55da5af5a",
             login_type: "automated"
         };
@@ -50,7 +50,7 @@ describe('platform_database_tests', () => {
         expect(res[0].selector).toBe(token.selector);
         expect(res[0].validator).toBe(token.validator)
         let res_epoch =new Date(Date.parse(res[0].expiry))
-        res_epoch.setHours(res_epoch.getHours() +2)
+        res_epoch.setHours(res_epoch.getHours() - res_epoch.getTimezoneOffset()/60)
         expect(res_epoch.toUTCString()).toBe(token.expiry);
     });
 

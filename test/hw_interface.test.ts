@@ -14,6 +14,10 @@ describe('Hardware interface test', () => {
         });
     })
 
+    afterAll(async () =>{
+        await hw.close();
+    })
+
     test('set scaling factors', async () => {
 
         let resp = await hw.set_scaling_factors([1, 1.5, 2, -5.4, 1, 0]);

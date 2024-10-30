@@ -5,36 +5,65 @@ import {
     scope_address,
     select_hil_output, set_hil_inputs, status_object
 } from "../data_model/operations_model";
-import {Request} from "zeromq";
-import {unpack} from "msgpackr";
 import commands from "./hw_commands_map";
 import {read_data_response} from "../data_model/driver_responses_model";
+import {Socket} from "node:net";
 
 interface response_body{
     data:any,
     response_code:number
 }
 
+
 export default class hw_interface {
-    private socket: Request;
-    private readonly driver_url :string;
+    private new_socket: Socket;
 
     constructor(host: string, port: number) {
-        this.socket = new Request({
-            receiveTimeout:8500,
-            sendTimeout:8500
+
+        this.new_socket = new Socket();
+        if(port != 0){
+            this.new_socket.connect(port, host)
+        }
+
+    }
+
+    public async close()  {
+        if(this.new_socket.readyState === "open"){
+            return this.new_socket.end();
+        }
+    }
+
+    private async read_n_bytes(n: number) : Promise<Buffer>{
+        return new Promise((resolve) => {
+            let buffer = Buffer.alloc(0);
+            const onData = () => {
+                const chunk = this.new_socket.read(n - buffer.length);
+                if (chunk) {
+                    buffer = Buffer.concat([buffer, chunk]);
+                    if (buffer.length >= n) {
+                        this.new_socket.off('readable', onData);
+                        resolve(buffer);
+                    }
+                }
+            };
+            this.new_socket.on('readable', onData);
         });
-        this.driver_url = "tcp://" + host + ":" + port;
-        this.socket.connect(this.driver_url);
     }
 
     private async send_command(command:string, args:any): Promise<any> {
         try {
             let command_obj = {"cmd": command, "args": args}
-            command = JSON.stringify(command_obj)
-            await this.socket.send(command);
-            let raw_resp = await this.socket.receive();
-            let resp = <response_body>unpack(raw_resp[0]).body;
+            let raw_command = Buffer.from(JSON.stringify(command_obj), "utf8")
+            let raw_length = Buffer.alloc(4);
+            raw_length.writeUInt32LE( raw_command.length)
+
+            this.new_socket.write(raw_length);
+            this.new_socket.write(raw_command);
+            let raw_resp_size = await this.read_n_bytes(4);
+            let resp_size = raw_resp_size.readUint32LE(0);
+
+            let raw_resp = await this.read_n_bytes(resp_size);
+            let resp = JSON.parse(raw_resp.toString('utf8')).body;
             if(resp.response_code != 1){
                 throw resp.data;
             } else{
