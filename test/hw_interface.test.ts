@@ -9,7 +9,7 @@ describe('Hardware interface test', () => {
 
     beforeAll(async () =>{
         await hw.set_scope_address({
-            address: 0x443c20000,
+            address: (0x443c20000),
             dma_buffer_offset: 1241
         });
     })

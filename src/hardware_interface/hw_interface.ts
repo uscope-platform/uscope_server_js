@@ -17,53 +17,57 @@ interface response_body{
 
 
 export default class hw_interface {
-    private new_socket: Socket;
+    private host: string;
+    private port: number;
 
     constructor(host: string, port: number) {
-
-        this.new_socket = new Socket();
-        if(port != 0){
-            this.new_socket.connect(port, host)
-        }
-
+        this.host = host;
+        this.port = port;
     }
 
     public async close()  {
-        if(this.new_socket.readyState === "open"){
-            return this.new_socket.end();
-        }
+
     }
 
-    private async read_n_bytes(n: number) : Promise<Buffer>{
+    private async read_n_bytes(socket: Socket, n: number) : Promise<Buffer>{
         return new Promise((resolve) => {
             let buffer = Buffer.alloc(0);
             const onData = () => {
-                const chunk = this.new_socket.read(n - buffer.length);
+                const chunk = socket.read(n - buffer.length);
                 if (chunk) {
                     buffer = Buffer.concat([buffer, chunk]);
                     if (buffer.length >= n) {
-                        this.new_socket.off('readable', onData);
+                        socket.off('readable', onData);
                         resolve(buffer);
                     }
                 }
             };
-            this.new_socket.on('readable', onData);
+            socket.on('readable', onData);
         });
     }
 
     private async send_command(command:string, args:any): Promise<any> {
         try {
+            let socket = new Socket();
+            socket.connect(this.port, this.host)
+
+
             let command_obj = {"cmd": command, "args": args}
             let raw_command = pack(command_obj)
             let raw_length = Buffer.alloc(4);
             raw_length.writeUInt32LE( raw_command.length)
 
-            this.new_socket.write(raw_length);
-            this.new_socket.write(raw_command);
-            let raw_resp_size = await this.read_n_bytes(4);
+            socket.write(raw_length);
+            let ack = await this.read_n_bytes(socket, 1);
+            if(ack[0] != 107){
+                console.log("NACK RECEIVED WHEN SENDING " + command_obj);
+            }
+            socket.write(raw_command);
+            let raw_resp_size = await this.read_n_bytes(socket, 4);
             let resp_size = raw_resp_size.readUint32LE(0);
-
-            let raw_resp = await this.read_n_bytes(resp_size);
+            socket.write("k");
+            let raw_resp = await this.read_n_bytes(socket, resp_size);
+            socket.end();
             let resp = unpack(raw_resp).body;
             if(resp.response_code != 1){
                 throw resp.data;
