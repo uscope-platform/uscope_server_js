@@ -8,6 +8,7 @@ import {
 import commands from "./hw_commands_map";
 import {read_data_response} from "../data_model/driver_responses_model";
 import {Socket} from "node:net";
+import {pack, unpack} from "msgpackr";
 
 interface response_body{
     data:any,
@@ -53,7 +54,7 @@ export default class hw_interface {
     private async send_command(command:string, args:any): Promise<any> {
         try {
             let command_obj = {"cmd": command, "args": args}
-            let raw_command = Buffer.from(JSON.stringify(command_obj), "utf8")
+            let raw_command = pack(command_obj)
             let raw_length = Buffer.alloc(4);
             raw_length.writeUInt32LE( raw_command.length)
 
@@ -63,7 +64,7 @@ export default class hw_interface {
             let resp_size = raw_resp_size.readUint32LE(0);
 
             let raw_resp = await this.read_n_bytes(resp_size);
-            let resp = JSON.parse(raw_resp.toString('utf8')).body;
+            let resp = unpack(raw_resp).body;
             if(resp.response_code != 1){
                 throw resp.data;
             } else{
