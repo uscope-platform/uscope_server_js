@@ -185,12 +185,12 @@ describe('emulator_database_tests', () => {
             length:1,
             stride:1
         }
-        await db.emulators.edit_dma_channel(1,"src", "dst", ch,);
+        await db.emulators.edit_dma_channel(1,"src", "dst", ch.name,ch);
         let res = await db.emulators.get_emulator(1);
         expect(res.connections[0].channels).toHaveLength(2);
         expect(res.connections[0].channels[0]).toStrictEqual(ch);
         try{
-            await db.emulators.edit_dma_channel(1, "srwec", "dst",ch,);
+            await db.emulators.edit_dma_channel(1, "srwec", "dst",ch.name,ch);
             expect(true).toStrictEqual(false);
         } catch (e) {
             expect(e).toStrictEqual("Connection not found");

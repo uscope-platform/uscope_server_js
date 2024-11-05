@@ -97,7 +97,7 @@ class emulators_db {
         return await this.update_emulator_field(id, "connections", emu.connections);
     }
 
-    public async edit_dma_channel(id:number, src:string, dst:string, channel:dma_channel_model) {
+    public async edit_dma_channel(id:number, src:string, dst:string, channel_name:string, channel:dma_channel_model) {
         let emu = await this.get_emulator(id);
         let conn = emu.connections.filter((e:connection_model)=>{
             return e.source == src && e.destination == dst;
@@ -106,7 +106,7 @@ class emulators_db {
             throw "Connection not found";
         }
         conn[0].channels = conn[0].channels.map((e:dma_channel_model)=>{
-            if( e.name === channel.name)
+            if( e.name === channel_name)
                 return channel;
             else
                 return e;

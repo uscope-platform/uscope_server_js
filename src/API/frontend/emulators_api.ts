@@ -99,8 +99,11 @@ class emulators_router {
                             case "add":
                                 ctx.body = await this.db.emulators.add_dma_channel(id, e.value.source, e.value.destination, e.value.object);
                                 break;
+                            case "rename":
+                                ctx.body = await this.db.emulators.edit_dma_channel(id, e.value.source, e.value.destination, e.value.selector, e.value.object);
+                                break;
                             case "edit":
-                                ctx.body = await this.db.emulators.edit_dma_channel(id, e.value.source, e.value.destination, e.value.object);
+                                ctx.body = await this.db.emulators.edit_dma_channel(id, e.value.source, e.value.destination, e.value.selector, e.value.object);
                                 break;
                             case "remove":
                                 ctx.body = await this.db.emulators.remove_dma_channel(id, e.value.source, e.value.destination, e.value.name);

@@ -95,9 +95,9 @@ describe('emulators API tests', () => {
 
                 results = ["add_channel", id, src, dst, obj];
             },
-            edit_dma_channel:(id:number, src:any, dst:any, obj:any)=>{
+            edit_dma_channel:(id:number, src:any, dst:any,sel:any, obj:any)=>{
 
-                results = ["edit_channel", id, src, dst, obj];
+                results = ["edit_channel", id, src, dst,sel, obj];
             },
             remove_dma_channel:(id:number,name:any, src:any, dst:any)=>{
 
@@ -373,6 +373,7 @@ describe('emulators API tests', () => {
         let ch = {
             source:"test_src",
             destination:"test_dst",
+            selector:"channel_sel",
             object:{
                 name:"2134",
                 type:"scalar_transfer",
@@ -397,7 +398,7 @@ describe('emulators API tests', () => {
             .send(edit)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(results).toStrictEqual(["edit_channel", 4,"test_src","test_dst", ch.object])
+                expect(results).toStrictEqual(["edit_channel", 4,"test_src","test_dst", "channel_sel", ch.object])
             });
     });
 
