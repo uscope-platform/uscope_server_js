@@ -18,6 +18,7 @@ interface api_map {
             scope_address:string,
             dma_disable:string,
             hil_deploy:string,
+            hil_disassemble:string,
             hil_emulate:string,
             hil_select_output:string,
             hil_set_input:string,
@@ -178,6 +179,7 @@ let endpoints_map : api_map = {
             dma_disable:'/plot/dma_disable',
 
             hil_deploy: '/hil/deploy',
+            hil_disassemble: '/hil/disassemble',
             hil_emulate: '/hil/emulate',
             hil_select_output: '/hil/select_out',
             hil_set_input: '/hil/set_input',

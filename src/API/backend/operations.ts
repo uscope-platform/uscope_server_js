@@ -82,6 +82,10 @@ export default class OperationsBackend {
         return this.hw_if.stop_hil();
     }
 
+    public async hil_disassemble(hil:emulator_model): Promise<any>{
+        return this.hw_if.hil_disassemble(hil);
+    }
+
     public async hil_deploy(hil:emulator_model): Promise<any>{
         return this.hw_if.deploy_hil(hil);
     }

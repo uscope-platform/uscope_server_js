@@ -223,7 +223,6 @@ describe('Hardware interface test', () => {
 
 
     test('apply program', async () => {
-
         let resp = await hw.apply_program([131073, 12, 12, 12, 397345, 12], 0x500000000);
         expect(resp).toBeUndefined();
     });
@@ -243,9 +242,6 @@ describe('Hardware interface test', () => {
         let resp = await hw.set_acquisition(acq);
         expect(resp).toBeUndefined();
     });
-
-
-
 
     test('deploy_hil', async () => {
         let hil = {
@@ -344,6 +340,87 @@ describe('Hardware interface test', () => {
         expect(resp).toBeUndefined();
     });
 
+    test('disassemble hil', async () => {
+        let hil = {
+            cores: [
+                {
+                    id: "test",
+                    order: 0,
+                    input_data: [],
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "out",
+                            metadata:{
+                                type: "float",
+                                width:32,
+                                signed:true
+                            },
+                            reg_n: [
+                                5
+                            ]
+                        }
+                    ],
+                    memory_init: [
+                        {
+                            name: "mem",
+                            metadata:{
+                                type: "float",
+                                width:32,
+                                signed:true
+                            },
+                            is_output: true,
+                            reg_n: 4,
+                            value: 14
+                        },
+                        {
+                            name: "mem_2",
+                            metadata:{
+                                type: "integer",
+                                width:16,
+                                signed:true
+                            },
+                            is_output: true,
+                            reg_n: 3,
+                            value: 12
+                        }
+                    ],
+                    channels: 1,
+                    options: {
+                        comparators: "reducing",
+                        efi_implementation: "none"
+                    },
+                    program: {
+                        content: "int main(){\n  float mem;\n  float mem_2;\n  float out = mem + mem_2;\n}",
+                        build_settings: {
+                            io: {
+                                inputs: [],
+                                memories: ["mem", "mem_2"],
+                                outputs: ["out"]
+                            }
+                        },
+                        headers: []
+                    },
+                    sampling_frequency: 1,
+                    deployment: {
+                        has_reciprocal: false,
+                        control_address: 18316525568,
+                        rom_address: 17179869184
+                    }
+                }
+            ],
+            interconnect: [],
+            emulation_time: 2,
+            deployment_mode: false
+        }
+
+
+        let resp = await hw.hil_disassemble(hil);
+        expect(resp).toStrictEqual({
+            test:"add r63, r62, r1\nstop\n"
+        });
+    });
+
     test('emulate hil ', async () => {
         let hil = {
             cores: [
@@ -427,7 +504,6 @@ describe('Hardware interface test', () => {
             results_valid: true
         });
     });
-
 
     test('select output', async () => {
         let out: select_hil_output = {

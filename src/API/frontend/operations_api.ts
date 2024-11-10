@@ -194,6 +194,17 @@ class operations_router {
         });
 
 
+        this.router.post(endpoints_map.operations.endpoints.hil_disassemble, async (ctx:Koa.Context) => {
+            try{
+                let status = <emulator_model>ctx.request.body;
+                ctx.response.body = await this.ops_backend.hil_disassemble(status);
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.body = error
+                ctx.status = 501
+            }
+        });
+
 
         this.router.post(endpoints_map.operations.endpoints.hil_emulate, async (ctx:Koa.Context) => {
             try{

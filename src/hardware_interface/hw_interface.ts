@@ -10,11 +10,6 @@ import {read_data_response} from "../data_model/driver_responses_model";
 import {Socket} from "node:net";
 import {pack, unpack} from "msgpackr";
 
-interface response_body{
-    data:any,
-    response_code:number
-}
-
 
 export default class hw_interface {
     private host: string;
@@ -188,6 +183,10 @@ export default class hw_interface {
 
     public async deploy_hil(spec:object){
         return await this.send_command(commands.core.deploy_hil, spec);
+    }
+
+    public async hil_disassemble(spec:object){
+        return await this.send_command(commands.core.hil_disassemble, spec);
     }
 
     public async select_output(out:select_hil_output){
