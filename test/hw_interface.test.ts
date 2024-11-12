@@ -417,7 +417,7 @@ describe('Hardware interface test', () => {
 
         let resp = await hw.hil_disassemble(hil);
         expect(resp).toStrictEqual({
-            test:"add r63, r62, r1\nstop\n"
+            test:"///////////////////////////////////////////\n//               IO MAPPING              //\n//    io address <---> core address      //\n///////////////////////////////////////////\n//    5  <--->  1      //\n//    4  <--->  63      //\n//    3  <--->  62      //\n///////////////////////////////////////////\nadd r63, r62, r1\nstop\n"
         });
     });
 
