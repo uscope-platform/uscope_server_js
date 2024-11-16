@@ -177,6 +177,10 @@ export default class hw_interface {
         return await this.send_command(commands.scope.set_acquisition, arg);
     }
 
+    public async debug_hil(command:object){
+        return await this.send_command(commands.core.hil_debug, command);
+    }
+
     public async emulate_hil(spec:object){
         return await this.send_command(commands.core.emulate_hil, spec);
     }

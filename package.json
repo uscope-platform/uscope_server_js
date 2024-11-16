@@ -15,7 +15,6 @@
   "dependencies": {
     "@koa/cors": "^5.0.0",
     "argon2": "^0.40.1",
-    "bson": "^6.9.0",
     "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
     "koa": "^2.15.3",

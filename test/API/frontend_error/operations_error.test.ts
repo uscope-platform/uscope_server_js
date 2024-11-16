@@ -140,6 +140,9 @@ describe('Operation API Error handling tests', () => {
         },
         apply_program: () =>{
             throw "ops error 20"
+        },
+        hil_debug:() =>{
+            throw "ops error 21"
         }
 
     } as any as OperationsBackend;
@@ -719,6 +722,32 @@ describe('Operation API Error handling tests', () => {
             });
 
     });
+
+
+    test('debug_hil', async () => {
+
+
+        let args = {
+            command:"breakpoint",
+            arguments:{
+                id:"core",
+                instruction:32
+            }
+
+        };
+
+        return request(app.callback())
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_debug)
+            .set('Authorization', `Bearer ${token}`)
+            .send(args)
+            .then((response)=>{
+                expect(response.status).toBe(501);
+                expect(response.text).toBe("ops error 21");
+            });
+
+    });
+
+
 
     afterEach(() => {
         // restore the spy created with spyOn

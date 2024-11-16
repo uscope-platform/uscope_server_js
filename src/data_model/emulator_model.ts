@@ -104,6 +104,13 @@ export interface connection_model {
 
 }
 
+
+export interface hil_debug_model {
+    action:string,
+    arguments:any
+}
+
+
 export default interface emulator_model {
     id:number,
     name:string,

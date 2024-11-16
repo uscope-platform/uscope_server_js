@@ -520,6 +520,35 @@ describe('Operation API tests', () => {
 
     });
 
+    test('debug_hil', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'hil_debug').mockImplementation(
+            (arg:any) => {
+                result = arg
+            });
+
+        let args = {
+            command:"breakpoint",
+            arguments:{
+                id:"core",
+                instruction:32
+            }
+
+        };
+
+        return request(app.callback())
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_debug)
+            .set('Authorization', `Bearer ${token}`)
+            .send(args)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(args);
+            });
+
+    });
+
 
     test('deploy_hil', async () => {
         let router = rtr as any;

@@ -8,7 +8,7 @@ import register_write_model, {
     channel_statuses, clock_info,
     programs_info, scope_address, select_hil_output, set_hil_inputs, status_object
 } from "../../data_model/operations_model";
-import emulator_model from "../../data_model/emulator_model";
+import emulator_model, {hil_debug_model} from "../../data_model/emulator_model";
 import FiltersBackend from "../backend/filters";
 import {filter_apply_model} from "../../data_model/filters_model";
 
@@ -205,6 +205,17 @@ class operations_router {
             }
         });
 
+        this.router.post(endpoints_map.operations.endpoints.hil_debug, async (ctx:Koa.Context) => {
+            try{
+                let command = <hil_debug_model>ctx.request.body;
+                ctx.response.body = await this.ops_backend.hil_debug(command);
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.body = error
+                ctx.status = 501
+            }
+        });
+
 
         this.router.post(endpoints_map.operations.endpoints.hil_emulate, async (ctx:Koa.Context) => {
             try{
@@ -320,6 +331,8 @@ class operations_router {
                 ctx.status = 501
             }
         });
+
+
     }
 }
 

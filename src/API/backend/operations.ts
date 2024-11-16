@@ -9,7 +9,7 @@ import register_write_model, {
     programs_info, scope_address, select_hil_output, set_hil_inputs, status_object
 } from "../../data_model/operations_model";
 import database from "../../Database/Database";
-import emulator_model from "../../data_model/emulator_model";
+import emulator_model, {hil_debug_model} from "../../data_model/emulator_model";
 import {read_data_response} from "../../data_model/driver_responses_model";
 
 
@@ -31,7 +31,6 @@ export default class OperationsBackend {
     public async fetch_data() : Promise<read_data_response>{
         return await this.hw_if.read_data();
     }
-
 
     public async read_register(addr:number) : Promise<number> {
         return await this.hw_if.read_register(addr);
@@ -92,6 +91,10 @@ export default class OperationsBackend {
 
     public async get_version(component:string): Promise<string> {
         return this.hw_if.get_version(component);
+    }
+
+    public async hil_debug(command: hil_debug_model) : Promise<any> {
+        return this.hw_if.debug_hil(command);
     }
 
     public async hil_emulate(hil:emulator_model): Promise<any>{

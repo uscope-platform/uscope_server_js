@@ -7,13 +7,15 @@ import register_write_model, {
     acquisition_status, clock_info,
     programs_info, scope_address, select_hil_output, set_hil_inputs
 } from "../../../src/data_model/operations_model";
-import emulator_model from "../../../src/data_model/emulator_model";
+import emulator_model, {hil_debug_model} from "../../../src/data_model/emulator_model";
 import program_model from "../../../src/data_model/program_model";
 import {application_model} from "../../../src/data_model/application_model";
 import bitstream_model from "../../../src/data_model/bitstreams_model";
 
 
 import fs from "node:fs";
+import request from "supertest";
+import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 describe('operations backend test', () => {
     let db_call_args = [] as any;
@@ -68,6 +70,7 @@ describe('operations backend test', () => {
             args = a;
             return "ok";
         },
+
         compile_program:(a:any)=>{
             if(a.id<44){
                 args = a;
@@ -126,6 +129,10 @@ describe('operations backend test', () => {
         emulate_hil:(a:any)=>{
             args = a;
             return "ok";
+        },
+        debug_hil:(a:any)=>{
+            args = a;
+            return {result:"ok"}
         },
         get_clock:(a:any)=>{
             args.push(a);
@@ -499,6 +506,23 @@ describe('operations backend test', () => {
         expect(res).toStrictEqual({error:"error test", status:"failed"});
     });
 
+
+
+    test('debug_hil', async () => {
+
+        let a : hil_debug_model = {
+            action:"breakpoint",
+            arguments:{
+                id:"core",
+                instruction:32
+            }
+
+        };
+
+        let res =await backend.hil_debug(a);
+        expect(a).toStrictEqual(args);
+        expect(res).toStrictEqual({result:"ok"});
+    });
 
     afterEach(() => {
         args = [] as any;

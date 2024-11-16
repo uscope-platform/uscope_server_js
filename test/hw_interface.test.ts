@@ -1,6 +1,8 @@
 import hw_interface from "../src/hardware_interface/hw_interface";
 import {expect} from "@jest/globals"
 import {programs_info, select_hil_output, set_hil_inputs} from "../src/data_model/operations_model";
+import request from "supertest";
+import endpoints_map from "../src/API/frontend/endpoints_map";
 
 describe('Hardware interface test', () => {
 
@@ -530,6 +532,24 @@ describe('Hardware interface test', () => {
 
         let resp = await hw.set_input(i);
         expect(resp).toBeUndefined();
+    });
+
+
+
+    test('debug_hil', async () => {
+
+        let args = {
+            command:"test",
+            arguments:{
+                id:"core",
+                instruction:32
+            }
+
+        };
+
+        let resp = await hw.debug_hil(args);
+        expect(resp).toStrictEqual("success");
+
     });
 
     test('apply_filter', async () => {
