@@ -1,8 +1,6 @@
 import hw_interface from "../src/hardware_interface/hw_interface";
 import {expect} from "@jest/globals"
 import {programs_info, select_hil_output, set_hil_inputs} from "../src/data_model/operations_model";
-import request from "supertest";
-import endpoints_map from "../src/API/frontend/endpoints_map";
 
 describe('Hardware interface test', () => {
 
@@ -250,12 +248,13 @@ describe('Hardware interface test', () => {
             cores: [
                 {
                     id: "test",
-                    order: 0,
+                    order: 1,
                     input_data: [],
                     inputs: [],
                     outputs: [
                         {
                             name: "out",
+                            type:"float",
                             metadata:{
                                 type: "float",
                                 width:32,
@@ -347,12 +346,13 @@ describe('Hardware interface test', () => {
             cores: [
                 {
                     id: "test",
-                    order: 0,
+                    order: 1,
                     input_data: [],
                     inputs: [],
                     outputs: [
                         {
                             name: "out",
+                            type:"float",
                             metadata:{
                                 type: "float",
                                 width:32,
@@ -419,7 +419,14 @@ describe('Hardware interface test', () => {
 
         let resp = await hw.hil_disassemble(hil);
         expect(resp).toStrictEqual({
-            test:"///////////////////////////////////////////\n//               IO MAPPING              //\n//    io address <---> core address      //\n///////////////////////////////////////////\n//    5  <--->  1      //\n//    4  <--->  63      //\n//    3  <--->  62      //\n///////////////////////////////////////////\nadd r63, r62, r1\nstop\n"
+            "test": {
+                "program": "add r63, r62, r1\nstop\n",
+                "translation_table": [
+                    [5, 1],
+                    [4, 63],
+                    [3, 62]
+                ]
+            }
         });
     });
 
@@ -428,12 +435,13 @@ describe('Hardware interface test', () => {
             cores: [
                 {
                     id: "test",
-                    order: 0,
+                    order: 1,
                     input_data: [],
                     inputs: [],
                     outputs: [
                         {
                             name: "out",
+                            type:"float",
                             metadata:{
                                 type: "float",
                                 width:32,
@@ -459,13 +467,13 @@ describe('Hardware interface test', () => {
                         {
                             name: "mem_2",
                             metadata:{
-                                type: "integer",
+                                type: "float",
                                 width:16,
                                 signed:true
                             },
                             is_output: true,
                             reg_n: 3,
-                            value: 12
+                            value: 12.0
                         }
                     ],
                     channels: 1,
@@ -502,7 +510,7 @@ describe('Hardware interface test', () => {
         expect(resp).toStrictEqual({
             code: 1,
             duplicates: "",
-            results: "{\"test\":{\"error_code\":\"\",\"outputs\":{\"mem\":{\"0\":[[14.0,14.0]]},\"mem_2\":{\"0\":[[12,12]]},\"out\":{\"0\":[[14.0,14.0]]}}},\"timebase\":[0.0]}",
+            results: "{\"test\":{\"error_code\":\"\",\"outputs\":{\"mem\":{\"0\":[[14.0,14.0]]},\"mem_2\":{\"0\":[[12.0,12.0]]},\"out\":{\"0\":[[26.0,26.0]]}}},\"timebase\":[0.0]}",
             results_valid: true
         });
     });
