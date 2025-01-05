@@ -108,6 +108,7 @@ interface rules_map {
     },
     settings:{
         [index: string]: any;
+        debugger_option:string;
         debug_level:string,
         hil_address_map:string
     }
@@ -212,6 +213,7 @@ let rules : rules_map = {
         delete:'admin'
     },
     settings:{
+        debugger_option:"operator",
         debug_level:'operator',
         hil_address_map:'operator'
     }

@@ -125,6 +125,51 @@ describe('Settings API tests', () => {
     });
 
 
+    test('get debugger option', async () => {
+
+        let router = rtr as any;
+        const spy = jest.spyOn(router.backend, 'get_debugger_option').mockImplementation(
+            () : boolean => {
+                return true
+            });
+
+        let path = endpoints_map.settings.prefix + endpoints_map.settings.endpoints.debugger_option;
+        path = path.replace(":name", "test_opt");
+
+        return request(app.callback())
+            .get(path)
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                    expect(response.body).toStrictEqual(true);
+            });
+
+    });
+
+
+    test('set debugger option', async () => {
+
+        let router = rtr as any;
+        let result = "";
+        const spy = jest.spyOn(router.backend, 'set_debugger_option').mockImplementation(
+            (arg:any)  => {
+                result= arg
+            });
+
+        let input = {test_opt:false};
+
+        return request(app.callback())
+            .post(endpoints_map.settings.prefix + endpoints_map.settings.endpoints.debugger_option)
+            .set('Authorization', `Bearer ${token}`)
+            .send(input)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(input);
+            });
+
+    });
 
     afterEach(() => {
         // restore the spy created with spyOn

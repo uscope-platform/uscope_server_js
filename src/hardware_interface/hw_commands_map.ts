@@ -37,7 +37,9 @@ interface hw_commands_map {
             get_clock:string,
             get_version:string,
             set_debug_level:string,
-            get_debug_level:string
+            get_debug_level:string,
+            set_debugger_option:string,
+            get_debugger_option:string
         }
 }
 
@@ -80,7 +82,9 @@ let commands :hw_commands_map = {
         get_clock:"get_clock",
         get_version:"get_version",
         set_debug_level:"set_debug_level",
-        get_debug_level:"get_debug_level"
+        get_debug_level:"get_debug_level",
+        set_debugger_option: "set_debugger_option",
+        get_debugger_option: "get_debugger_option"
     }
 }
 export default commands;

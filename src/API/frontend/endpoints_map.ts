@@ -37,6 +37,7 @@ interface api_map {
             [index: string]: any;
             debug_level:string,
             hil_address_map:string
+            debugger_option:string
         }
     },
     script: {
@@ -158,6 +159,7 @@ let endpoints_map : api_map = {
     settings:{
         prefix: g_prefix + "/settings",
         endpoints:{
+            debugger_option:'/debugger_option/:name',
             debug_level:'/debug_level',
             hil_address_map:'/hil_address_map',
         }

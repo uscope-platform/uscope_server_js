@@ -9,6 +9,7 @@ import commands from "./hw_commands_map";
 import {read_data_response} from "../data_model/driver_responses_model";
 import {Socket} from "node:net";
 import {pack, unpack} from "msgpackr";
+import {debugger_option} from "../data_model/settings_model";
 
 
 export default class hw_interface {
@@ -87,6 +88,15 @@ export default class hw_interface {
     public async get_debug_level(): Promise<string>{
         return await this.send_command(commands.platform.get_debug_level, {})
     }
+
+    public async get_debugger_option(name:string): Promise<debugger_option>{
+        return await this.send_command(commands.platform.get_debugger_option, name)
+    }
+
+    public async set_debugger_option(option: debugger_option): Promise<any>{
+        return await this.send_command(commands.platform.set_debugger_option, option)
+    }
+
 
     public async get_version(component:string): Promise<string>{
         return await this.send_command(commands.platform.get_version, component);

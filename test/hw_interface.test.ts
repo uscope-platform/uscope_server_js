@@ -49,6 +49,17 @@ describe('Hardware interface test', () => {
     });
 
 
+    test('set debugger option', async () => {
+        let resp = await hw.set_debugger_option({name:"multichannel_debug", value:true});
+        expect(resp).toBeUndefined();
+    });
+
+    test('get debugger option', async () => {
+        let resp = await hw.get_debugger_option("multichannel_debug");
+        expect(resp).toBeTruthy();
+    });
+
+
     test('get debug level', async () => {
         let resp = await hw.get_debug_level();
         expect(resp).toStrictEqual("debug")

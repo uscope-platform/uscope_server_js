@@ -35,6 +35,12 @@ describe('Settings API error handling tests', () => {
         set_hil_map: ():string =>{
             throw "generic db error 73";
         },
+        get_debugger_option: ():string =>{
+            throw "generic db error 74";
+        },
+        set_debugger_option: ():string =>{
+            throw "generic db error 75";
+        },
     } as any as SettingsBackend;
 
     let rtr = new settings_router(backend);
@@ -97,6 +103,38 @@ describe('Settings API error handling tests', () => {
                 expect(response.status).toBe(501);
                 expect(response.text).toStrictEqual("generic db error 73");
             });
+
+    });
+
+    test('get debugger option', async () => {
+
+        let path = endpoints_map.settings.prefix + endpoints_map.settings.endpoints.debugger_option;
+        path = path.replace(":name", "test_opt");
+
+        return request(app.callback())
+            .get(path)
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("generic db error 74");
+            });
+
+    });
+
+
+    test('set debugger option', async () => {
+
+        let a_map = {"test_opt":true};
+
+        return request(app.callback())
+            .post(endpoints_map.settings.prefix + endpoints_map.settings.endpoints.debugger_option)
+            .set('Authorization', `Bearer ${token}`)
+            .send(a_map)
+            .then((response)=>{
+                expect(response.status).toBe(501);
+                expect(response.text).toStrictEqual("generic db error 75");
+            });
+
 
     });
 

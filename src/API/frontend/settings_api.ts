@@ -3,6 +3,7 @@ import * as Koa from "koa";
 import endpoints_map from "./endpoints_map";
 import SettingsBackend from "../backend/settings";
 import {hil_address_map} from "../../data_model/operations_model";
+import {debugger_option} from "../../data_model/settings_model";
 
 class settings_router{
     public router: Router;
@@ -14,6 +15,30 @@ class settings_router{
         this.router = new Router({
             prefix: endpoints_map.settings.prefix
         });
+
+        this.router.get(endpoints_map.settings.endpoints.debugger_option, async (ctx:Koa.Context) => {
+            try{
+                let opt_name = ctx.params.name;
+                ctx.body = await this.backend.get_debugger_option(opt_name);
+                ctx.status = 200
+            } catch(error:any){
+                ctx.body = error
+                ctx.status = 501
+            }
+        });
+
+
+        this.router.post(endpoints_map.settings.endpoints.debugger_option, async (ctx:Koa.Context) => {
+            try{
+                let opt = <debugger_option>ctx.request.body;
+                await this.backend.set_debugger_option(opt);
+                ctx.status = 200
+            } catch(error:any){
+                ctx.body = error
+                ctx.status = 501
+            }
+        });
+
 
         this.router.get(endpoints_map.settings.endpoints.debug_level, async (ctx:Koa.Context) => {
             try{

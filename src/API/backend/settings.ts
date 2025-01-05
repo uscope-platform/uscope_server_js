@@ -1,6 +1,7 @@
 
 import hw_interface from "../../hardware_interface/hw_interface";
 import {hil_address_map} from "../../data_model/operations_model";
+import {debugger_option} from "../../data_model/settings_model";
 
 export default class SettingsBackend {
     private hw_if: hw_interface;
@@ -16,6 +17,13 @@ export default class SettingsBackend {
         return this.hw_if.get_debug_level();
     }
 
+    public async get_debugger_option(name:string): Promise<debugger_option>{
+        return this.hw_if.get_debugger_option(name);
+    }
+
+    public async set_debugger_option(option: debugger_option): Promise<any>{
+        return this.hw_if.set_debugger_option(option);
+    }
 
     public async set_hil_map(map:hil_address_map): Promise<any>{
         return this.hw_if.set_hil_address_map(map);
