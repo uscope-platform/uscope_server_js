@@ -1,7 +1,7 @@
 import Router from "koa-router";
 import * as Koa from "koa";
 import endpoints_map from "./endpoints_map";
-import SettingsBackend from "../backend/settings";
+import {SettingsBackend} from "../backend";
 import {hil_address_map} from "../../data_model/operations_model";
 import {debugger_option} from "../../data_model/settings_model";
 

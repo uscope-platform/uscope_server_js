@@ -1,6 +1,6 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
-import {authorizer, error_handler} from "./API/backend/middleware";
+import {} from "./API/backend/middleware";
 import jwt from "koa-jwt";
 import applications_router from "./API/frontend/applications_api";
 import database from "./Database/Database";
@@ -12,9 +12,7 @@ import peripherals_router from "./API/frontend/peripherals_api";
 import programs_router from "./API/frontend/programs_api";
 import scripts_router from "./API/frontend/scripts_api";
 import settings_router from "./API/frontend/settings_api";
-import FiltersBackend from "./API/backend/filters";
-import OperationsBackend from "./API/backend/operations";
-import SettingsBackend from "./API/backend/settings";
+import {FiltersBackend, OperationsBackend, SettingsBackend, authorizer, error_handler} from "./API/backend";
 import hw_interface from "./hardware_interface/hw_interface";
 import platform_router from "./API/frontend/platform_api";
 

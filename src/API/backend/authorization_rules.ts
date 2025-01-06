@@ -114,7 +114,7 @@ interface rules_map {
     }
 }
 
-let rules : rules_map = {
+export let rules : rules_map = {
     operations:{
         load_application:"operator",
         read_register:"operator",
@@ -233,5 +233,3 @@ export const roles_hierarchy: roles_hierarcy_t = {
     operator:2,
     public:99
 }
-
-export default rules

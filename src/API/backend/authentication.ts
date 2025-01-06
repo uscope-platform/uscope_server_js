@@ -15,7 +15,7 @@ class CustomError extends Error {
     }
 }
 
-export default class Authenticator {
+export class Authenticator {
     private readonly secret: string
     private db: database
     constructor(s:string, d: database) {

@@ -5,7 +5,7 @@ import bodyParser from "koa-bodyparser";
 import platform_router from "../../../src/API/frontend/platform_api";
 import database from "../../../src/Database/Database";
 import {expect} from "@jest/globals";
-import {authorizer, error_handler} from "../../../src/API/backend/middleware";
+import {authorizer, error_handler} from "../../../src/API/backend";
 import jwt from "koa-jwt";
 import hw_interface from "../../../src/hardware_interface/hw_interface";
 import endpoints_map from "../../../src/API/frontend/endpoints_map";

@@ -1,16 +1,14 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import database from "../../../src/Database/Database";
-import {authorizer, error_handler} from "../../../src/API/backend/middleware";
 import jwt from "koa-jwt"
 import operations_router from "../../../src/API/frontend/operations_api";
 import fs from "node:fs";
 import {createHash} from "node:crypto";
 import request from "supertest";
 import {expect} from "@jest/globals";
-import OperationsBackend from "../../../src/API/backend/operations";
 import hw_interface from "../../../src/hardware_interface/hw_interface";
-import FiltersBackend from "../../../src/API/backend/filters";
+import {FiltersBackend, OperationsBackend, authorizer, error_handler} from "../../../src/API/backend";
 import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 

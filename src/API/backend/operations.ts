@@ -13,7 +13,7 @@ import emulator_model, {hil_debug_model} from "../../data_model/emulator_model";
 import {read_data_response} from "../../data_model/driver_responses_model";
 
 
-export default class OperationsBackend {
+export class OperationsBackend {
     private hw_if: hw_interface;
     public db: database;
 

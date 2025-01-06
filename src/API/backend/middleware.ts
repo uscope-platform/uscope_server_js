@@ -1,7 +1,7 @@
 import Koa from "koa";
 import endpoints_map from "../frontend/endpoints_map";
 import  {roles_hierarchy} from "./authorization_rules";
-import rules from "./authorization_rules";
+import {rules} from ".";
 
 
 export let error_handler = async  (ctx:Koa.Context, next: Koa.Next) => {

@@ -2,7 +2,7 @@
 import database from "../../../src/Database/Database";
 import {expect} from "@jest/globals";
 import hw_interface from "../../../src/hardware_interface/hw_interface";
-import OperationsBackend from "../../../src/API/backend/operations";
+import {OperationsBackend} from "../../../src/API/backend";
 import register_write_model, {
     acquisition_status, clock_info,
     programs_info, scope_address, select_hil_output, set_hil_inputs

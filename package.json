@@ -9,6 +9,11 @@
     "test_serial": "jest test/database --runInBand",
     "test": "npm run test_parallel & npm run test_serial"
   },
+  "imports": {
+    "@api_frontent": "./src/API/frontend",
+    "@api_backend": "./src/API/backend",
+    "@data_model": "./src/data_model"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

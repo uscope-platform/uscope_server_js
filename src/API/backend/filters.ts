@@ -151,7 +151,7 @@ if __name__ == '__main__':
         print(json.dumps(response))
 `
 
-export default class FiltersBackend {
+export class FiltersBackend {
     public db: database;
     public hw_if: hw_interface;
 

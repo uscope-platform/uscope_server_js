@@ -1,5 +1,5 @@
 
-import SettingsBackend from "../../../src/API/backend/settings";
+import {SettingsBackend} from "../../../src/API/backend";
 import hw_interface from "../../../src/hardware_interface/hw_interface";
 import {debugger_option} from "../../../src/data_model/settings_model";
 import {hil_address_map} from "../../../src/data_model/operations_model";

@@ -1,7 +1,7 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import database from "../../../src/Database/Database";
-import {authorizer, error_handler} from "../../../src/API/backend/middleware";
+import {authorizer, error_handler} from "../../../src/API/backend";
 import request from "supertest";
 import { expect} from "@jest/globals";
 import jwt from "koa-jwt"
