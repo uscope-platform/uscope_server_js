@@ -2,12 +2,12 @@
 import request from "supertest"
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
-import {platform_router, endpoints_map} from "../../../src/API/frontend";
-import {database} from "../../../src/Database";
+import {platform_router, endpoints_map} from "#api_frontend";
+import {database} from "#database";
 import {expect} from "@jest/globals";
-import {authorizer, error_handler} from "../../../src/API/backend";
+import {authorizer, error_handler} from "#api_backend";
 import jwt from "koa-jwt";
-import hw_interface from "../../../src/hardware_interface/hw_interface";
+import {hw_interface} from "#hw";
 
 
 describe('platform API tests', () => {

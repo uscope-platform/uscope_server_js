@@ -2,12 +2,12 @@ import {
     acquisition_status, channel_statuses, clock_info, hil_address_map, scope_address,
     select_hil_output, set_hil_inputs, status_object,read_data_response, debugger_option
 } from "../data_model";
-import commands from "./hw_commands_map";
+import {commands} from ".";
 import {Socket} from "node:net";
 import {pack, unpack} from "msgpackr";
 
 
-export default class hw_interface {
+export class hw_interface {
     private host: string;
     private port: number;
 

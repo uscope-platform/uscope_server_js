@@ -1,9 +1,8 @@
 import type {Config} from 'jest';
-
+import {pathsToModuleNameMapper} from "ts-jest";
+import options from "./tsconfig.json"
 const config: Config = {
 
-  // Stop running tests after `n` failures
-  // bail: 0,
 
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: false,
@@ -13,10 +12,11 @@ const config: Config = {
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: "v8",
-  roots: ["<rootDir>/test"],
   preset: "ts-jest",
-  testEnvironment: 'node'
-
+  testEnvironment: 'node',
+  roots: ['<rootDir>'],
+  modulePaths: [options.compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
+  moduleNameMapper: pathsToModuleNameMapper(options.compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
 };
 
 export default config;

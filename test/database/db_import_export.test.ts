@@ -1,9 +1,9 @@
-import {database} from "../../src/Database";
+import {database} from "#database";
 import {expect} from "@jest/globals";
 import {
     emulator_model, application_model, filter_model, bitstream_model,
     script_model, program_model, peripheral_model
-} from "../../src/data_model";
+} from "#models";
 
 
 

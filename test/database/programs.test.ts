@@ -1,5 +1,5 @@
-import {database} from "../../src/Database";
-import {program_model} from "../../src/data_model";
+import {database} from "#database";
+import {program_model} from "#models";
 import {expect} from "@jest/globals";
 
 

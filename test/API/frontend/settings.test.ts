@@ -3,10 +3,10 @@ import bodyParser from "koa-bodyparser";
 import jwt from "koa-jwt"
 import request from "supertest";
 import {expect} from "@jest/globals";
-import {settings_router, endpoints_map} from "../../../src/API/frontend";
-import {hil_address_map} from "../../../src/data_model";
-import {SettingsBackend, authorizer, error_handler} from "../../../src/API/backend";
-import hw_interface from "../../../src/hardware_interface/hw_interface";
+import {settings_router, endpoints_map} from "#api_frontend";
+import {hil_address_map} from "#models";
+import {SettingsBackend, authorizer, error_handler} from "#api_backend";
+import {hw_interface} from "#hw";
 
 
 

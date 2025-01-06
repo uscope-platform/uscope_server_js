@@ -10,9 +10,11 @@
     "test": "npm run test_parallel & npm run test_serial"
   },
   "imports": {
-    "@api_frontent": "./src/API/frontend",
-    "@api_backend": "./src/API/backend",
-    "@data_model": "./src/data_model"
+    "#hw/*": "./src/hardware_interface/*",
+    "#api_backend/*": "./src/API/backend/*",
+    "#api_frontend/*": "./src/API/frontend/*",
+    "#database/*": "./src/Database/*",
+    "#models/*": "./src/data_model/*"
   },
   "keywords": [],
   "author": "",

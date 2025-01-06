@@ -1,6 +1,6 @@
-import hw_interface from "../src/hardware_interface/hw_interface";
+import {hw_interface} from "#hw";
 import {expect} from "@jest/globals"
-import {programs_info, select_hil_output, set_hil_inputs} from "../src/data_model";
+import {programs_info, select_hil_output, set_hil_inputs} from "#models";
 
 describe('Hardware interface test', () => {
 

@@ -43,7 +43,7 @@ interface hw_commands_map {
         }
 }
 
-let commands :hw_commands_map = {
+export let commands :hw_commands_map = {
     infrastructure: {
         null:"null"
     },
@@ -87,4 +87,3 @@ let commands :hw_commands_map = {
         get_debugger_option: "get_debugger_option"
     }
 }
-export default commands;

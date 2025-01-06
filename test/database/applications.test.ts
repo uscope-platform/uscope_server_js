@@ -1,4 +1,4 @@
-import {database} from "../../src/Database";
+import {database} from "#database";
 import {expect} from "@jest/globals";
 
 

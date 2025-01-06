@@ -5,10 +5,10 @@ import {
     applications_router, bitstream_router, emulators_router,filters_router,
     peripherals_router, operations_router, programs_router, scripts_router,
     settings_router, platform_router
-} from "./API/frontend";
-import {database} from "./Database";
-import {FiltersBackend, OperationsBackend, SettingsBackend, authorizer, error_handler} from "./API/backend";
-import hw_interface from "./hardware_interface/hw_interface";
+} from "#api_frontend/index.ts";
+import {database} from "#database/index.ts";
+import {FiltersBackend, OperationsBackend, SettingsBackend, authorizer, error_handler} from "#api_backend/index.ts";
+import {hw_interface} from "#hw/index.ts";
 
 import cors from '@koa/cors';
 

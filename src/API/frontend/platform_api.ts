@@ -1,10 +1,10 @@
 import Router from 'koa-router';
 import * as Koa from 'koa';
 import {Authenticator} from "../backend";
-import {database} from "../../Database";
+import {database} from "#database";
 import {auto_login_object, db_dump, user_login_object} from "../../data_model";
 import {endpoints_map} from ".";
-import hw_interface from "../../hardware_interface/hw_interface";
+import {hw_interface} from "#hw";
 
 interface user_add_request {
     user:string,

@@ -6,8 +6,8 @@ import {
     status_object, hil_debug_model, emulator_model, read_data_response,
     application_model, register_write_model
 } from "../../data_model";
-import hw_interface from "../../hardware_interface/hw_interface";
-import {database} from "../../Database";
+import {hw_interface} from "#hw";
+import {database} from "#database";
 
 export class OperationsBackend {
     private hw_if: hw_interface;

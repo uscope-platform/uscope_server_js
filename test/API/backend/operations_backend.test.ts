@@ -1,14 +1,14 @@
 
-import {database} from "../../../src/Database";
+import {database} from "#database";
 import {expect} from "@jest/globals";
-import hw_interface from "../../../src/hardware_interface/hw_interface";
-import {OperationsBackend} from "../../../src/API/backend";
+import {hw_interface} from "#hw";
+import {OperationsBackend} from "#api_backend";
 import {
     register_write_model, acquisition_status, clock_info,
     programs_info, scope_address, select_hil_output, set_hil_inputs,
     emulator_model, hil_debug_model, program_model, bitstream_model,
     application_model
-} from "../../../src/data_model";
+} from "#models";
 
 import fs from "node:fs";
 

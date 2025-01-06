@@ -1,7 +1,8 @@
-import {FiltersBackend} from "../../../src/API/backend";
-import {database} from "../../../src/Database";
 import {expect} from "@jest/globals";
-import hw_interface from "../../../src/hardware_interface/hw_interface";
+
+import {FiltersBackend} from "#api_backend";
+import {database} from "#database";
+import {hw_interface} from "#hw";
 
 
 describe('filters backend test', () => {

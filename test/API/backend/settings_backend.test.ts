@@ -1,8 +1,7 @@
 
-import {SettingsBackend} from "../../../src/API/backend";
-import hw_interface from "../../../src/hardware_interface/hw_interface";
-import {debugger_option} from "../../../src/data_model/settings_model";
-import {hil_address_map} from "../../../src/data_model/operations_model";
+import {SettingsBackend} from "#api_backend";
+import {hw_interface} from "#hw";
+import {debugger_option, hil_address_map} from "#models";
 import {expect} from "@jest/globals";
 
 describe('filters backend test', () => {

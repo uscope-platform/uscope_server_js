@@ -1,7 +1,7 @@
-import {database} from "../../Database";
 import {spawnSync} from "node:child_process";
-import hw_interface from "../../hardware_interface/hw_interface";
 
+import {hw_interface} from "#hw";
+import {database} from "#database";
 
 let filter_designer =`
 # Copyright 2021 University of Nottingham Ningbo China
