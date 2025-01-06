@@ -19,7 +19,7 @@ export interface register_model {
     n_registers?:number[]
 }
 
-export default interface peripheral_model {
+export interface peripheral_model {
     id:number,
     name:string,
     image:string,

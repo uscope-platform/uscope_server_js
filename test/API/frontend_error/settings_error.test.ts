@@ -3,10 +3,8 @@ import bodyParser from "koa-bodyparser";
 import jwt from "koa-jwt"
 import request from "supertest";
 import {expect} from "@jest/globals";
-import settings_router from "../../../src/API/frontend/settings_api";
+import {settings_router, endpoints_map} from "../../../src/API/frontend";
 import {SettingsBackend, authorizer, error_handler} from "../../../src/API/backend";
-import endpoints_map from "../../../src/API/frontend/endpoints_map";
-
 
 
 describe('Settings API error handling tests', () => {

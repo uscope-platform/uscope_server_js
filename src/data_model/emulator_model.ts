@@ -111,7 +111,7 @@ export interface hil_debug_model {
 }
 
 
-export default interface emulator_model {
+export interface emulator_model {
     id:number,
     name:string,
     cores:{

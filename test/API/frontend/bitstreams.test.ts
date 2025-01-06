@@ -1,16 +1,14 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
-import database from "../../../src/Database/Database";
+import {database} from "../../../src/Database";
 import {authorizer, error_handler} from "../../../src/API/backend";
 import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
-import bitstream_router from "../../../src/API/frontend/bitstreams_api";
+import {bitstream_router, endpoints_map} from "../../../src/API/frontend";
 import fs from "node:fs";
-import bitstream_model from "../../../src/data_model/bitstreams_model";
+import {bitstream_model} from "../../../src/data_model";
 import {createHash} from "node:crypto";
-import endpoints_map from "../../../src/API/frontend/endpoints_map";
-
 
 
 describe('bitstream API tests', () => {

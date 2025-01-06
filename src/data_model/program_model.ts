@@ -1,6 +1,6 @@
 
 
-export default interface program_model {
+export interface program_model {
     id:number,
     name:string,
     type:string,

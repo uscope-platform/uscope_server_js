@@ -1,11 +1,9 @@
-import database from "../../src/Database/Database";
+import {database} from "../../src/Database";
 import {expect} from "@jest/globals";
-import emulator_model, {
-    connection_model,
-    core_model, dma_channel_model,
-    efi_implementation_type,
-    fcore_comparator_type
-} from "../../src/data_model/emulator_model";
+import {
+    emulator_model, connection_model, core_model, dma_channel_model,
+    efi_implementation_type, fcore_comparator_type
+} from "../../src/data_model";
 
 describe('emulator_database_tests', () => {
 

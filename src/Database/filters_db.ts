@@ -1,8 +1,8 @@
 import postgres from "postgres";
-import filter_model from "../data_model/filters_model";
+import {filter_model} from "../data_model";
 
 
-class filters_db {
+export class filters_db {
     private readonly db: postgres.Sql;
     private readonly schema: string;
 
@@ -81,5 +81,3 @@ class filters_db {
     }
 
 }
-
-export default filters_db;

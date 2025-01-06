@@ -1,5 +1,5 @@
-import database from "../../src/Database/Database";
-import bitstream_model from "../../src/data_model/bitstreams_model";
+import {database} from "../../src/Database";
+import {bitstream_model} from "../../src/data_model";
 import {expect} from "@jest/globals";
 import * as fs from "node:fs";
 import {createHash} from "node:crypto";

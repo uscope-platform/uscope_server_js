@@ -1,6 +1,6 @@
 
 
-export default interface filter_model {
+export interface filter_model {
     id:number,
     name:string,
     parameters:object,

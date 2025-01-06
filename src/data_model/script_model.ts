@@ -1,6 +1,6 @@
 
 
-export default interface script_model {
+export interface script_model {
     id:number,
     name:string,
     path:string,

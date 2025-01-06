@@ -143,7 +143,8 @@ interface api_map {
 
 }
 let g_prefix = "/uscope"
-let endpoints_map : api_map = {
+
+export let endpoints_map : api_map = {
     global_prefix:g_prefix,
     script:{
         prefix: g_prefix + "/script",
@@ -281,4 +282,3 @@ let endpoints_map : api_map = {
         }
     }
 }
-export default endpoints_map

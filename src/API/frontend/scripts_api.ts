@@ -1,10 +1,10 @@
 import Router from "koa-router";
-import database from "../../Database/Database";
+import {database} from "../../Database";
 import * as Koa from "koa";
-import endpoints_map from "./endpoints_map";
-import script_model, {script_edit_model} from "../../data_model/script_model";
+import {endpoints_map} from ".";
+import {script_model, script_edit_model} from "../../data_model";
 
-class scripts_router {
+export class scripts_router {
     public router: Router;
     public db: database;
     constructor(db: database) {
@@ -86,6 +86,3 @@ class scripts_router {
 
     }
 }
-
-export default scripts_router;
-

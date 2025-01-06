@@ -1,10 +1,10 @@
 import Router from "koa-router";
-import database from "../../Database/Database";
+import {database} from "../../Database";
 import * as Koa from "koa";
-import endpoints_map from "./endpoints_map";
-import filter_model, {filter_edit_model} from "../../data_model/filters_model";
+import {endpoints_map} from ".";
+import {filter_model, filter_edit_model} from "../../data_model";
 
-class filters_router {
+export class filters_router {
     public router: Router;
     public db: database;
     constructor(db: database) {
@@ -86,6 +86,3 @@ class filters_router {
 
     }
 }
-
-export default filters_router;
-

@@ -1,21 +1,16 @@
 
-import database from "../../../src/Database/Database";
+import {database} from "../../../src/Database";
 import {expect} from "@jest/globals";
 import hw_interface from "../../../src/hardware_interface/hw_interface";
 import {OperationsBackend} from "../../../src/API/backend";
-import register_write_model, {
-    acquisition_status, clock_info,
-    programs_info, scope_address, select_hil_output, set_hil_inputs
-} from "../../../src/data_model/operations_model";
-import emulator_model, {hil_debug_model} from "../../../src/data_model/emulator_model";
-import program_model from "../../../src/data_model/program_model";
-import {application_model} from "../../../src/data_model/application_model";
-import bitstream_model from "../../../src/data_model/bitstreams_model";
-
+import {
+    register_write_model, acquisition_status, clock_info,
+    programs_info, scope_address, select_hil_output, set_hil_inputs,
+    emulator_model, hil_debug_model, program_model, bitstream_model,
+    application_model
+} from "../../../src/data_model";
 
 import fs from "node:fs";
-import request from "supertest";
-import endpoints_map from "../../../src/API/frontend/endpoints_map";
 
 describe('operations backend test', () => {
     let db_call_args = [] as any;

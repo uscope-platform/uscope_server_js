@@ -1,19 +1,15 @@
 import postgres from "postgres";
 
-import applications_db from "./applications_db";
-import platform_db from "./platform_db";
-import scripts_db from "./scripts_db";
-import programs_db from "./programs_db";
-import filters_db from "./filters_db";
-import emulators_db from "./emulators_db";
-import peripherals_db from "./peripherals_db";
-import Applications_db from "./applications_db";
-import bitstreams_db from "./bitstreams_db";
-import {db_dump} from "../data_model/platform_model";
+import {
+    bitstreams_db, applications_db, peripherals_db,
+    platform_db, emulators_db, filters_db, scripts_db,
+    programs_db
+} from ".";
+import {db_dump} from "../data_model";
 
 const sql = postgres({ max: 4 })
 
-class database {
+export class database {
     public applications:applications_db;
     public scripts: scripts_db;
     public programs: programs_db;
@@ -37,7 +33,7 @@ class database {
 
          this.schema = schema;
 
-         this.applications = new Applications_db(this.db, schema);
+         this.applications = new applications_db(this.db, schema);
          this.platform = new platform_db(this.db, schema);
          this.scripts = new scripts_db(this.db, schema);
          this.programs = new programs_db(this.db, schema);
@@ -533,6 +529,3 @@ class database {
         }
     }
 }
-
-
-export default database;

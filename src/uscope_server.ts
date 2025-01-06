@@ -1,20 +1,14 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
-import {} from "./API/backend/middleware";
 import jwt from "koa-jwt";
-import applications_router from "./API/frontend/applications_api";
-import database from "./Database/Database";
-import bitstream_router from "./API/frontend/bitstreams_api";
-import emulators_router from "./API/frontend/emulators_api";
-import filters_router from "./API/frontend/filters_api";
-import operations_router from "./API/frontend/operations_api";
-import peripherals_router from "./API/frontend/peripherals_api";
-import programs_router from "./API/frontend/programs_api";
-import scripts_router from "./API/frontend/scripts_api";
-import settings_router from "./API/frontend/settings_api";
+import {
+    applications_router, bitstream_router, emulators_router,filters_router,
+    peripherals_router, operations_router, programs_router, scripts_router,
+    settings_router, platform_router
+} from "./API/frontend";
+import {database} from "./Database";
 import {FiltersBackend, OperationsBackend, SettingsBackend, authorizer, error_handler} from "./API/backend";
 import hw_interface from "./hardware_interface/hw_interface";
-import platform_router from "./API/frontend/platform_api";
 
 import cors from '@koa/cors';
 

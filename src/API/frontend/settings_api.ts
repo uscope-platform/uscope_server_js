@@ -1,11 +1,10 @@
 import Router from "koa-router";
 import * as Koa from "koa";
-import endpoints_map from "./endpoints_map";
+import {endpoints_map} from ".";
 import {SettingsBackend} from "../backend";
-import {hil_address_map} from "../../data_model/operations_model";
-import {debugger_option} from "../../data_model/settings_model";
+import {hil_address_map, debugger_option} from "../../data_model";
 
-class settings_router{
+export class settings_router{
     public router: Router;
     private backend: SettingsBackend;
 
@@ -88,6 +87,3 @@ class settings_router{
 
     }
 }
-
-export default settings_router;
-

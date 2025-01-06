@@ -1,8 +1,8 @@
 import postgres from "postgres";
-import bitstream_model from "../data_model/bitstreams_model";
+import {bitstream_model} from "../data_model";
 import {createHash} from "node:crypto";
 
-class bitstreams_db {
+export class bitstreams_db {
     private readonly db: postgres.Sql;
     private readonly schema: string;
 
@@ -96,5 +96,3 @@ class bitstreams_db {
     }
 
 }
-
-export default bitstreams_db;

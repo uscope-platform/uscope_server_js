@@ -1,8 +1,8 @@
 import postgres from "postgres";
-import emulator_model, {connection_model, core_model, dma_channel_model} from "../data_model/emulator_model";
+import {emulator_model, connection_model, core_model, dma_channel_model} from "../data_model";
 
 
-class emulators_db {
+export class emulators_db {
     private readonly db: postgres.Sql;
     private readonly schema: string;
 
@@ -170,5 +170,3 @@ class emulators_db {
 
 
 }
-
-export default emulators_db;

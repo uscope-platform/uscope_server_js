@@ -1,8 +1,8 @@
 import postgres from "postgres";
-import peripheral_model, {field_model, register_model} from "../data_model/peripheral_model";
+import {peripheral_model, field_model, register_model} from "../data_model";
 
 
-class peripherals_db {
+export class peripherals_db {
     private readonly db: postgres.Sql;
     private readonly schema: string;
 
@@ -144,5 +144,3 @@ class peripherals_db {
         return res[0].exists;
     }
 }
-
-export default peripherals_db;

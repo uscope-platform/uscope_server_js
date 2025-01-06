@@ -1,10 +1,10 @@
 import Router from "koa-router";
-import database from "../../Database/Database";
+import {database} from "../../Database";
 import * as Koa from "koa";
-import endpoints_map from "./endpoints_map";
-import program_model, {program_edit_model} from "../../data_model/program_model";
+import {endpoints_map} from ".";
+import {program_model, program_edit_model} from "../../data_model";
 
-class programs_router {
+export class programs_router {
     public router: Router;
     public db: database;
     constructor(db: database) {
@@ -88,6 +88,3 @@ class programs_router {
 
     }
 }
-
-export default programs_router;
-

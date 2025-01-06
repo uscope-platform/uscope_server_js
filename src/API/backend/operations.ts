@@ -1,17 +1,13 @@
-import {application_model} from "../../data_model/application_model";
 import fs from "node:fs";
 import {createHash} from "node:crypto";
-import bitstream_model from "../../data_model/bitstreams_model";
+import {
+    bitstream_model, acquisition_status, channel_statuses, clock_info,
+    programs_info, scope_address, select_hil_output, set_hil_inputs,
+    status_object, hil_debug_model, emulator_model, read_data_response,
+    application_model, register_write_model
+} from "../../data_model";
 import hw_interface from "../../hardware_interface/hw_interface";
-import register_write_model, {
-    acquisition_status,
-    channel_statuses, clock_info,
-    programs_info, scope_address, select_hil_output, set_hil_inputs, status_object
-} from "../../data_model/operations_model";
-import database from "../../Database/Database";
-import emulator_model, {hil_debug_model} from "../../data_model/emulator_model";
-import {read_data_response} from "../../data_model/driver_responses_model";
-
+import {database} from "../../Database";
 
 export class OperationsBackend {
     private hw_if: hw_interface;

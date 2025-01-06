@@ -1,13 +1,12 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
-import database from "../../../src/Database/Database";
+import {database} from "../../../src/Database";
 import {authorizer, error_handler} from "../../../src/API/backend";
 import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
-import peripherals_router from "../../../src/API/frontend/peripherals_api";
-import endpoints_map from "../../../src/API/frontend/endpoints_map";
-import {field_model, register_model} from "../../../src/data_model/peripheral_model";
+import {peripherals_router, endpoints_map} from "../../../src/API/frontend";
+import {field_model, register_model} from "../../../src/data_model";
 
 
 

@@ -1,12 +1,9 @@
-import database from "../../src/Database/Database";
+import {database} from "../../src/Database";
 import {expect} from "@jest/globals";
-import emulator_model from "../../src/data_model/emulator_model";
-import {application_model} from "../../src/data_model/application_model";
-import filter_model from "../../src/data_model/filters_model";
-import bitstream_model from "../../src/data_model/bitstreams_model";
-import script_model from "../../src/data_model/script_model";
-import program_model from "../../src/data_model/program_model";
-import peripheral_model from "../../src/data_model/peripheral_model";
+import {
+    emulator_model, application_model, filter_model, bitstream_model,
+    script_model, program_model, peripheral_model
+} from "../../src/data_model";
 
 
 

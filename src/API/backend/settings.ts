@@ -1,7 +1,6 @@
 
 import hw_interface from "../../hardware_interface/hw_interface";
-import {hil_address_map} from "../../data_model/operations_model";
-import {debugger_option} from "../../data_model/settings_model";
+import {hil_address_map, debugger_option} from "../../data_model";
 
 export class SettingsBackend {
     private hw_if: hw_interface;

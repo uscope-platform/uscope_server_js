@@ -1,10 +1,10 @@
 import Router from "koa-router";
-import database from "../../Database/Database";
+import {database} from "../../Database";
 import * as Koa from "koa";
-import endpoints_map from "./endpoints_map";
-import bitstream_model, {bitstream_edit_model} from "../../data_model/bitstreams_model";
+import {endpoints_map} from ".";
+import {bitstream_edit_model, bitstream_model} from "../../data_model";
 
-class bitstream_router {
+export class bitstream_router {
     public router: Router;
     public db: database;
     constructor(db: database) {
@@ -107,6 +107,3 @@ class bitstream_router {
         }
     }
 }
-
-export default bitstream_router;
-

@@ -1,10 +1,10 @@
 import Router from "koa-router";
-import database from "../../Database/Database";
+import {database} from "../../Database";
 import * as Koa from "koa";
-import endpoints_map from "./endpoints_map";
-import emulator_model, {connection_model, core_model, emulator_edit_model} from "../../data_model/emulator_model";
+import {endpoints_map} from ".";
+import {connection_model, core_model, emulator_edit_model, emulator_model} from "../../data_model";
 
-class emulators_router {
+export class emulators_router {
     public router: Router;
     public db: database;
     constructor(db: database) {
@@ -137,6 +137,3 @@ class emulators_router {
 
     }
 }
-
-export default emulators_router;
-

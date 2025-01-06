@@ -1,5 +1,5 @@
-import database from "../../src/Database/Database";
-import {auto_login_object, user_model} from "../../src/data_model/platform_model";
+import {database} from "../../src/Database";
+import {auto_login_object, user_model} from "../../src/data_model";
 
 
 

@@ -1,7 +1,7 @@
 import postgres from "postgres";
-import {application_model} from "../data_model/application_model";
+import {application_model} from "../data_model";
 
-class applications_db {
+export class applications_db {
     private readonly db: postgres.Sql;
     private readonly schema: string;
 
@@ -124,5 +124,3 @@ class applications_db {
         return res[0].exists;
     }
 }
-
-export default applications_db;

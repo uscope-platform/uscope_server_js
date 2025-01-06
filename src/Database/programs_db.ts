@@ -1,7 +1,7 @@
 import postgres from "postgres";
-import program_model from "../data_model/program_model";
+import {program_model} from "../data_model";
 
-class programs_db {
+export class programs_db {
     private readonly db: postgres.Sql;
     private readonly schema: string;
 
@@ -96,5 +96,3 @@ class programs_db {
     }
 
 }
-
-export default programs_db;

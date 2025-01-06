@@ -1,13 +1,11 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
-import database from "../../../src/Database/Database";
+import {database} from "../../../src/Database";
 import {authorizer, error_handler} from "../../../src/API/backend";
-import scripts_router from "../../../src/API/frontend/scripts_api";
+import {scripts_router, endpoints_map} from "../../../src/API/frontend";
 import request from "supertest";
 import {expect} from "@jest/globals";
 import jwt from "koa-jwt"
-import endpoints_map from "../../../src/API/frontend/endpoints_map";
-
 
 
 describe('script API tests', () => {

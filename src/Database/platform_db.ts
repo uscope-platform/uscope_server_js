@@ -1,8 +1,8 @@
 import postgres, {Row} from "postgres";
-import {auto_login_object, user_model} from "../data_model/platform_model";
+import {auto_login_object, user_model} from "../data_model";
 
 
-class platform_db {
+export class platform_db {
     private readonly db: postgres.Sql;
     private readonly schema: string;
 
@@ -72,5 +72,3 @@ class platform_db {
         return res[0].exists;
     }
 }
-
-export default platform_db;

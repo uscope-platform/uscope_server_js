@@ -1,10 +1,10 @@
 import Router from "koa-router";
-import database from "../../Database/Database";
+import {database} from "../../Database";
 import * as Koa from "koa";
-import endpoints_map from "./endpoints_map";
-import {application_edit_model, application_model} from "../../data_model/application_model";
+import {endpoints_map} from ".";
+import {application_edit_model, application_model} from "../../data_model";
 
-class applications_router {
+export class applications_router {
     public router: Router;
     public db: database;
     private readonly item_types_map:{
@@ -192,6 +192,3 @@ class applications_router {
         await this.db.applications.update_application_field(app);
     }
 }
-
-export default applications_router;
-

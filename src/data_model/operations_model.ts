@@ -1,5 +1,5 @@
 
-export default interface register_write_model {
+export interface register_write_model {
     address:number,
     value:number,
     type:string,

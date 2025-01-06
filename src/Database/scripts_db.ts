@@ -1,7 +1,7 @@
 import postgres from "postgres";
-import script_model from "../data_model/script_model";
+import {script_model} from "../data_model";
 
-class scripts_db {
+export class scripts_db {
     private readonly db: postgres.Sql;
     private readonly schema: string;
 
@@ -84,5 +84,3 @@ class scripts_db {
 
 
 }
-
-export default scripts_db;

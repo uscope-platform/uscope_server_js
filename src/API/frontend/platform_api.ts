@@ -1,9 +1,9 @@
 import Router from 'koa-router';
 import * as Koa from 'koa';
 import {Authenticator} from "../backend";
-import database from "../../Database/Database";
-import {auto_login_object, db_dump, user_login_object} from "../../data_model/platform_model";
-import endpoints_map from "./endpoints_map";
+import {database} from "../../Database";
+import {auto_login_object, db_dump, user_login_object} from "../../data_model";
+import {endpoints_map} from ".";
 import hw_interface from "../../hardware_interface/hw_interface";
 
 interface user_add_request {
@@ -12,7 +12,7 @@ interface user_add_request {
     role:string
 }
 
-class platform_router {
+export class platform_router {
     public router: Router;
     private auth: Authenticator;
     private db: database;
@@ -95,6 +95,3 @@ class platform_router {
 
     }
 }
-
-export default platform_router;
-

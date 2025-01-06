@@ -1,5 +1,5 @@
 
-export default interface bitstream_model {
+export interface bitstream_model {
     id:number,
     name:string,
     data:Buffer | string,

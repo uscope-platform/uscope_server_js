@@ -1,10 +1,10 @@
 import Router from "koa-router";
-import database from "../../Database/Database";
 import * as Koa from "koa";
-import endpoints_map from "./endpoints_map";
-import peripheral_model, {peripheral_edit_model, register_model} from "../../data_model/peripheral_model";
+import {database} from "../../Database";
+import {endpoints_map} from ".";
+import {peripheral_model, peripheral_edit_model, register_model} from "../../data_model";
 
-class peripherals_router {
+export class peripherals_router {
     public router: Router;
     public db: database;
     constructor(db: database) {
@@ -116,6 +116,3 @@ class peripherals_router {
 
     }
 }
-
-export default peripherals_router;
-

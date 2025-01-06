@@ -1,15 +1,10 @@
 import {
-    acquisition_status,
-    channel_statuses, clock_info,
-    hil_address_map,
-    scope_address,
-    select_hil_output, set_hil_inputs, status_object
-} from "../data_model/operations_model";
+    acquisition_status, channel_statuses, clock_info, hil_address_map, scope_address,
+    select_hil_output, set_hil_inputs, status_object,read_data_response, debugger_option
+} from "../data_model";
 import commands from "./hw_commands_map";
-import {read_data_response} from "../data_model/driver_responses_model";
 import {Socket} from "node:net";
 import {pack, unpack} from "msgpackr";
-import {debugger_option} from "../data_model/settings_model";
 
 
 export default class hw_interface {

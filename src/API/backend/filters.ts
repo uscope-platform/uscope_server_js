@@ -1,4 +1,4 @@
-import database from "../../Database/Database";
+import {database} from "../../Database";
 import {spawnSync} from "node:child_process";
 import hw_interface from "../../hardware_interface/hw_interface";
 
