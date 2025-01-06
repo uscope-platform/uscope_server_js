@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import {bitstream_model} from "../data_model";
+import {bitstream_model} from "#models";
 import {createHash} from "node:crypto";
 
 export class bitstreams_db {

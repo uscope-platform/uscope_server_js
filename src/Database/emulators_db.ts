@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import {emulator_model, connection_model, core_model, dma_channel_model} from "../data_model";
+import {emulator_model, connection_model, core_model, dma_channel_model} from "#models";
 
 
 export class emulators_db {

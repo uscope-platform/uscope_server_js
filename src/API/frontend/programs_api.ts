@@ -1,8 +1,8 @@
 import Router from "koa-router";
-import {database} from "../../Database";
+import {database} from "#database";
 import * as Koa from "koa";
 import {endpoints_map} from ".";
-import {program_model, program_edit_model} from "../../data_model";
+import {program_model, program_edit_model} from "#models";
 
 export class programs_router {
     public router: Router;

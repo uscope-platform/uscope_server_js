@@ -1,5 +1,5 @@
 import Koa from "koa";
-import {endpoints_map} from "../frontend";
+import {endpoints_map} from "#api_frontend";
 import  {roles_hierarchy} from "./authorization_rules";
 import {rules} from ".";
 

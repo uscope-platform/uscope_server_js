@@ -5,7 +5,7 @@ import {
     programs_info, scope_address, select_hil_output, set_hil_inputs,
     status_object, hil_debug_model, emulator_model, read_data_response,
     application_model, register_write_model
-} from "../../data_model";
+} from "#models";
 import {hw_interface} from "#hw";
 import {database} from "#database";
 

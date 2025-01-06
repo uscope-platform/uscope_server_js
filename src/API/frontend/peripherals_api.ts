@@ -1,8 +1,8 @@
 import Router from "koa-router";
 import * as Koa from "koa";
-import {database} from "../../Database";
+import {database} from "#database";
 import {endpoints_map} from ".";
-import {peripheral_model, peripheral_edit_model, register_model} from "../../data_model";
+import {peripheral_model, peripheral_edit_model, register_model} from "#models";
 
 export class peripherals_router {
     public router: Router;

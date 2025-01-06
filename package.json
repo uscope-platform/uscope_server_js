@@ -10,10 +10,15 @@
     "test": "npm run test_parallel & npm run test_serial"
   },
   "imports": {
+    "#hw": "./src/hardware_interface/index.ts",
     "#hw/*": "./src/hardware_interface/*",
+    "#api_backend": "./src/API/backend/index.ts",
     "#api_backend/*": "./src/API/backend/*",
+    "#api_frontend": "./src/API/frontend/index.ts",
     "#api_frontend/*": "./src/API/frontend/*",
+    "#database": "./src/Database/index.ts",
     "#database/*": "./src/Database/*",
+    "#models": "./src/data_model/index.ts",
     "#models/*": "./src/data_model/*"
   },
   "keywords": [],

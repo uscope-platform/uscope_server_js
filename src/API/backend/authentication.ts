@@ -1,9 +1,9 @@
-import {database} from "../../Database";
+import {database} from "#database";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import {randomBytes, timingSafeEqual} from "node:crypto";
 import {subtle} from "node:crypto";
-import {auth_response, auto_login_object, user_login_object} from "../../data_model";
+import {auth_response, auto_login_object, user_login_object} from "#models";
 
 class CustomError extends Error {
     public status:number;

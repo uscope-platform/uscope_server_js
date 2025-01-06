@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import {filter_model} from "../data_model";
+import {filter_model} from "#models";
 
 
 export class filters_db {

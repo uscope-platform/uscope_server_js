@@ -1,5 +1,5 @@
 import postgres, {Row} from "postgres";
-import {auto_login_object, user_model} from "../data_model";
+import {auto_login_object, user_model} from "#models";
 
 
 export class platform_db {

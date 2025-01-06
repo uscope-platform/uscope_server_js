@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import {peripheral_model, field_model, register_model} from "../data_model";
+import {peripheral_model, field_model, register_model} from "#models";
 
 
 export class peripherals_db {

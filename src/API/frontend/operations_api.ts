@@ -1,13 +1,13 @@
 import Router from "koa-router";
-import {database} from "../../Database";
+import {database} from "#database";
 import * as Koa from "koa";
 import {endpoints_map} from ".";
 import {
     register_write_model, emulator_model, acquisition_status, channel_statuses, clock_info,
     programs_info, scope_address, select_hil_output, set_hil_inputs, status_object,
     hil_debug_model, filter_apply_model
-} from "../../data_model";
-import {FiltersBackend, OperationsBackend} from "../backend";
+} from "#models";
+import {FiltersBackend, OperationsBackend} from "#api_backend";
 
 
 export class operations_router {

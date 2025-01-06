@@ -1,8 +1,8 @@
 import Router from "koa-router";
-import {database} from "../../Database";
+import {database} from "#database";
 import * as Koa from "koa";
 import {endpoints_map} from ".";
-import {bitstream_edit_model, bitstream_model} from "../../data_model";
+import {bitstream_edit_model, bitstream_model} from "#models";
 
 export class bitstream_router {
     public router: Router;

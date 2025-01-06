@@ -1,8 +1,8 @@
 import Router from "koa-router";
 import * as Koa from "koa";
 import {endpoints_map} from ".";
-import {SettingsBackend} from "../backend";
-import {hil_address_map, debugger_option} from "../../data_model";
+import {SettingsBackend} from "#api_backend";
+import {hil_address_map, debugger_option} from "#models";
 
 export class settings_router{
     public router: Router;

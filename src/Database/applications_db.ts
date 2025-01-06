@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import {application_model} from "../data_model";
+import {application_model} from "#models";
 
 export class applications_db {
     private readonly db: postgres.Sql;

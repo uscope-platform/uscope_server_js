@@ -5,7 +5,7 @@ import {
     platform_db, emulators_db, filters_db, scripts_db,
     programs_db
 } from ".";
-import {db_dump} from "../data_model";
+import {db_dump} from "#models"
 
 const sql = postgres({ max: 4 })
 

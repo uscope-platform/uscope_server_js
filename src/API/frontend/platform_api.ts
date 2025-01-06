@@ -1,8 +1,8 @@
 import Router from 'koa-router';
 import * as Koa from 'koa';
-import {Authenticator} from "../backend";
+import {Authenticator} from "#api_backend";
 import {database} from "#database";
-import {auto_login_object, db_dump, user_login_object} from "../../data_model";
+import {auto_login_object, db_dump, user_login_object} from "#models";
 import {endpoints_map} from ".";
 import {hw_interface} from "#hw";
 
