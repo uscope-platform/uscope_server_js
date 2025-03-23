@@ -38,38 +38,34 @@ export class hw_interface {
     }
 
     private async send_command(command:string, args:any): Promise<any> {
-        try {
-            let socket = new Socket();
-            socket.connect(this.port, this.host)
+        let socket = new Socket();
+        await new Promise((resolve, reject) => {
+            socket.connect(this.port, this.host, ()=>resolve);
+            socket.on('error', reject);
+        });
 
+        let command_obj = {"cmd": command, "args": args}
+        let raw_command = pack(command_obj)
+        let raw_length = Buffer.alloc(4);
+        raw_length.writeUInt32LE( raw_command.length)
 
-            let command_obj = {"cmd": command, "args": args}
-            let raw_command = pack(command_obj)
-            let raw_length = Buffer.alloc(4);
-            raw_length.writeUInt32LE( raw_command.length)
-
-            socket.write(raw_length);
-            let ack = await this.read_n_bytes(socket, 1);
-            if(ack[0] != 107){
-                console.log("NACK RECEIVED WHEN SENDING " + command_obj);
-            }
-            socket.write(raw_command);
-            let raw_resp_size = await this.read_n_bytes(socket, 4);
-            let resp_size = raw_resp_size.readUint32LE(0);
-            socket.write("k");
-            let raw_resp = await this.read_n_bytes(socket, resp_size);
-            socket.end();
-            let resp = unpack(raw_resp).body;
-            if(resp.response_code != 1){
-                throw resp.data;
-            } else{
-                return resp.data;
-            }
-        } catch (e: any) {
-            console.log(e);
-            process.exit(-1)
+        socket.write(raw_length);
+        let ack = await this.read_n_bytes(socket, 1);
+        if(ack[0] != 107){
+            console.log("NACK RECEIVED WHEN SENDING " + command_obj);
         }
-
+        socket.write(raw_command);
+        let raw_resp_size = await this.read_n_bytes(socket, 4);
+        let resp_size = raw_resp_size.readUint32LE(0);
+        socket.write("k");
+        let raw_resp = await this.read_n_bytes(socket, resp_size);
+        socket.end();
+        let resp = unpack(raw_resp).body;
+        if(resp.response_code != 1){
+            throw resp.data;
+        } else{
+            return resp.data;
+        }
     }
 
     public async read_data(): Promise<read_data_response> {
