@@ -40,7 +40,9 @@ export class hw_interface {
     private async send_command(command:string, args:any): Promise<any> {
         let socket = new Socket();
         await new Promise((resolve, reject) => {
-            socket.connect(this.port, this.host, ()=>resolve);
+            socket.connect(this.port, this.host, ()=>{
+                resolve("")
+            });
             socket.on('error', reject);
         });
 
