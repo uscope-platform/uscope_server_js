@@ -296,11 +296,8 @@ describe('emulators API tests', () => {
 
     test('add connection', async () => {
         let conn :connection_model= {
-            source:"test_src",
-            destination:"test_dst",
-            channels:[
-
-            ]
+            source:"test_src.a",
+            destination:"test_dst.b"
         }
         let edit = {emulator:4, field:"connections", action:"add", value:conn};
         let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
@@ -331,93 +328,6 @@ describe('emulators API tests', () => {
             .then((response)=>{
                 expect(response.status).toBe(200);
                 expect(results).toStrictEqual(["remove_connection", 4, "test_src", "test_dst"])
-            });
-    });
-
-
-    test('add dma_channel', async () => {
-        let ch = {
-            source:"test_src",
-            destination:"test_dst",
-            object:{
-                name:"test_channel_1",
-                type:"scalar_transfer",
-                source:{
-                    channel:[0],
-                    register:[0]
-                },
-                destination: {
-                    channel:[0],
-                    register: [0]
-                },
-                length:1,
-                stride:1
-            }
-        }
-        let edit = {emulator:4, field:"dma_channel", action:"add", value: ch};
-        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
-        path = path.replace(':id', '4');
-        return request(app.callback())
-            .patch(path)
-            .set('Authorization', `Bearer ${token}`)
-            .send(edit)
-            .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(results).toStrictEqual(["add_channel", 4,"test_src","test_dst", ch.object])
-            });
-    });
-
-
-    test('edit dma_channel', async () => {
-        let ch = {
-            source:"test_src",
-            destination:"test_dst",
-            selector:"channel_sel",
-            object:{
-                name:"2134",
-                type:"scalar_transfer",
-                source:{
-                    channel:[2],
-                    register:[0]
-                },
-                destination: {
-                    channel:[0],
-                    register: [0]
-                },
-                length:1,
-                stride:1
-            }
-        }
-        let edit = {emulator:4, field:"dma_channel", action:"edit", value: ch};
-        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
-        path = path.replace(':id', '4');
-        return request(app.callback())
-            .patch(path)
-            .set('Authorization', `Bearer ${token}`)
-            .send(edit)
-            .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(results).toStrictEqual(["edit_channel", 4,"test_src","test_dst", "channel_sel", ch.object])
-            });
-    });
-
-
-    test('remove dma_channel', async () => {
-        let ch = {
-            name:"5af",
-            source:"test_src",
-            destination:"test_dst",
-        }
-        let edit = {emulator:4, field:"dma_channel", action:"remove", value: ch};
-        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
-        path = path.replace(':id', '4');
-        return request(app.callback())
-            .patch(path)
-            .set('Authorization', `Bearer ${token}`)
-            .send(edit)
-            .then((response)=>{
-                expect(response.status).toBe(200);
-                expect(results).toStrictEqual(["remove_channel", 4,"test_src","test_dst","5af"])
             });
     });
 

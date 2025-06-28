@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import {emulator_model, connection_model, core_model, dma_channel_model} from "#models";
+import {emulator_model, connection_model, core_model} from "#models";
 
 
 export class emulators_db {
@@ -82,51 +82,6 @@ export class emulators_db {
         let new_conn = emu.connections;
         new_conn.push(connection);
         return await this.update_emulator_field(id, "connections", new_conn);
-    }
-
-
-    public async add_dma_channel(id:number, src:string, dst:string, channel:dma_channel_model){
-        let emu = await this.get_emulator(id);
-        let conn = emu.connections.filter((e:connection_model)=>{
-            return e.source == src && e.destination == dst;
-        });
-        if(conn.length == 0){
-            throw "Connection not found";
-        }
-        conn[0].channels.push(channel);
-        return await this.update_emulator_field(id, "connections", emu.connections);
-    }
-
-    public async edit_dma_channel(id:number, src:string, dst:string, channel_name:string, channel:dma_channel_model) {
-        let emu = await this.get_emulator(id);
-        let conn = emu.connections.filter((e:connection_model)=>{
-            return e.source == src && e.destination == dst;
-        });
-        if(conn.length == 0){
-            throw "Connection not found";
-        }
-        conn[0].channels = conn[0].channels.map((e:dma_channel_model)=>{
-            if( e.name === channel_name)
-                return channel;
-            else
-                return e;
-        });
-        return await this.update_emulator_field(id, "connections", emu.connections);
-    }
-
-
-    public async remove_dma_channel(emu_id:number, src:string, dst:string, ch_name: string) {
-        let emu = await this.get_emulator(emu_id);
-        let conn = emu.connections.filter((e:connection_model)=>{
-            return e.source == src && e.destination == dst;
-        });
-        if(conn.length == 0){
-            throw "Connection not found";
-        }
-        conn[0].channels = conn[0].channels.filter((e:dma_channel_model)=>{
-            return e.name !== ch_name;
-        });
-        return await this.update_emulator_field(emu_id, "connections", emu.connections);
     }
 
     public async remove_connection(id:number, src:string, dst:string) {

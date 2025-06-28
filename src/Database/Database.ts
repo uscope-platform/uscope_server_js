@@ -422,7 +422,7 @@ export class database {
             `
             await this.db`
                 alter table ${sql(this.schema)}.emulators
-                    add connections jsonb[]
+                    add connections jsonb
             `
             await this.db`
                 alter table ${sql(this.schema)}.emulators

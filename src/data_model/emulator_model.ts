@@ -83,25 +83,9 @@ export interface core_model {
     deployment:core_deployment_options
 }
 
-export interface dma_endpoint {
-    register: number[],
-    channel: number[]
-}
-
-export interface dma_channel_model {
-    name:string,
-    length:number,
-    stride:number,
-    type:string,
-    source:dma_endpoint,
-    destination:dma_endpoint,
-}
-
 export interface connection_model {
     source:string,
     destination:string,
-    channels:dma_channel_model[],
-
 }
 
 
