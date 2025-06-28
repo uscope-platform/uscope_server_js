@@ -206,7 +206,7 @@ describe('Hardware interface test', () => {
         }
 
         let resp = await hw.compile_program(prog);
-        expect(resp).toStrictEqual({hex: [131073, 12, 12, 12, 397345, 12], status: "ok"});
+        expect(resp).toStrictEqual({hex: [131076, 12,131073, 65538,196611, 12, 12, 395329, 12], status: "ok"});
     });
 
     test('compile program error', async () => {
@@ -256,6 +256,7 @@ describe('Hardware interface test', () => {
 
     test('deploy_hil', async () => {
         let hil = {
+            version:1,
             cores: [
                 {
                     id: "test",
@@ -354,6 +355,7 @@ describe('Hardware interface test', () => {
 
     test('disassemble hil', async () => {
         let hil = {
+            version:1,
             cores: [
                 {
                     id: "test",
@@ -443,6 +445,7 @@ describe('Hardware interface test', () => {
 
     test('emulate hil ', async () => {
         let hil = {
+            version:1,
             cores: [
                 {
                     id: "test",
