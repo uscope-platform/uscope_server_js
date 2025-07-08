@@ -104,7 +104,7 @@ export class emulators_router {
                                 ctx.body = await this.db.emulators.update_port_link(id, e.value.core.source, e.value.core.destination, e.value.link_id, e.value.update_object);
                                 break;
                             case "remove":
-                                ctx.body = await this.db.emulators.remove_port_link(id, e.value.core.source, e.value.core.destination, e.value.link_id);
+                                ctx.body = await this.db.emulators.remove_port_link(id, e.value.source, e.value.destination, e.value.link_id);
                                 break;
                         }
                         break;
