@@ -4,7 +4,7 @@ export {scope_data_object, read_data_response} from "./driver_responses_model"
 export {
     hil_debug_model, connection_model, core_deployment_options, core_input, core_input_data, core_input_metadata, core_input_source,
     core_memory, core_model, core_options_model, core_output, core_output_metadata, emulator_edit_model,
-    emulator_model, efi_implementation_type, fcore_comparator_type
+    emulator_model, efi_implementation_type, fcore_comparator_type, port_link_model
 } from "./emulator_model"
 export {filter_apply_model, filter_edit_model, filter_model} from "./filters_model"
 export {

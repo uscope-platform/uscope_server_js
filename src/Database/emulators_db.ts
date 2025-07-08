@@ -1,5 +1,6 @@
 import postgres from "postgres";
 import {emulator_model, connection_model, core_model} from "#models";
+import {port_link_model} from "#models/emulator_model.ts";
 
 
 export class emulators_db {
@@ -84,10 +85,37 @@ export class emulators_db {
         return await this.update_emulator_field(id, "connections", new_conn);
     }
 
+
+    public async add_port_link(id:number, src:string, dst:string, port:port_link_model){
+        let emu = await this.get_emulator(id);
+        let connection = emu.connections.filter((e:connection_model)=>{
+            return e.source_core === src && e.destination_core === dst;
+        })[0];
+        connection.ports.push(port);
+        return await this.update_emulator_field(id, "connections", emu.connections);
+    }
+
+    public async update_port_link(id:number, src_core:string, dst_core:string, link_id:number, link:port_link_model) {
+        await this.remove_port_link(id, src_core, dst_core, link_id);
+        return await this.add_port_link(id, src_core, dst_core, link);
+    }
+
+    public async remove_port_link(id:number, src_core:string, dst_core:string, link_id:number) {
+        let emu = await this.get_emulator(id);
+        let conn = emu.connections.filter((e:connection_model)=>{
+            return e.source_core === src_core || e.destination_core === dst_core;
+        })[0];
+        conn.ports = conn.ports.filter((e:port_link_model)=>{
+            return e.id !== link_id;
+        })
+        return await this.update_emulator_field(id, "connections",  emu.connections);
+    }
+
+
     public async remove_connection(id:number, src:string, dst:string) {
         let emu = await this.get_emulator(id);
         emu.connections = emu.connections.filter((e:connection_model)=>{
-            return e.source !== src || e.destination !== dst;
+            return e.source_core !== src || e.destination_core !== dst;
         });
         return await this.update_emulator_field(id, "connections",  emu.connections);
     }

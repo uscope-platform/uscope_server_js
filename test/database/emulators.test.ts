@@ -127,14 +127,15 @@ describe('emulator_database_tests', () => {
 
     test('add_connection', async () => {
         let conn :connection_model = {
-            source:"src",
-            destination:"dst"
+            source_core:"src",
+            destination_core:"dst",
+            ports:[{id: 1, source_port:"a", destination_port: "b"}]
         }
         await db.emulators.add_connection(1, conn);
         let res = await db.emulators.get_emulator(1);
         expect(res.connections).toHaveLength(1);
         expect(res.connections[0]).toStrictEqual(conn);
-        conn.source="test";
+        conn.source_core="test";
         await db.emulators.add_connection(1, conn);
     });
 
@@ -142,9 +143,39 @@ describe('emulator_database_tests', () => {
         await  db.emulators.remove_connection(1, "src", "dst");
         let res = await db.emulators.get_emulator(1);
         expect(res.connections).toHaveLength(1);
-        expect(res.connections[0].source).toStrictEqual("test");
+        expect(res.connections[0].source_core).toStrictEqual("test");
     });
 
+    test('add_port_link', async () => {
+        let conn :connection_model = {
+            source_core:"src_l",
+            destination_core:"dst_l",
+            ports:[{id: 1, source_port:"a", destination_port: "b"}]
+        }
+        await db.emulators.add_connection(1, conn);
+        await db.emulators.add_port_link(1, "src_l", "dst_l", {id: 2, source_port:"c", destination_port:"d"});
+        let res = await db.emulators.get_emulator(1);
+        expect(res.connections).toHaveLength(2);
+        expect(res.connections[1].ports[1]).toStrictEqual({id: 2, source_port:"c", destination_port:"d"});
+    });
+
+    test('update_port_link', async () => {
+        await db.emulators.update_port_link(1, "src_l", "dst_l", 2, {id: 4, source_port:"c2", destination_port:"d2"});
+        let res = await db.emulators.get_emulator(1);
+        expect(res.connections).toHaveLength(2);
+        expect(res.connections[1].ports[0]).toStrictEqual({id: 1, source_port:"a", destination_port:"b"});
+        expect(res.connections[1].ports[1]).toStrictEqual({id: 4, source_port:"c2", destination_port:"d2"});
+    });
+
+
+    test('remove_port_link', async () => {
+        await db.emulators.remove_port_link(1, "src_l", "dst_l", 1);
+        let res = await db.emulators.get_emulator(1);
+        expect(res.connections).toHaveLength(2);
+        expect(res.connections[1].ports).toHaveLength(1);
+        expect(res.connections[1].ports[0]).toStrictEqual({id: 4, source_port:"c2", destination_port: "d2"});
+        await db.emulators.remove_connection(1, "src_l", "dst_l");
+    });
 
     test('update_emulator', async () => {
         await db.emulators.edit_atomic_field(1, "emulation_time", 12);

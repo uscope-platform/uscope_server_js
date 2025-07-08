@@ -82,10 +82,15 @@ export interface core_model {
     sampling_frequency:number,
     deployment:core_deployment_options
 }
-
+export interface port_link_model{
+    id: number,
+    source_port:string,
+    destination_port:string
+}
 export interface connection_model {
-    source:string,
-    destination:string,
+    source_core:string,
+    destination_core:string,
+    ports: port_link_model[]
 }
 
 

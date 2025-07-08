@@ -10,7 +10,8 @@ import {
     connection_model,
     core_model,
     efi_implementation_type, emulator_edit_model,
-    fcore_comparator_type
+    fcore_comparator_type,
+    port_link_model
 } from "#models";
 
 
@@ -90,18 +91,6 @@ describe('emulators API tests', () => {
             remove_connection:(id:number, src:any, dst:any) =>{
                 results = ["remove_connection", id, src, dst];
             },
-            add_dma_channel:(id:number, src:any, dst:any, obj:any)=>{
-
-                results = ["add_channel", id, src, dst, obj];
-            },
-            edit_dma_channel:(id:number, src:any, dst:any,sel:any, obj:any)=>{
-
-                results = ["edit_channel", id, src, dst,sel, obj];
-            },
-            remove_dma_channel:(id:number,name:any, src:any, dst:any)=>{
-
-                results = ["remove_channel", id,name, src, dst];
-            },
             add_emulator:(flt:any) =>{
                 results = flt;
             },
@@ -110,6 +99,15 @@ describe('emulators API tests', () => {
             },
             remove_emulator:(id:number) =>{
                 results = id;
+            },
+            add_port_link:(id:number, src:string, dst:string, port:port_link_model) =>{
+                results = ["add_port_link", id, src, dst, port];
+            },
+            update_port_link:(id:number, src_core:string, dst_core:string, link_id:number, link:port_link_model) =>{
+                results = ["update_port_link", id, src_core, dst_core, link_id, link];
+            },
+            remove_port_link:(id:number, src_core:string, dst_core:string, link_id:number) =>{
+                results = ["remove_port_link", id, src_core, dst_core, link_id];
             }
         }
     } as any as database
@@ -296,8 +294,11 @@ describe('emulators API tests', () => {
 
     test('add connection', async () => {
         let conn :connection_model= {
-            source:"test_src.a",
-            destination:"test_dst.b"
+            source_core:"test_src",
+            destination_core:"test_dst",
+            ports:[
+                {id: 1, source_port:"a", destination_port:"b"}
+            ]
         }
         let edit = {emulator:4, field:"connections", action:"add", value:conn};
         let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
@@ -328,6 +329,81 @@ describe('emulators API tests', () => {
             .then((response)=>{
                 expect(response.status).toBe(200);
                 expect(results).toStrictEqual(["remove_connection", 4, "test_src", "test_dst"])
+            });
+    });
+
+    test('add port_link', async () => {
+        let edit = {
+            emulator:4,
+            field:"port_link",
+            action:"add",
+            value: {
+                core:{
+                    source: "srcc",
+                    destination: "dstc",
+                },
+                link:{id: 1, source_port:"a", destination_port:"b"}
+            }
+        };
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
+        path = path.replace(':id', '4');
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                    expect(results).toStrictEqual(["add_port_link",4, "srcc", "dstc", {id: 1, source_port:"a", destination_port:"b"}])
+            });
+    });
+
+
+
+
+    test('update port_link', async () => {
+        let edit = {
+            emulator:4,
+            field:"port_link",
+            action:"edit",
+            value: {
+                core:{
+                    source: "srcc",
+                    destination: "dstc",
+                },
+                link_id:1,
+                update_object: {id: 1, source_port:"a2", destination_port:"b2"}
+            }};
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
+        path = path.replace(':id', '4');
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(["update_port_link", 4, "srcc", "dstc", 1, {id: 1, source_port:"a2", destination_port:"b2"}])
+            });
+    });
+
+
+    test('remove port_link', async () => {
+        let conn = {
+            core:{
+                source: "srcc",
+                destination: "dstc",
+            },
+            link_id:1
+        }
+        let edit = {emulator:4, field:"port_link", action:"remove", value:conn};
+        let path = endpoints_map.emulator.prefix + endpoints_map.emulator.endpoints.edit
+        path = path.replace(':id', '4');
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(results).toStrictEqual(["remove_port_link", 4, "srcc", "dstc", 1])
             });
     });
 
