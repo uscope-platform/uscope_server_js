@@ -388,10 +388,8 @@ describe('emulators API tests', () => {
 
     test('remove port_link', async () => {
         let conn = {
-            core:{
-                source: "srcc",
-                destination: "dstc",
-            },
+            source: "srcc",
+            destination: "dstc",
             link_id:1
         }
         let edit = {emulator:4, field:"port_link", action:"remove", value:conn};
