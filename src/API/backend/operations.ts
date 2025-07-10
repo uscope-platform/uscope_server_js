@@ -85,6 +85,10 @@ export class OperationsBackend {
         return this.hw_if.deploy_hil(hil);
     }
 
+    public async hil_hardware_sim(hil:emulator_model): Promise<any>{
+        return this.hw_if.hil_hardware_sim(hil);
+    }
+
     public async get_version(component:string): Promise<string> {
         return this.hw_if.get_version(component);
     }

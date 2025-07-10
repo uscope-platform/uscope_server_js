@@ -19,6 +19,7 @@ interface api_map {
             dma_disable:string,
             hil_debug:string,
             hil_deploy:string,
+            hil_hardware_sim:string,
             hil_disassemble:string,
             hil_emulate:string,
             hil_select_output:string,
@@ -184,6 +185,7 @@ export let endpoints_map : api_map = {
 
             hil_debug: '/hil/debug',
             hil_deploy: '/hil/deploy',
+            hil_hardware_sim: '/hil/hardware_sim',
             hil_disassemble: '/hil/disassemble',
             hil_emulate: '/hil/emulate',
             hil_select_output: '/hil/select_out',

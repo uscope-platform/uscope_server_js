@@ -979,6 +979,29 @@ describe('Operation API tests', () => {
 
     });
 
+
+    test('hil_hardware_sim', async () => {
+        let router = rtr as any;
+        let result = {} as any;
+        const spy = jest.spyOn(router.ops_backend, 'hil_hardware_sim').mockImplementation(
+            (model:any) => {
+                result =model
+            });
+
+        let model = {cores:[], version:1,interconnects:[]};
+
+        return request(app.callback())
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_hardware_sim)
+            .set('Authorization', `Bearer ${token}`)
+            .send(model)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toBeCalledTimes(1);
+                expect(result).toStrictEqual(model);
+            });
+
+    });
+
     afterEach(() => {
         // restore the spy created with spyOn
         jest.restoreAllMocks();

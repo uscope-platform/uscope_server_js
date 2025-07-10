@@ -236,6 +236,17 @@ export class operations_router {
             }
         });
 
+        this.router.post(endpoints_map.operations.endpoints.hil_hardware_sim, async (ctx:Koa.Context) => {
+            try{
+                let model = <emulator_model>ctx.request.body;
+                ctx.response.body = await this.ops_backend.hil_hardware_sim(model);
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.body = error
+                ctx.status = 501
+            }
+        });
+
 
         this.router.post(endpoints_map.operations.endpoints.hil_set_input, async (ctx:Koa.Context) => {
             try{

@@ -192,6 +192,10 @@ export class hw_interface {
         return await this.send_command(commands.core.deploy_hil, spec);
     }
 
+    public async hil_hardware_sim(spec:object){
+        return await this.send_command(commands.core.hil_hardware_sim, spec);
+    }
+
     public async hil_disassemble(spec:object){
         return await this.send_command(commands.core.hil_disassemble, spec);
     }

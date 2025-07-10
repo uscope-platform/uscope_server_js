@@ -443,6 +443,7 @@ describe('Hardware interface test', () => {
         });
     });
 
+
     test('emulate hil ', async () => {
         let hil = {
             version:1,
@@ -580,6 +581,101 @@ describe('Hardware interface test', () => {
         expect(resp).toBeUndefined();
     });
 
+    test('hil hardware sim', async () => {
+        let hil = {
+            version:2,
+            cores: [
+                {
+                    id: "test",
+                    order: 0,
+                    inputs: [
+                        {
+                            name: "input_1",
+                            is_vector: false,
+                            metadata:{
+                                type: "float",
+                                width:16,
+                                signed:true,
+                                common_io:false
+                            },
+                            source: {
+                                type: "constant",
+                                value: [
+                                    31.2
+                                ]
+                            }
+                        },
+                        {
+                            name: "input_2",
+                            is_vector: false,
+                            metadata:{
+                                type: "float",
+                                width:16,
+                                signed:true,
+                                common_io:false
+                            },
+                            source: {
+                                type: "constant",
+                                value: [
+                                    4
+                                ]
+                            }
+                        }
+                    ],
+                    outputs: [
+                        {
+                            name: "out",
+                            is_vector: false,
+                            metadata:{
+                                type: "float",
+                                width:16,
+                                signed:true,
+                                common_io:false
+                            }
+                        }
+                    ],
+                    memory_init: [],
+                    channels: 1,
+                    options: {
+                        comparators: "reducing",
+                        efi_implementation: "none"
+                    },
+                    program: {
+                        content: "int main(){\n  float input_1;\n  float input_2;\n  float out = input_1 + input_2;\n}",
+                        build_settings: {
+                            io: {
+                                inputs: [
+                                    "input_1",
+                                    "input_2"
+                                ],
+                                memories: [],
+                                outputs: [
+                                    "out"
+                                ]
+                            }
+                        },
+                        headers: []
+                    },
+                    sampling_frequency: 1,
+                    deployment: {
+                        has_reciprocal: false,
+                        control_address: 18316525568,
+                        rom_address: 17179869184
+                    }
+                }
+            ],
+            interconnect: [],
+            emulation_time: 2,
+            deployment_mode: false
+        }
+
+
+        let resp = await hw.hil_hardware_sim(hil);
+        expect(resp).toStrictEqual({
+            "code": "293194563584:131076\n293194563588:12\n293194563592:196609\n293194563596:65538\n293194563600:131075\n293194563604:12\n293194563608:12\n293194563612:395329\n293194563616:12\n",
+            "control": "18316595204:131073\n18316595268:56\n18316595200:1\n18316599304:3\n18316599296:1106876826\n18316603400:2\n18316603392:1082130432\n18316529668:0\n18316525576:2\n18316525572:1000000000\n18316529664:1\n18316591104:11\n"
+        });
+    });
 
 });
 
