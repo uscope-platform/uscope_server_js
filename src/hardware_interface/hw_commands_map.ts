@@ -29,7 +29,6 @@ interface hw_commands_map {
             hil_set_in:string,
             hil_start:string,
             hil_stop:string,
-            set_layout_map:string,
             set_hil_address_map:string,
             get_hil_address_map:string
         },
@@ -75,7 +74,6 @@ export let commands :hw_commands_map = {
         hil_debug:"hil_debug",
         hil_start:"hil_start",
         hil_stop:"hil_stop",
-        set_layout_map:"set_layout_map",
         set_hil_address_map:"set_hil_address_map",
         get_hil_address_map:"get_hil_address_map"
     },
