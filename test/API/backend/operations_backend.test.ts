@@ -25,8 +25,7 @@ describe('operations backend test', () => {
                         hex:[213, 134,2],
                         content:"",
                         headers:[],
-                        cached_bin_version:"21324",
-                        build_settings:[]
+                        cached_bin_version:"21324"
                     };
                 } else {
                     return {
@@ -36,8 +35,7 @@ describe('operations backend test', () => {
                         hex:[21134,2],
                         content:"",
                         headers:[],
-                        cached_bin_version:"safaf",
-                        build_settings:[]
+                        cached_bin_version:"safaf"
                     };
                 }
             },

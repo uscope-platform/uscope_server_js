@@ -23,7 +23,6 @@ describe('programs API tests', () => {
             "content": "void main(){\n    float i_mem;\n\n    i_mem = i_mem + 10.0;\n    int i_mem = fti(i_mem);\n    i_mem = i_mem & 2047;\n  i_mem = itf(i_mem);\n}",
             "type": "C",
             "hex": ["262145", "12", "12", "38", "1092616192", "264257", "12"],
-            "build_settings": {"io": {"inputs": [], "outputs": [], "memories": ["i_mem"]}},
             "cached_bin_version": "",
             "headers": []
         },
@@ -33,7 +32,6 @@ describe('programs API tests', () => {
             "content": "void main(){\n  float b_f = itf(b);\n  c = a/b_f;\n}",
             "type": "C",
             "hex": [],
-            "build_settings": {"io": {"inputs": ["a", "b"], "outputs": ["c"],"memories": []}},
             "cached_bin_version": "",
             "headers": []
         }];
@@ -115,7 +113,6 @@ describe('programs API tests', () => {
             "content": "void main(){}",
             "type": "C",
             "hex": [],
-            "build_settings": {"io": {"inputs": [], "outputs": [],"memories": []}},
             "cached_bin_version": "",
             "headers": []
         }

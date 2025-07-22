@@ -45,7 +45,7 @@ describe('db_creation_test', () => {
                 filters:["id", "ideal_taps", "quantized_taps", "name", "parameters"],
                 login_tokens:["selector", "validator", "expiry", "username"],
                 peripherals:["id", "image", "name", "parametric", "registers", "version"],
-                programs:["id", "build_settings", "headers", "type", "hex", "name", "cached_bin_version", "content"],
+                programs:["id", "headers", "type", "hex", "name", "cached_bin_version", "content"],
                 scripts:["id", "content", "name", "path", "triggers"],
                 users:["pw_hash", "role", "username"]
             }

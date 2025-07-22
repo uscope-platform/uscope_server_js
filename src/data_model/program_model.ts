@@ -6,7 +6,6 @@ export interface program_model {
     type:string,
     content:string,
     hex:number[],
-    build_settings:object,
     cached_bin_version:string,
     headers:number[]
 }

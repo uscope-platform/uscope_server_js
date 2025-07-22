@@ -123,6 +123,7 @@ describe('Hardware interface test', () => {
                 cores_control: 0x443c10000,
                 cores_inputs: 8192,
                 cores_rom:  0x443c20000,
+                noise_generator:   0x443c70000,
                 hil_control:  0x443c30000,
                 scope_mux:  0x443c40000
             },
@@ -223,7 +224,6 @@ describe('Hardware interface test', () => {
                 {name:"c",associated_io:"c", address:3, type:"output", common_io:false},
             ]
         }
-
         let resp = await hw.compile_program(prog);
         expect(resp).toStrictEqual({
             error: "extraneous input 'ab' expecting ';'",
@@ -256,25 +256,23 @@ describe('Hardware interface test', () => {
 
     test('deploy_hil', async () => {
         let hil = {
-            version:1,
+            version:2,
             cores: [
                 {
                     id: "test",
                     order: 1,
-                    input_data: [],
                     inputs: [],
                     outputs: [
                         {
                             name: "out",
-                            type:"float",
                             metadata:{
                                 type: "float",
                                 width:32,
-                                signed:true
+                                signed:true,
+                                common_io:false
                             },
-                            reg_n: [
-                                5
-                            ]
+                            is_vector: false,
+                            vector_size: 1
                         }
                     ],
                     memory_init: [
@@ -283,10 +281,13 @@ describe('Hardware interface test', () => {
                             metadata:{
                                 type: "float",
                                 width:32,
-                                signed:true
+                                signed:true,
+                                common_io:false
                             },
                             is_output: true,
-                            reg_n: 4,
+                            is_input: false,
+                            is_vector: false,
+                            vector_size: 1,
                             value: 14
                         },
                         {
@@ -297,7 +298,9 @@ describe('Hardware interface test', () => {
                                 signed:true
                             },
                             is_output: true,
-                            reg_n: 3,
+                            is_input: false,
+                            is_vector: false,
+                            vector_size: 1,
                             value: 12
                         }
                     ],
@@ -308,13 +311,6 @@ describe('Hardware interface test', () => {
                     },
                     program: {
                         content: "int main(){\n  float mem;\n  float mem_2;\n  float out = mem + mem_2;\n}",
-                        build_settings: {
-                            io: {
-                                inputs: [],
-                                memories: ["mem", "mem_2"],
-                                outputs: ["out"]
-                            }
-                        },
                         headers: []
                     },
                     sampling_frequency: 1,
@@ -335,6 +331,7 @@ describe('Hardware interface test', () => {
             bases: {
                 controller: 0x443c00000,
                 cores_control: 0x443c10000,
+                noise_generator:    0x443c70000,
                 cores_inputs: 8192,
                 cores_rom:  0x4443c20000,
                 hil_control:  0x443c30000,
@@ -355,25 +352,23 @@ describe('Hardware interface test', () => {
 
     test('disassemble hil', async () => {
         let hil = {
-            version:1,
+            version:2,
             cores: [
                 {
                     id: "test",
                     order: 1,
-                    input_data: [],
                     inputs: [],
                     outputs: [
                         {
                             name: "out",
-                            type:"float",
                             metadata:{
                                 type: "float",
                                 width:32,
-                                signed:true
+                                signed:true,
+                                common_io:false
                             },
-                            reg_n: [
-                                5
-                            ]
+                            is_vector: false,
+                            vector_size: 1,
                         }
                     ],
                     memory_init: [
@@ -382,10 +377,13 @@ describe('Hardware interface test', () => {
                             metadata:{
                                 type: "float",
                                 width:32,
-                                signed:true
+                                signed:true,
+                                common_io:false
                             },
+                            is_vector: false,
+                            vector_size: 1,
                             is_output: true,
-                            reg_n: 4,
+                            is_input: false,
                             value: 14
                         },
                         {
@@ -393,10 +391,13 @@ describe('Hardware interface test', () => {
                             metadata:{
                                 type: "integer",
                                 width:16,
-                                signed:true
+                                signed:true,
+                                common_io: false
                             },
+                            is_vector: false,
+                            vector_size: 1,
                             is_output: true,
-                            reg_n: 3,
+                            is_input: false,
                             value: 12
                         }
                     ],
@@ -407,13 +408,6 @@ describe('Hardware interface test', () => {
                     },
                     program: {
                         content: "int main(){\n  float mem;\n  float mem_2;\n  float out = mem + mem_2;\n}",
-                        build_settings: {
-                            io: {
-                                inputs: [],
-                                memories: ["mem", "mem_2"],
-                                outputs: ["out"]
-                            }
-                        },
                         headers: []
                     },
                     sampling_frequency: 1,
@@ -435,9 +429,9 @@ describe('Hardware interface test', () => {
             "test": {
                 "program": "add r63, r62, r1\nstop\n",
                 "translation_table": [
-                    [5, 1],
-                    [4, 63],
-                    [3, 62]
+                    [3, 1],
+                    [2, 63],
+                    [1, 62]
                 ]
             }
         });
@@ -446,25 +440,23 @@ describe('Hardware interface test', () => {
 
     test('emulate hil ', async () => {
         let hil = {
-            version:1,
+            version:2,
             cores: [
                 {
                     id: "test",
                     order: 1,
-                    input_data: [],
                     inputs: [],
                     outputs: [
                         {
                             name: "out",
-                            type:"float",
                             metadata:{
                                 type: "float",
                                 width:32,
-                                signed:true
+                                signed:true,
+                                common_io:false
                             },
-                            reg_n: [
-                                5
-                            ]
+                            is_vector: false,
+                            vector_size: 1,
                         }
                     ],
                     memory_init: [
@@ -473,10 +465,13 @@ describe('Hardware interface test', () => {
                             metadata:{
                                 type: "float",
                                 width:32,
-                                signed:true
+                                signed:true,
+                                common_io:false
                             },
                             is_output: true,
-                            reg_n: 4,
+                            is_input: false,
+                            is_vector: false,
+                            vector_size: 1,
                             value: 14
                         },
                         {
@@ -487,7 +482,9 @@ describe('Hardware interface test', () => {
                                 signed:true
                             },
                             is_output: true,
-                            reg_n: 3,
+                            is_input: false,
+                            is_vector: false,
+                            vector_size: 1,
                             value: 12.0
                         }
                     ],
@@ -498,13 +495,6 @@ describe('Hardware interface test', () => {
                     },
                     program: {
                         content: "int main(){\n  float mem;\n  float mem_2;\n  float out = mem + mem_2;\n}",
-                        build_settings: {
-                            io: {
-                                inputs: [],
-                                memories: ["mem", "mem_2"],
-                                outputs: ["out"]
-                            }
-                        },
                         headers: []
                     },
                     sampling_frequency: 1,
@@ -534,7 +524,7 @@ describe('Hardware interface test', () => {
         let out: select_hil_output = {
             channel: 1,
             output: {
-                address:5,
+                address:3,
                 name:"out",
                 output:"out",
                 channel:0,
@@ -642,18 +632,6 @@ describe('Hardware interface test', () => {
                     },
                     program: {
                         content: "int main(){\n  float input_1;\n  float input_2;\n  float out = input_1 + input_2;\n}",
-                        build_settings: {
-                            io: {
-                                inputs: [
-                                    "input_1",
-                                    "input_2"
-                                ],
-                                memories: [],
-                                outputs: [
-                                    "out"
-                                ]
-                            }
-                        },
                         headers: []
                     },
                     sampling_frequency: 1,
@@ -673,7 +651,7 @@ describe('Hardware interface test', () => {
         let resp = await hw.hil_hardware_sim(hil);
         expect(resp).toStrictEqual({
             "code": "293194563584:131076\n293194563588:12\n293194563592:196609\n293194563596:65538\n293194563600:131075\n293194563604:12\n293194563608:12\n293194563612:395329\n293194563616:12\n",
-            "control": "18316595204:131073\n18316595268:56\n18316595200:1\n18316599304:3\n18316599296:1106876826\n18316603400:2\n18316603392:1082130432\n18316529668:0\n18316525576:2\n18316525572:1000000000\n18316529664:1\n18316591104:11\n"
+            "control": "18316595204:131073\n18316595268:56\n18316595200:1\n18316599308:0\n18316599304:3\n18316599296:1106876826\n18316599308:1\n18316599304:2\n18316599296:1082130432\n18316529668:0\n18316525576:2\n18316525572:1000000000\n18316529664:1\n18316591104:11\n18316722176:1\n--\n2:test.out\n4:test.out\n5:test.mem\n6:test.mem_2\n"
         });
     });
 

@@ -69,13 +69,6 @@ describe('emulator_database_tests', () => {
         name:'test.c',
         content:'',
         type:'',
-        build_settings:{
-            io:{
-                inputs: ["in"],
-                outputs: ["out"],
-                memories: []
-            }
-        },
         hex:[213, 1245, 1237546],
         headers:[],
         cached_bin_version:""

@@ -56,8 +56,7 @@ export class programs_db {
                 type,
                 headers,
                 hex,
-                cached_bin_version,
-                build_settings
+                cached_bin_version
             ) values (
                 ${prog.id},
                 ${prog.name},
@@ -65,8 +64,7 @@ export class programs_db {
                 ${prog.type},
                 ${prog.headers},
                 ${prog.hex},
-                ${prog.cached_bin_version},
-                ${prog.build_settings}
+                ${prog.cached_bin_version}
             )
         `;
     }

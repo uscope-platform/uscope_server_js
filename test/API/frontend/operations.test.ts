@@ -443,13 +443,6 @@ describe('Operation API tests', () => {
                         }
                     ],
                     program: {
-                        build_settings: {
-                            io: {
-                                inputs: [],
-                                memories: ['mem'],
-                                outputs: ['out']
-                            }
-                        },
                         content: 'int main(){\n  float mem;\n\n  mem = mem  + 1.0;\n  mem = fti(mem);\n  mem = mem & 0x3ff;\n  mem = itf(mem);\n  \n  float out[2];\n  out[0] = mem + 100.0;\n  out[1] = mem + 1000.0;\n}',
                         headers: []
                     },
@@ -472,13 +465,6 @@ describe('Operation API tests', () => {
                         }
                     ],
                     program: {
-                        build_settings: {
-                            io: {
-                                inputs: ['input'],
-                                memories: [],
-                                outputs: ['out']
-                            }
-                        },
                         content: 'int main(){\n  float input;\n  float out = input*3.5;\n}',
                         headers: []
                     },
@@ -583,13 +569,6 @@ describe('Operation API tests', () => {
                         }
                     ],
                     program: {
-                        build_settings: {
-                            io: {
-                                inputs: [],
-                                memories: ['mem'],
-                                outputs: ['out']
-                            }
-                        },
                         content: 'int main(){\n  float mem;\n\n  mem = mem  + 1.0;\n  mem = fti(mem);\n  mem = mem & 0x3ff;\n  mem = itf(mem);\n  \n  float out[2];\n  out[0] = mem + 100.0;\n  out[1] = mem + 1000.0;\n}',
                         headers: []
                     },
@@ -612,13 +591,6 @@ describe('Operation API tests', () => {
                         }
                     ],
                     program: {
-                        build_settings: {
-                            io: {
-                                inputs: ['input'],
-                                memories: [],
-                                outputs: ['out']
-                            }
-                        },
                         content: 'int main(){\n  float input;\n  float out = input*3.5;\n}',
                         headers: []
                     },
@@ -694,13 +666,6 @@ describe('Operation API tests', () => {
                         }
                     ],
                     program: {
-                        build_settings: {
-                            io: {
-                                inputs: [],
-                                memories: ['mem'],
-                                outputs: ['out']
-                            }
-                        },
                         content: 'int main(){\n  float mem;\n\n  mem = mem  + 1.0;\n  mem = fti(mem);\n  mem = mem & 0x3ff;\n  mem = itf(mem);\n  \n  float out[2];\n  out[0] = mem + 100.0;\n  out[1] = mem + 1000.0;\n}',
                         headers: []
                     },
@@ -723,13 +688,6 @@ describe('Operation API tests', () => {
                         }
                     ],
                     program: {
-                        build_settings: {
-                            io: {
-                                inputs: ['input'],
-                                memories: [],
-                                outputs: ['out']
-                            }
-                        },
                         content: 'int main(){\n  float input;\n  float out = input*3.5;\n}',
                         headers: []
                     },

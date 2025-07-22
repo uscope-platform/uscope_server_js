@@ -85,6 +85,7 @@ interface hil_map_bases {
     cores_control:number,
     cores_inputs:number,
     cores_rom:number,
+    noise_generator:number,
     hil_control:number
     scope_mux:number
 }

@@ -91,7 +91,6 @@ describe('programs API error handling tests', () => {
             "content": "void main(){}",
             "type": "C",
             "hex": [],
-            "build_settings": {"io": {"inputs": [], "outputs": [],"memories": []}},
             "cached_bin_version": "",
             "headers": []
         }

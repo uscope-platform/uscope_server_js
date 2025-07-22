@@ -191,10 +191,6 @@ export class database {
             `
             await this.db`
                 alter table ${sql(this.schema)}.programs
-                    add build_settings jsonb
-            `
-            await this.db`
-                alter table ${sql(this.schema)}.programs
                     add cached_bin_version text
             `
             await this.db`
