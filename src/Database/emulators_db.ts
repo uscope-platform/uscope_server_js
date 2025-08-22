@@ -103,7 +103,7 @@ export class emulators_db {
     public async remove_port_link(id:number, src_core:string, dst_core:string, link_id:number) {
         let emu = await this.get_emulator(id);
         let conn = emu.connections.filter((e:connection_model)=>{
-            return e.source_core === src_core || e.destination_core === dst_core;
+            return e.source_core === src_core && e.destination_core === dst_core;
         })[0];
         conn.ports = conn.ports.filter((e:port_link_model)=>{
             return e.id !== link_id;
