@@ -141,6 +141,8 @@ export class hw_interface {
         map.bases.hil_control = Number(map.bases.hil_control);
         map.bases.scope_mux = Number(map.bases.scope_mux);
         map.bases.cores_rom = Number(map.bases.cores_rom);
+        map.bases.waveform_generator = Number(map.bases.waveform_generator);
+        map.bases.noise_generator = Number(map.bases.noise_generator);
 
         map.offsets.hil_tb = Number(map.offsets.hil_tb);
         map.offsets.controller = Number(map.offsets.controller);

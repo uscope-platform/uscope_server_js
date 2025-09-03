@@ -123,7 +123,8 @@ describe('Hardware interface test', () => {
                 cores_control: 0x443c10000,
                 cores_inputs: 8192,
                 cores_rom:  0x443c20000,
-                noise_generator:   0x443c70000,
+                noise_generator:    0x443c70000,
+                waveform_generator: 0x443c90000,
                 hil_control:  0x443c30000,
                 scope_mux:  0x443c40000
             },
@@ -150,6 +151,8 @@ describe('Hardware interface test', () => {
                 cores_inputs: 8192,
                 cores_rom:  0x443c20000,
                 hil_control:  0x443c30000,
+                noise_generator:    0x443c70000,
+                waveform_generator: 0x443c90000,
                 scope_mux:  0x443c40000
             },
             offsets: {
@@ -332,6 +335,7 @@ describe('Hardware interface test', () => {
                 controller: 0x443c00000,
                 cores_control: 0x443c10000,
                 noise_generator:    0x443c70000,
+                waveform_generator: 0x443c90000,
                 cores_inputs: 8192,
                 cores_rom:  0x4443c20000,
                 hil_control:  0x443c30000,
@@ -516,7 +520,7 @@ describe('Hardware interface test', () => {
         expect(resp).toStrictEqual({
             code: 1,
             duplicates: "",
-            results: "{\"test\":{\"error_code\":\"\",\"outputs\":{\"mem\":{\"0\":[[14.0,14.0]]},\"mem_2\":{\"0\":[[12.0,12.0]]},\"out\":{\"0\":[[26.0,26.0]]}}},\"timebase\":[0.0]}",
+            results: "{\"test\":{\"error_code\":\"\",\"outputs\":{\"mem\":{\"0\":[[14.0,14.0]]},\"mem_2\":{\"0\":[[12.0,12.0]]},\"out\":{\"0\":[[26.0,26.0]]}}},\"timebase\":[0.0,1.0]}",
             results_valid: true
         });
     });
@@ -652,7 +656,7 @@ describe('Hardware interface test', () => {
         let resp = await hw.hil_hardware_sim(hil);
         expect(resp).toStrictEqual({
             "code": "293194563584:131076\n293194563588:12\n293194563592:196609\n293194563596:65538\n293194563600:131075\n293194563604:12\n293194563608:12\n293194563612:395329\n293194563616:12\n",
-            "control": "18316595204:131073\n18316595268:56\n18316595200:1\n18316599308:0\n18316599304:3\n18316599296:1106876826\n18316599308:1\n18316599304:2\n18316599296:1082130432\n18316529668:0\n18316525576:2\n18316525572:1000000000\n18316529664:1\n18316591104:11\n18316722176:1\n",
+            "control": "18316595212:131073\n18316595276:56\n18316595200:1\n18316599308:0\n18316599304:3\n18316599296:1106876826\n18316599308:1\n18316599304:2\n18316599296:1082130432\n18316529668:0\n18316525576:2\n18316525572:100000000\n18316529664:1\n18316591104:11\n18316722176:1\n",
             "inputs": "test.input_1,18316599296,3,0,0\ntest.input_2,18316599296,2,1,0\n",
             "outputs": "2:test.out\n"
         });

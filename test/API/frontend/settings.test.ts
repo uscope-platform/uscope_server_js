@@ -80,7 +80,25 @@ describe('Settings API tests', () => {
     test('get_address_map', async () => {
 
         let router = rtr as any;
-        let a_map = {'bases': {'controller': 18316591104, 'cores_control': 18316656640, 'cores_inputs': 8192, 'cores_rom': 21474836480, 'hil_control': 18316525568, 'scope_mux': 18316853248, "noise_generator": 18316918784}, 'offsets': {'controller': 4096, 'cores_control': 65536, 'cores_inputs': 4096, 'cores_rom': 268435456, 'dma': 4096, 'hil_tb': 0}};
+        let a_map = {
+            'bases': {
+                'controller': 18316591104,
+                'cores_control': 18316656640,
+                'cores_inputs': 8192,
+                'cores_rom': 21474836480,
+                'hil_control': 18316525568,
+                'scope_mux': 18316853248,
+                "noise_generator": 18316918784,
+                "waveform_generator": 18316984320
+            }, 'offsets': {
+                'controller': 4096,
+                'cores_control': 65536,
+                'cores_inputs': 4096,
+                'cores_rom': 268435456,
+                'dma': 4096,
+                'hil_tb': 0
+            }
+        };
 
         const spy = jest.spyOn(router.backend, 'get_hil_map').mockImplementation(
             () : hil_address_map => {
@@ -108,8 +126,25 @@ describe('Settings API tests', () => {
                 result= arg
             });
 
-        let a_map = {'bases': {'controller': 18316591104, 'cores_control': 18316656640, 'cores_inputs': 8192, 'cores_rom': 21474836480, 'hil_control': 18316525568, 'scope_mux': 18316853248}, 'offsets': {'controller': 4096, 'cores_control': 65536, 'cores_inputs': 4096, 'cores_rom': 268435456, 'dma': 4096, 'hil_tb': 0}};
-
+        let a_map = {
+            'bases': {
+                'controller': 18316591104,
+                'cores_control': 18316656640,
+                'cores_inputs': 8192,
+                'cores_rom': 21474836480,
+                'hil_control': 18316525568,
+                'scope_mux': 18316853248,
+                "noise_generator": 18316918784,
+                "waveform_generator": 18316984320
+            }, 'offsets': {
+                'controller': 4096,
+                'cores_control': 65536,
+                'cores_inputs': 4096,
+                'cores_rom': 268435456,
+                'dma': 4096,
+                'hil_tb': 0
+            }
+        };
         return request(app.callback())
             .post(endpoints_map.settings.prefix + endpoints_map.settings.endpoints.hil_address_map)
             .set('Authorization', `Bearer ${token}`)
