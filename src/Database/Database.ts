@@ -79,6 +79,7 @@ export class database {
     public async init_db(): Promise<void> {
         let db_exists = await this.check_db_existance();
         if(!db_exists){
+            console.log("DATABASE UNINITIALIZED, PROCEDING WITH INITIALIZATION");
             await this.create_schema();
             await this.create_data_versions();
             await this.create_stored_procedures();
