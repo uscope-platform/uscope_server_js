@@ -141,6 +141,7 @@ export class OperationsBackend {
                 return;
             }
         }
+        console.log("Bitstream is outdated writing new one");
         fs.writeFileSync(path, bitfile.data);
     }
 
