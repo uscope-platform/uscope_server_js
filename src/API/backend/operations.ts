@@ -134,6 +134,7 @@ export class OperationsBackend {
     }
 
     private refresh_bitfile(bitfile: bitstream_model, path:string) {
+        if(process.arch == "x64") return;
         if(fs.existsSync(path)){
             let old_data = fs.readFileSync(path);
             let old_hash = createHash('sha256').update(old_data).digest('hex');
