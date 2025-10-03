@@ -7,10 +7,8 @@ import {
     register_write_model, acquisition_status, clock_info,
     programs_info, scope_address, select_hil_output, set_hil_inputs,
     emulator_model, hil_debug_model, program_model, bitstream_model,
-    application_model
 } from "#models";
 
-import fs from "node:fs";
 
 describe('operations backend test', () => {
     let db_call_args = [] as any;
@@ -145,26 +143,7 @@ describe('operations backend test', () => {
 
 
 
-    test('load_application_clean', async () => {
-        let a : application_model = {
-            application_name: "",
-            bitstream: "test.bit",
-            channel_groups: [],
-            channels: [],
-            clock_frequency: 0,
-            filters: [],
-            id: 0,
-            initial_registers_values: [],
-            macro: [],
-            miscellaneous: {},
-            parameters: [],
-            peripherals: [],
-            pl_clocks: {0: 0, 1: 0, 2: 0, 3: 0},
-            programs: [],
-            scripts: [],
-            soft_cores: []
-
-        }
+    test('load_application', async () => {
         let b : bitstream_model = {
             data: Buffer.from("t3affa"),
             hash: "",
@@ -172,96 +151,9 @@ describe('operations backend test', () => {
             name: ""
         }
 
-        let bitstream = "/tmp/test.bit"
-        if(fs.existsSync(bitstream)) fs.unlinkSync(bitstream);
-        let res = await backend.load_application(a, b);
+        let res = await backend.load_application(b);
 
         expect(res).toStrictEqual("ok");
-        expect(fs.existsSync(bitstream)).toBeTruthy();
-        let content = fs.readFileSync(bitstream).toString();
-        expect(content).toStrictEqual("t3affa");
-        if(fs.existsSync(bitstream)) fs.unlinkSync(bitstream);
-    });
-
-
-    test('load_application_no_refresh', async () => {
-        let a : application_model = {
-            application_name: "",
-            bitstream: "test.bit",
-            channel_groups: [],
-            channels: [],
-            clock_frequency: 0,
-            filters: [],
-            id: 0,
-            initial_registers_values: [],
-            macro: [],
-            miscellaneous: {},
-            parameters: [],
-            peripherals: [],
-            pl_clocks: {0: 0, 1: 0, 2: 0, 3: 0},
-            programs: [],
-            scripts: [],
-            soft_cores: []
-
-        }
-        let b : bitstream_model = {
-            data: Buffer.from("t3affa"),
-            hash: "5bc0978d11d3a8c01893a0e0b2d40c15081c7c9eb3b6a2e7a84d1babdce76870",
-            id: 0,
-            name: ""
-        }
-
-        let bitstream = "/tmp/test.bit"
-        if(fs.existsSync(bitstream)) fs.unlinkSync(bitstream);
-        fs.writeFileSync(bitstream, b.data);
-        let res = await backend.load_application(a, b);
-
-        expect(res).toStrictEqual("ok");
-        expect(fs.existsSync(bitstream)).toBeTruthy();
-        let content = fs.readFileSync(bitstream).toString();
-        expect(content).toStrictEqual("t3affa");
-        if(fs.existsSync(bitstream)) fs.unlinkSync(bitstream);
-
-    });
-
-
-    test('load_application_refresh', async () => {
-        let a : application_model = {
-            application_name: "",
-            bitstream: "test.bit",
-            channel_groups: [],
-            channels: [],
-            clock_frequency: 0,
-            filters: [],
-            id: 0,
-            initial_registers_values: [],
-            macro: [],
-            miscellaneous: {},
-            parameters: [],
-            peripherals: [],
-            pl_clocks: {0: 0, 1: 0, 2: 0, 3: 0},
-            programs: [],
-            scripts: [],
-            soft_cores: []
-
-        }
-        let b : bitstream_model = {
-            data: Buffer.from("t3affa"),
-            hash: "",
-            id: 0,
-            name: ""
-        }
-
-        let bitstream = "/tmp/test.bit"
-        if(fs.existsSync(bitstream)) fs.unlinkSync(bitstream);
-        fs.writeFileSync(bitstream, Buffer.from("test rewrite"));
-        let res = await backend.load_application(a, b);
-
-        expect(res).toStrictEqual("ok");
-        expect(fs.existsSync(bitstream)).toBeTruthy();
-        let content = fs.readFileSync(bitstream).toString();
-        expect(content).toStrictEqual("t3affa");
-        if(fs.existsSync(bitstream)) fs.unlinkSync(bitstream);
     });
 
     test('fetch_data', async () => {
@@ -378,8 +270,8 @@ describe('operations backend test', () => {
         let a :select_hil_output = {
             channel: 1,
             output: {
-                address:1,
                 channel:2,
+                core:"Core",
                 name:"string",
                 output:"a",
                 source:"b"
@@ -392,8 +284,9 @@ describe('operations backend test', () => {
 
     test('hil_set_input', async () => {
         let a :set_hil_inputs = {
-            address:[123],
             core:"sad",
+            channel: 0,
+            name: "string",
             value:32
         }
         let res =await backend.hil_set_input(a);

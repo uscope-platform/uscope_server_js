@@ -56,14 +56,15 @@ export interface   scope_address {
 
 
 export interface set_hil_inputs {
-    address:number[],
+    name:string,
+    channel:number,
     core:string,
     value:number
 }
 
 export interface hil_output {
-    address:number,
     channel:number,
+    core:string,
     name:string,
     output:string,
     source:string

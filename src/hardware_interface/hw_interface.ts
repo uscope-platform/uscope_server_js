@@ -1,6 +1,6 @@
 import {
     acquisition_status, channel_statuses, clock_info, hil_address_map, scope_address,
-    select_hil_output, set_hil_inputs, status_object,read_data_response, debugger_option
+    select_hil_output, set_hil_inputs, status_object, read_data_response, debugger_option
 } from "#models";
 import {commands} from ".";
 import {Socket} from "node:net";
@@ -107,7 +107,7 @@ export class hw_interface {
         return await this.send_command(commands.scope.disable_scope_dma, status);
     }
 
-    public async load_bitstream(bit:string){
+    public async load_bitstream(bit:Buffer |string){
         return await this.send_command(commands.control.load_bitstream,bit);
     }
 

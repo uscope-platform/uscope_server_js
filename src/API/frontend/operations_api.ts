@@ -33,7 +33,7 @@ export class operations_router {
                 if(app.bitstream){
                     let bitstream = await this.db.bitstreams.get_by_name(app.bitstream);
                     if(bitstream === undefined) throw "Bitstream not found (" + app.bitstream+ ")";
-                    await this.ops_backend.load_application(app, bitstream);
+                    await this.ops_backend.load_application(bitstream);
                 }
 
                 ctx.status = 200

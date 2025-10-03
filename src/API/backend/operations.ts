@@ -1,10 +1,8 @@
-import fs from "node:fs";
-import {createHash} from "node:crypto";
 import {
     bitstream_model, acquisition_status, channel_statuses, clock_info,
     programs_info, scope_address, select_hil_output, set_hil_inputs,
     status_object, hil_debug_model, emulator_model, read_data_response,
-    application_model, register_write_model
+    register_write_model
 } from "#models";
 import {hw_interface} from "#hw";
 import {database} from "#database";
@@ -18,10 +16,8 @@ export class OperationsBackend {
         this.db = db;
     }
 
-    public async load_application(app:application_model, bit:bitstream_model) {
-        const fs_path =  process.env.BITSTREAMS_DIR + "/" + app.bitstream;
-        this.refresh_bitfile(bit, fs_path);
-        return await this.hw_if.load_bitstream(fs_path);
+    public async load_application(bit:bitstream_model) {
+        return await this.hw_if.load_bitstream(bit.data);
     }
 
     public async fetch_data() : Promise<read_data_response>{
@@ -132,19 +128,5 @@ export class OperationsBackend {
             await this.db.programs.update_program_field(prog.id, "cached_bin_version", prog.hash);
         }
     }
-
-    private refresh_bitfile(bitfile: bitstream_model, path:string) {
-        if(process.arch == "x64") return;
-        if(fs.existsSync(path)){
-            let old_data = fs.readFileSync(path);
-            let old_hash = createHash('sha256').update(old_data).digest('hex');
-            if(old_hash === bitfile.hash){
-                return;
-            }
-        }
-        console.log("Bitstream is outdated writing new one");
-        fs.writeFileSync(path, bitfile.data);
-    }
-
 
 }
