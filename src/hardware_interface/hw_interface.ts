@@ -107,8 +107,9 @@ export class hw_interface {
         return await this.send_command(commands.scope.disable_scope_dma, status);
     }
 
-    public async load_bitstream(bit:Buffer |string){
-        return await this.send_command(commands.control.load_bitstream,bit);
+    public async load_bitstream(bit:Buffer){
+        let bit_string = bit.toString("base64")
+        return await this.send_command(commands.control.load_bitstream,bit_string);
     }
 
 

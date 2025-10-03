@@ -2,7 +2,7 @@
 export interface bitstream_model {
     id:number,
     name:string,
-    data:Buffer | string,
+    data:Buffer,
     hash:string
 }
 
