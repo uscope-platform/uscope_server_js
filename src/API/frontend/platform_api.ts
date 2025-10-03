@@ -74,7 +74,7 @@ export class platform_router {
 
             ctx.type = 'text';
             if(ctx.params.component == "server"){
-                ctx.body = "test_ver";
+                ctx.body = process.env.VERSION;
             } else {
                 ctx.body = await this.hw_if.get_version(ctx.params.component);
             }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/uscope_server.ts",
   "scripts": {
-    "start": "nodemon src/uscope_server.ts",
+    "start": "VERSION=$(git rev-parse --short HEAD) nodemon src/uscope_server.ts",
     "test_parallel": "jest test/API",
     "test_serial": "jest test/database --runInBand",
     "test": "npm run test_parallel & npm run test_serial"
