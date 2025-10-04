@@ -66,8 +66,6 @@ export interface hil_output {
     channel:number,
     core:string,
     name:string,
-    output:string,
-    source:string
 }
 
 export interface select_hil_output {

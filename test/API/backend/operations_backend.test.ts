@@ -272,9 +272,7 @@ describe('operations backend test', () => {
             output: {
                 channel:2,
                 core:"Core",
-                name:"string",
-                output:"a",
-                source:"b"
+                name:"string"
             }
         }
         let res =await backend.hil_select_output(a);

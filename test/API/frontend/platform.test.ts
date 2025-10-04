@@ -136,6 +136,7 @@ describe('platform API tests', () => {
     });
 
     test('get_server_version', async () => {
+        process.env.VERSION = "CAFEBEBE";
         let path = endpoints_map.platform.prefix + endpoints_map.platform.endpoints.versions;
         path = path.replace(":component", "server")
         return request(app.callback())
@@ -143,7 +144,7 @@ describe('platform API tests', () => {
             .set('Authorization', `Bearer ${bearer_token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(response.text).toBe("test_ver");
+                expect(response.text).toBe( "CAFEBEBE");
             });
     });
 
