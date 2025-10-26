@@ -52,7 +52,7 @@ export class peripherals_db {
                 ${app.name},
                 ${""},
                 ${app.version},
-                ${app.parametric},
+                ${true},
                 ${app.registers}
             )
         `;
