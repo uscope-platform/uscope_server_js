@@ -83,11 +83,11 @@ export class hw_interface {
     }
 
     public async get_debugger_option(name:string): Promise<debugger_option>{
-        return await this.send_command(commands.platform.get_debugger_option, name)
+        throw new Error("set_debugger_option is not implemented.");
     }
 
     public async set_debugger_option(option: debugger_option): Promise<any>{
-        return await this.send_command(commands.platform.set_debugger_option, option)
+        throw new Error("set_debugger_option is not implemented.");
     }
 
 

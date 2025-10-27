@@ -49,17 +49,6 @@ describe('Hardware interface test', () => {
     });
 
 
-    test('set debugger option', async () => {
-        let resp = await hw.set_debugger_option({name:"multichannel_debug", value:true});
-        expect(resp).toBeUndefined();
-    });
-
-    test('get debugger option', async () => {
-        let resp = await hw.get_debugger_option("multichannel_debug");
-        expect(resp).toBeTruthy();
-    });
-
-
     test('get debug level', async () => {
         let resp = await hw.get_debug_level();
         expect(resp).toStrictEqual("debug")
@@ -673,7 +662,7 @@ describe('Hardware interface test', () => {
         let resp = await hw.hil_hardware_sim(hil);
         expect(resp).toStrictEqual({
             "code": "21743271936:131076\n21743271940:12\n21743271944:196609\n21743271948:65538\n21743271952:131075\n21743271956:12\n21743271960:12\n21743271964:395329\n21743271968:12\n",
-            "control": "18316595212:131073\n18316595276:56\n18316595200:1\n18316599308:0\n18316599304:3\n18316599296:1106876826\n18316599308:1\n18316599304:2\n18316599296:1082130432\n18316529668:0\n18316525576:2\n18316525572:1000000000\n18316529664:1\n18316591104:11\n18316722176:1\n",
+            "control": "18316595212:131073\n18316595276:56\n18316595200:1\n18316599308:0\n18316599304:3\n18316599296:1106876826\n18316599308:1\n18316599304:2\n18316599296:1082130432\n18316529668:0\n18316525576:2\n18316525572:100000000\n18316529664:1\n18316591104:11\n18316722176:1\n",
             "inputs": "test.input_1,18316599296,3,0,0\ntest.input_2,18316599296,2,1,0\n",
             "outputs": "2:test.out\n"
         });

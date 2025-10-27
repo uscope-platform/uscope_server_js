@@ -47,7 +47,7 @@ describe('Settings API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(response.text).toStrictEqual("minimal");
             });
 
@@ -71,7 +71,7 @@ describe('Settings API tests', () => {
             .send({level:"minimal"})
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual("minimal");
             });
 
@@ -110,7 +110,7 @@ describe('Settings API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(response.body).toStrictEqual(a_map);
             });
 
@@ -151,7 +151,7 @@ describe('Settings API tests', () => {
             .send(a_map)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(a_map);
             });
 
@@ -174,7 +174,7 @@ describe('Settings API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                     expect(response.body).toStrictEqual(true);
             });
 
@@ -198,7 +198,7 @@ describe('Settings API tests', () => {
             .send(input)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(input);
             });
 

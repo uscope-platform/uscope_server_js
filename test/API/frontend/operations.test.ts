@@ -104,7 +104,7 @@ describe('Operation API tests', () => {
             .then((response)=>{
                 expect(response.status).toBe(200);
                 expect(results).toStrictEqual( {app_id:1, bitstream:"test_bitstream"})
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(data.equals(<Buffer>mock_results.bit.data)).toBeTruthy();
             });
     });
@@ -139,7 +139,7 @@ describe('Operation API tests', () => {
             .send(write_in)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(2);
+                expect(spy).toHaveBeenCalledTimes(2);
                 expect(mock_results).toStrictEqual(write_in);
             });
 
@@ -164,7 +164,7 @@ describe('Operation API tests', () => {
             .then((response)=>{
                 expect(response.status).toBe(200);
                 expect(response.text).toStrictEqual("4213");
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(54231231);
             });
 
@@ -195,7 +195,7 @@ describe('Operation API tests', () => {
             .send(prog_info)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(prog_info);
             });
 
@@ -241,7 +241,7 @@ describe('Operation API tests', () => {
             .send(prog_info)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(prog_info);
             });
 
@@ -261,7 +261,7 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(response.text).toStrictEqual("[1.5,2,3,4,5]");
             });
 
@@ -286,7 +286,7 @@ describe('Operation API tests', () => {
             .send(sfs)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(sfs);
             });
 
@@ -308,7 +308,7 @@ describe('Operation API tests', () => {
             .send(statuses)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(statuses);
             });
 
@@ -327,7 +327,7 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(response.text).toStrictEqual("wait_trigger");
             });
 
@@ -357,7 +357,7 @@ describe('Operation API tests', () => {
             .send(acq)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(acq);
             });
 
@@ -377,7 +377,7 @@ describe('Operation API tests', () => {
             .send({status:true})
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual({status:true});
             });
 
@@ -399,7 +399,7 @@ describe('Operation API tests', () => {
             .send(acq)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(acq);
             });
 
@@ -496,7 +496,7 @@ describe('Operation API tests', () => {
             .send(hil)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(hil);
             });
 
@@ -525,7 +525,7 @@ describe('Operation API tests', () => {
             .send(args)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(args);
             });
 
@@ -622,7 +622,7 @@ describe('Operation API tests', () => {
             .send(hil)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(hil);
             });
 
@@ -719,7 +719,7 @@ describe('Operation API tests', () => {
             .send(hil)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(hil);
             });
 
@@ -741,7 +741,7 @@ describe('Operation API tests', () => {
             .send(in_obj)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(in_obj);
             });
 
@@ -763,7 +763,7 @@ describe('Operation API tests', () => {
             .send(in_obj)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(in_obj);
             });
 
@@ -781,7 +781,7 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
             });
 
     });
@@ -798,7 +798,7 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
             });
 
     });
@@ -817,7 +817,7 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(response.text).toStrictEqual("[1999.1,0,123,45]");
             });
 
@@ -840,7 +840,7 @@ describe('Operation API tests', () => {
             .send(clk_obj)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(clk_obj);
             });
 
@@ -862,7 +862,7 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(4);
             });
 
@@ -884,7 +884,7 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(23);
             });
 
@@ -906,7 +906,7 @@ describe('Operation API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(23);
             });
 
@@ -928,7 +928,7 @@ describe('Operation API tests', () => {
             .send({id:2, address:3123})
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result.i).toStrictEqual(2);
                 expect(result.a).toStrictEqual(3123);
             });
@@ -952,7 +952,7 @@ describe('Operation API tests', () => {
             .send(model)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(spy).toBeCalledTimes(1);
+                expect(spy).toHaveBeenCalledTimes(1);
                 expect(result).toStrictEqual(model);
             });
 
