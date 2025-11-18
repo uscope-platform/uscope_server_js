@@ -91,6 +91,10 @@ export class hw_interface {
     }
 
 
+    public async get_sampling_frequency(): Promise<number>{
+        return await this.send_command(commands.scope.get_sampling_frequency, {});
+    }
+
     public async get_version(component:string): Promise<string>{
         return await this.send_command(commands.platform.get_version, component);
     }

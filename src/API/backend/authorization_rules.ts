@@ -129,6 +129,7 @@ export let rules : rules_map = {
         acquisition:"operator",
         scope_address:'operator',
         dma_disable:'operator',
+        sampling_frequency:'operator',
         hil_debug:"operator",
         hil_deploy:'operator',
         hil_disassemble:'operator',

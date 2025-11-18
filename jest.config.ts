@@ -1,6 +1,6 @@
 import type {Config} from 'jest';
 import {pathsToModuleNameMapper} from "ts-jest";
-import options from "./tsconfig.json"
+
 const config: Config = {
 
 
@@ -15,8 +15,19 @@ const config: Config = {
   preset: "ts-jest",
   testEnvironment: 'node',
   roots: ['<rootDir>'],
-  modulePaths: [options.compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
-  moduleNameMapper: pathsToModuleNameMapper(options.compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
+  modulePaths: ["./src"],
+  moduleNameMapper: pathsToModuleNameMapper({
+      "#hw": ["hardware_interface/index.ts"],
+      "#hw/*": ["hardware_interface/*"],
+      "#api_backend": ["API/backend/index.ts"],
+      "#api_backend/*": ["API/backend/*"],
+      "#api_frontend": ["API/frontend/index.ts"],
+      "#api_frontend/*": ["API/frontend/*"],
+      "#database": ["Database/index.ts"],
+      "#database/*": ["Database/*"],
+      "#models": ["data_model/index.ts"],
+      "#models/*": ["data_model/*"]
+  }),
 };
 
 export default config;

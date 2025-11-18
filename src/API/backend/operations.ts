@@ -89,6 +89,10 @@ export class OperationsBackend {
         return this.hw_if.get_version(component);
     }
 
+    public async get_sampling_frequency() : Promise<number> {
+        return this.hw_if.get_sampling_frequency();
+    }
+
     public async hil_debug(command: hil_debug_model) : Promise<any> {
         return this.hw_if.debug_hil(command);
     }

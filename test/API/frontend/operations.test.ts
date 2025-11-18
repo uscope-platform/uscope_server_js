@@ -958,6 +958,23 @@ describe('Operation API tests', () => {
 
     });
 
+
+    test('sampling_frequency', async () => {
+        let router = rtr as any;
+        const spy = jest.spyOn(router.ops_backend, 'get_sampling_frequency').mockImplementation(
+            () => {
+               return 5423;
+            });
+        return request(app.callback())
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.sampling_frequency)
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toHaveBeenCalledTimes(1);
+            });
+
+    });
+
     afterEach(() => {
         // restore the spy created with spyOn
         jest.restoreAllMocks();

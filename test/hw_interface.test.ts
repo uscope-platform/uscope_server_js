@@ -60,6 +60,12 @@ describe('Hardware interface test', () => {
     });
 
 
+    test('get sampling frequency', async () => {
+        let resp = await hw.get_sampling_frequency();
+        expect(resp).toStrictEqual(0);
+    });
+
+
     test('set scope address', async () => {
         let resp = await hw.set_scope_address({
             address: 0x443c20000,

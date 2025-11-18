@@ -61,7 +61,9 @@ describe('operations backend test', () => {
             args = a;
             return "ok";
         },
-
+        get_sampling_frequency:() =>{
+          return 1234;
+        },
         compile_program:(a:any)=>{
             if(a.id<44){
                 args = a;
@@ -391,6 +393,10 @@ describe('operations backend test', () => {
     });
 
 
+    test('debug_hil', async () => {
+        let res =await backend.get_sampling_frequency();
+        expect(res).toStrictEqual(1234);
+    });
 
     test('debug_hil', async () => {
 

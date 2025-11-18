@@ -10,6 +10,7 @@ interface hw_commands_map {
         },
         scope:{
             read_data:string,
+            get_sampling_frequency:string,
             set_scaling_factors:string,
             set_channel_status:string,
             disable_scope_dma:string,
@@ -53,6 +54,7 @@ export let commands :hw_commands_map = {
     },
     scope:{
         read_data:"read_data",
+        get_sampling_frequency:"get_sampling_frequency",
         set_scaling_factors:"set_scaling_factors",
         set_channel_status:"set_channel_status",
         disable_scope_dma:"disable_scope_dma",

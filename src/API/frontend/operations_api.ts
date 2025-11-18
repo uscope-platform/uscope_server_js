@@ -202,6 +202,16 @@ export class operations_router {
             }
         });
 
+        this.router.get(endpoints_map.operations.endpoints.sampling_frequency, async (ctx:Koa.Context) => {
+            try{
+                ctx.response.body = await this.ops_backend.get_sampling_frequency();
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.body = error
+                ctx.status = 501
+            }
+        });
+
         this.router.post(endpoints_map.operations.endpoints.hil_debug, async (ctx:Koa.Context) => {
             try{
                 let command = <hil_debug_model>ctx.request.body;

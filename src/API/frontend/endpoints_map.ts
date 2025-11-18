@@ -17,6 +17,7 @@ interface api_map {
             acquisition:string,
             scope_address:string,
             dma_disable:string,
+            sampling_frequency: string,
             hil_debug:string,
             hil_deploy:string,
             hil_hardware_sim:string,
@@ -182,7 +183,7 @@ export let endpoints_map : api_map = {
             acquisition: '/plot/acquisition',
             scope_address:'/plot/address',
             dma_disable:'/plot/dma_disable',
-
+            sampling_frequency:'/hil/sampling_frequency',
             hil_debug: '/hil/debug',
             hil_deploy: '/hil/deploy',
             hil_hardware_sim: '/hil/hardware_sim',
