@@ -4,6 +4,7 @@ import {
     status_object, hil_debug_model, emulator_model, read_data_response,
     register_write_model
 } from "#models";
+import {randomBytes} from "crypto";
 import {hw_interface} from "#hw";
 import {database} from "#database";
 
@@ -51,6 +52,14 @@ export class OperationsBackend {
 
     public async set_scope_address(addr:scope_address): Promise<any>{
         return this.hw_if.set_scope_address(addr);
+    }
+
+    /// Registers on the driver a one time ticket for the scope websocket, which the client connects to directly
+    public async create_scope_ticket(role:string): Promise<{ticket:string, ttl:number}>{
+        const ttl = 60;
+        const ticket = randomBytes(32).toString("hex");
+        await this.hw_if.add_scope_ticket(ticket, role, ttl);
+        return {ticket: ticket, ttl: ttl};
     }
 
     public async set_dma_disable(status:status_object): Promise<any>{

@@ -16,7 +16,8 @@ interface hw_commands_map {
             disable_scope_dma:string,
             get_acquisition_status:string,
             set_acquisition:string,
-            set_scope_address:string
+            set_scope_address:string,
+            scope_ticket_add:string
         },
         core:{
             apply_program:string,
@@ -60,7 +61,8 @@ export let commands :hw_commands_map = {
         disable_scope_dma:"disable_scope_dma",
         get_acquisition_status:"get_acquisition_status",
         set_acquisition:"set_acquisition",
-        set_scope_address:"set_scope_address"
+        set_scope_address:"set_scope_address",
+        scope_ticket_add:"scope_ticket_add"
     },
     core:{
         apply_program:"apply_program",

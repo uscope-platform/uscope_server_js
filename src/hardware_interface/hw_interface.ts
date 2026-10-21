@@ -117,6 +117,10 @@ export class hw_interface {
     }
 
 
+    public async add_scope_ticket(ticket:string, role:string, ttl:number){
+        return await this.send_command(commands.scope.scope_ticket_add, {ticket: ticket, role: role, ttl: ttl});
+    }
+
     public async set_scaling_factors(factors:number[]){
         return await this.send_command(commands.scope.set_scaling_factors, factors);
     }

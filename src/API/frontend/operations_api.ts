@@ -179,6 +179,16 @@ export class operations_router {
             }
         });
 
+        this.router.post(endpoints_map.operations.endpoints.scope_ticket, async (ctx:Koa.Context) => {
+            try{
+                ctx.response.body = await this.ops_backend.create_scope_ticket(ctx.state.user.role);
+                ctx.status = 200;
+            } catch(error:any){
+                ctx.body = error
+                ctx.status = 501
+            }
+        });
+
         this.router.post(endpoints_map.operations.endpoints.dma_disable, async (ctx:Koa.Context) => {
             try{
                 let status = <status_object>ctx.request.body;
