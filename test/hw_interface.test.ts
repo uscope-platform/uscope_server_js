@@ -7,38 +7,9 @@ describe('Hardware interface test', () => {
     let hw = new hw_interface("localhost", 6666);
 
 
-    beforeAll(async () =>{
-        await hw.set_scope_address({
-            address: (0x443c20000),
-            dma_buffer_offset: 1241
-        });
-    })
-
     afterAll(async () =>{
         await hw.close();
     })
-
-    test('set scaling factors', async () => {
-
-        let resp = await hw.set_scaling_factors([1, 1.5, 2, -5.4, 1, 0]);
-        expect(resp).toBeUndefined();
-    });
-
-    test('set channel status', async () => {
-
-        let resp = await hw.set_channel_status( {'0': true, '1': true, '2': true, '3': true, '4': true, '5': true});
-        expect(resp).toBeUndefined();
-    });
-
-    test('read_data', async () => {
-        let resp = await hw.read_data();
-        expect(resp).toHaveLength(6)
-        for(let ch of resp){
-            expect(ch.channel).toBeLessThanOrEqual(6);
-            expect(ch.channel).toBeGreaterThanOrEqual(0);
-            expect(ch.data).toHaveLength(1024);
-        }
-    });
 
 
 
@@ -66,24 +37,6 @@ describe('Hardware interface test', () => {
     });
 
 
-    test('set scope address', async () => {
-        let resp = await hw.set_scope_address({
-            address: 0x443c20000,
-            dma_buffer_offset: 1241
-        });
-        expect(resp).toBeUndefined();
-    });
-
-
-    test('get acquisition status', async () => {
-        let resp = await hw.get_acquisition_status();
-        expect(resp).toStrictEqual("wait");
-    });
-
-    test('set dma disable', async () => {
-        let resp = await hw.set_dma_disable({status:false});
-        expect(resp).toBeUndefined();
-    });
 
     test('load bitstream', async () => {
         let buf = Buffer.from("test_bitstream");
@@ -238,18 +191,8 @@ describe('Hardware interface test', () => {
     });
 
 
-    test('apply program', async () => {
-        let acq = {
-            level: 0,
-            level_type: 'int',
-            mode: 'continuous',
-            prescaler: 0,
-            source: 1,
-            trigger: 'rising_edge',
-            trigger_point: 200
-        };
-
-        let resp = await hw.set_acquisition(acq);
+    test('add scope ticket', async () => {
+        let resp = await hw.add_scope_ticket("0123456789abcdef0123456789abcdef", "operator", 60);
         expect(resp).toBeUndefined();
     });
 

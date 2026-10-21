@@ -21,10 +21,6 @@ export class OperationsBackend {
         return await this.hw_if.load_bitstream(bit.data);
     }
 
-    public async fetch_data() : Promise<read_data_response>{
-        return await this.hw_if.read_data();
-    }
-
     public async read_register(addr:number) : Promise<number> {
         return await this.hw_if.read_register(addr);
     }
@@ -34,36 +30,12 @@ export class OperationsBackend {
     }
 
 
-    public async set_scaling_factors(factors:number[]) : Promise<any> {
-        return await this.hw_if.set_scaling_factors(factors);
-    }
-
-    public async set_channel_status(status:channel_statuses) : Promise<any> {
-        return await this.hw_if.set_channel_status(status);
-    }
-
-    public async get_acquisition() : Promise<string> {
-        return this.hw_if.get_acquisition_status();
-    }
-
-    public async set_acquisition(status:acquisition_status) : Promise<any> {
-        return this.hw_if.set_acquisition(status)
-    }
-
-    public async set_scope_address(addr:scope_address): Promise<any>{
-        return this.hw_if.set_scope_address(addr);
-    }
-
     /// Registers on the driver a one time ticket for the scope websocket, which the client connects to directly
     public async create_scope_ticket(role:string): Promise<{ticket:string, ttl:number}>{
         const ttl = 60;
         const ticket = randomBytes(32).toString("hex");
         await this.hw_if.add_scope_ticket(ticket, role, ttl);
         return {ticket: ticket, ttl: ttl};
-    }
-
-    public async set_dma_disable(status:status_object): Promise<any>{
-        return this.hw_if.set_dma_disable(status);
     }
 
     public async hil_select_output(out:select_hil_output): Promise<any>{

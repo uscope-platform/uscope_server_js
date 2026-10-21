@@ -70,14 +70,6 @@ export class hw_interface {
         }
     }
 
-    public async read_data(): Promise<read_data_response> {
-        return await this.send_command(commands.scope.read_data,{});
-    }
-
-    public async get_acquisition_status() : Promise<string> {
-        return await this.send_command(commands.scope.get_acquisition_status, {});
-    }
-
     public async get_debug_level(): Promise<string>{
         return await this.send_command(commands.platform.get_debug_level, {})
     }
@@ -103,14 +95,6 @@ export class hw_interface {
         return await this.send_command(commands.platform.set_debug_level, level);
     }
 
-    public async set_scope_address(address:scope_address){
-        return await this.send_command(commands.scope.set_scope_address, address);
-    }
-
-    public async set_dma_disable(status:status_object){
-        return await this.send_command(commands.scope.disable_scope_dma, status);
-    }
-
     public async load_bitstream(bit:Buffer){
         let bit_string = bit.toString("base64")
         return await this.send_command(commands.control.load_bitstream,bit_string);
@@ -119,14 +103,6 @@ export class hw_interface {
 
     public async add_scope_ticket(ticket:string, role:string, ttl:number){
         return await this.send_command(commands.scope.scope_ticket_add, {ticket: ticket, role: role, ttl: ttl});
-    }
-
-    public async set_scaling_factors(factors:number[]){
-        return await this.send_command(commands.scope.set_scaling_factors, factors);
-    }
-
-    public async set_channel_status(status:channel_statuses){
-        return await this.send_command(commands.scope.set_channel_status, status);
     }
 
     public async read_register(address:number): Promise<number>{
@@ -185,10 +161,6 @@ export class hw_interface {
 
     public async apply_program(program:number[], core_address:number){
         return await this.send_command(commands.core.apply_program, {address: core_address, program: program})
-    }
-
-    public async set_acquisition(arg:acquisition_status){
-        return await this.send_command(commands.scope.set_acquisition, arg);
     }
 
     public async debug_hil(command:object){

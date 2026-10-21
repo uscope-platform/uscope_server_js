@@ -78,9 +78,6 @@ describe('Operation API Error handling tests', () => {
         load_application: () =>{
             throw "ops error 0"
         },
-        fetch_data: () =>{
-            throw "ops error 1"
-        },
         read_register: () =>{
             throw "ops error 2"
         },
@@ -89,24 +86,6 @@ describe('Operation API Error handling tests', () => {
         },
         compile_program: () =>{
             throw "ops error 4"
-        },
-        set_scaling_factors: () =>{
-            throw "ops error 5"
-        },
-        set_channel_status: () =>{
-            throw "ops error 6"
-        },
-        get_acquisition: () =>{
-            throw "ops error 7"
-        },
-        set_acquisition: () =>{
-            throw "ops error 8"
-        },
-        set_scope_address: () =>{
-            throw "ops error 9"
-        },
-        set_dma_disable: () =>{
-            throw "ops error 10"
         },
         hil_select_output: () =>{
             throw "ops error 11"
@@ -282,113 +261,9 @@ describe('Operation API Error handling tests', () => {
 
 
 
-    test('fetch_data', async () => {
-
-        return request(app.callback())
-            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.fetch_data)
-            .set('Authorization', `Bearer ${token}`)
-            .then((response)=>{
-                expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 1");
-            });
-
-    });
 
 
 
-
-    test('set_scaling_factors', async () => {
-
-        let sfs = [1, 1.5, 2, -5.4, 1, 0];
-
-        return request(app.callback())
-            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.scaling_factors)
-            .set('Authorization', `Bearer ${token}`)
-            .send(sfs)
-            .then((response)=>{
-                expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 5");
-            });
-
-    });
-
-    test('set_channel_statuses', async () => {
-
-        let statuses = {'0': false, '1': true, '2': true, '3': true, '4': true, '5': true};
-
-        return request(app.callback())
-            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.set_channel_status)
-            .set('Authorization', `Bearer ${token}`)
-            .send(statuses)
-            .then((response)=>{
-                expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 6");
-            });
-
-    });
-
-
-    test('get_acquisition', async () => {
-
-        return request(app.callback())
-            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.acquisition)
-            .set('Authorization', `Bearer ${token}`)
-            .then((response)=>{
-                expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 7");
-            });
-
-    });
-
-    test('set_acquisition', async () => {
-
-        let acq = {
-            level: 0,
-            level_type: 'int',
-            mode: 'continuous',
-            prescaler: 0,
-            source: 1,
-            trigger: 'rising_edge',
-            trigger_point: 200
-        };
-
-        return request(app.callback())
-            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.acquisition)
-            .set('Authorization', `Bearer ${token}`)
-            .send(acq)
-            .then((response)=>{
-                expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 8");
-            });
-
-    });
-
-    test('set_dma_disable', async () => {
-
-        return request(app.callback())
-            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.dma_disable)
-            .set('Authorization', `Bearer ${token}`)
-            .send({status:true})
-            .then((response)=>{
-                expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 10");
-            });
-
-    });
-
-    test('address', async () => {
-        let acq = {'address': 18316853248, 'dma_buffer_offset': 520};
-
-        return request(app.callback())
-            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.scope_address)
-            .set('Authorization', `Bearer ${token}`)
-            .send(acq)
-            .then((response)=>{
-                expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 9");
-            });
-
-    });
 
     test('deploy_hil', async () => {
         let hil = {

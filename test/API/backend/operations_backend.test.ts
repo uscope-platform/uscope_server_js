@@ -4,8 +4,8 @@ import {expect} from "@jest/globals";
 import {hw_interface} from "#hw";
 import {OperationsBackend} from "#api_backend";
 import {
-    register_write_model, acquisition_status, clock_info,
-    programs_info, scope_address, select_hil_output, set_hil_inputs,
+    register_write_model, clock_info,
+    programs_info, select_hil_output, set_hil_inputs,
     emulator_model, hil_debug_model, program_model, bitstream_model,
 } from "#models";
 
@@ -50,9 +50,6 @@ describe('operations backend test', () => {
             args = a;
             return "ok";
         },
-        read_data:()=>{
-            return [123, 123, 123];
-        },
         read_register:(addr:any) =>{
             args = addr;
             return 1232;
@@ -74,33 +71,14 @@ describe('operations backend test', () => {
                 return {status:"error",error:"error test"}
             }
         },
-        set_scaling_factors:(a:any)=>{
-            args = a;
-            return "ok";
-        },
-        set_channel_status:(a:any)=>{
-            args = a;
-            return "ok";
-        },
-        get_acquisition_status:()=>{
-            return "wait";
-        },
-        set_acquisition:(a:any)=>{
-            args = a;
-            return "ok";
+        add_scope_ticket:(ticket:any, role:any, ttl:any)=>{
+            args = {ticket, role, ttl};
+            return undefined;
         },
         start_hil:()=>{
             return "ok";
         },
         stop_hil:()=>{
-            return "ok";
-        },
-        set_scope_address:(a:any)=>{
-            args = a;
-            return "ok";
-        },
-        set_dma_disable:(a:any)=>{
-            args = a;
             return "ok";
         },
         select_output:(a:any)=>{
@@ -158,11 +136,6 @@ describe('operations backend test', () => {
         expect(res).toStrictEqual("ok");
     });
 
-    test('fetch_data', async () => {
-        let res =await backend.fetch_data();
-        expect(res).toStrictEqual([123, 123, 123]);
-    });
-
     test('read_register', async () => {
         let res =await backend.read_register(12441);
         expect(args).toStrictEqual(12441)
@@ -198,41 +171,16 @@ describe('operations backend test', () => {
         expect(args).toStrictEqual(a);
     });
 
-    test('set_scaling_factors', async () => {
-        let res =await backend.set_scaling_factors([1.0, 0.6, 3.2]);
-        expect(res).toStrictEqual("ok");
-        expect(args).toStrictEqual([1.0, 0.6, 3.2]);
+
+
+
+
+    test('create_scope_ticket', async () => {
+        let res = await backend.create_scope_ticket("operator");
+        expect(res.ttl).toBe(60);
+        expect(res.ticket).toMatch(/^[0-9a-f]{64}$/);
+        expect(args).toStrictEqual({ticket: res.ticket, role: "operator", ttl: 60});
     });
-
-
-    test('set_channel_status', async () => {
-        let res =await backend.set_channel_status({"1":true, "2":true, "3":false});
-        expect(res).toStrictEqual("ok");
-        expect(args).toStrictEqual({"1":true, "2":true, "3":false});
-    });
-
-
-    test('get_acquisition', async () => {
-        let res =await backend.get_acquisition();
-        expect(res).toStrictEqual("wait");
-    });
-
-
-    test('set_acquisition', async () => {
-        let a : acquisition_status = {
-            level:123,
-            trigger:"edge",
-            mode:"single",
-            source:2,
-            level_type:"rising",
-            trigger_point:213,
-            prescaler:1
-        };
-        let res =await backend.set_acquisition(a);
-        expect(res).toStrictEqual("ok");
-        expect(args).toStrictEqual(a);
-    });
-
 
     test('hil_start', async () => {
         let res =await backend.hil_start();
@@ -249,22 +197,6 @@ describe('operations backend test', () => {
         let res =await backend.get_version("34123");
         expect(res).toStrictEqual("1234fasf");
         expect(args).toStrictEqual("34123");
-    });
-
-    test('set_scope_address', async () => {
-        let a :scope_address = {
-            address: 123,
-            dma_buffer_offset:123
-        }
-        let res =await backend.set_scope_address(a);
-        expect(res).toStrictEqual("ok");
-        expect(args).toStrictEqual(a);
-    });
-
-    test('set_dma_disable', async () => {
-        let res =await backend.set_dma_disable({status:false});
-        expect(res).toStrictEqual("ok");
-        expect(args).toStrictEqual({status:false});
     });
 
 
