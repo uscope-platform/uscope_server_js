@@ -3,7 +3,7 @@ import {database} from "#database";
 import * as Koa from "koa";
 import {endpoints_map} from ".";
 import {connection_model, core_model, emulator_edit_model, emulator_model} from "#models";
-import {port_link_model} from "#models/emulator_model.ts";
+import {io_block_model, port_link_model} from "#models/emulator_model.ts";
 
 export class emulators_router {
     public router: Router;
@@ -57,6 +57,19 @@ export class emulators_router {
                             break;
                         case "remove":
                             ctx.body = await this.db.emulators.remove_core(id, e.value);
+                            break;
+                    }
+                    break;
+                case "io_blocks":
+                    switch (e.action){
+                        case "add":
+                            ctx.body = await this.db.emulators.add_io_block(id, <io_block_model>e.value);
+                            break;
+                        case "edit":
+                            ctx.body = await this.db.emulators.update_io_block(id, <io_block_model>e.value);
+                            break;
+                        case "remove":
+                            ctx.body = await this.db.emulators.remove_io_block(id, e.value);
                             break;
                     }
                     break;
