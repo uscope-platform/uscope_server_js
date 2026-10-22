@@ -10,14 +10,12 @@ describe('script_database_tests', () => {
         {
             id: 1,
             name: "test_script",
-            content:"console.log('test')",
-            triggers:"trogger"
+            content:"console.log('test')"
         },
         {
             id: 2,
             name: "test_script_54",
-            content:"cons",
-            triggers:"trogger"
+            content:"cons"
         }
     ]
 

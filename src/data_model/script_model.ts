@@ -3,8 +3,7 @@
 export interface script_model {
     id:number,
     name:string,
-    content:string,
-    triggers:string
+    content:string
 }
 
 export interface script_edit_model {

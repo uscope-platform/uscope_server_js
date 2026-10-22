@@ -59,8 +59,7 @@ describe('emulator_database_tests', () => {
     let scr : script_model = {
         id: 2,
         name: "test_script_54",
-        content:"cons",
-        triggers:"trogger"
+        content:"cons"
     }
 
     let prg : program_model = {

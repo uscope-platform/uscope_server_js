@@ -19,14 +19,12 @@ describe('script API tests', () => {
         {
             "id": 1,
             "name": "new script_1",
-            "content": "console.log(\"t\")",
-            "triggers": "test_trigger"
+            "content": "console.log(\"t\")"
         },
         {
             "id": 2,
             "name": "new script_2",
-            "content": "",
-            "triggers": ""
+            "content": ""
         }];
 
     let results:any = {}
@@ -103,8 +101,7 @@ describe('script API tests', () => {
         let script_obj = {
             "id": 3,
             "name": "new script_3",
-            "content": "",
-            "triggers": ""
+            "content": ""
         }
         let path = endpoints_map.script.prefix + endpoints_map.script.endpoints.add;
         path = path.replace(":id", "3");

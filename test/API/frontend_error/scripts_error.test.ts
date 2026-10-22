@@ -89,8 +89,7 @@ describe('script API error handling tests', () => {
         let script_obj = {
             "id": 3,
             "name": "new script_3",
-            "content": "",
-            "triggers": ""
+            "content": ""
         }
         let path = endpoints_map.script.prefix + endpoints_map.script.endpoints.add;
         path = path.replace(':id', '3')
