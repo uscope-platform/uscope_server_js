@@ -1,6 +1,6 @@
 import Router from 'koa-router';
 import * as Koa from 'koa';
-import {Authenticator} from "#api_backend";
+import {Authenticator, http_error} from "#api_backend";
 import {database} from "#database";
 import {auto_login_object, db_dump, user_login_object} from "#models";
 import {endpoints_map} from ".";
@@ -40,7 +40,9 @@ export class platform_router {
             let has_users = await this.db.platform.has_users();
             let body = <user_add_request>ctx.request.body;
             if(!has_users) {
-                await this.auth.create_user(body.user, body.password, body.role);
+                if(!body.user || !body.password) throw new http_error(400, "A username and a password are needed");
+                // the first account is the administrator, whatever is asked: the platform could not be managed otherwise
+                await this.auth.create_user(body.user, body.password, "admin");
             }
             ctx.status = 200;
         })

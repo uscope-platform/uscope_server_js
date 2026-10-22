@@ -121,7 +121,8 @@ describe('platform API tests', () => {
 
 
     test('onboarding_post', async () => {
-        let user_obj = {user:"test_user2",password:"test2", role:"admin2"}
+        // the role asked is ignored, the first account is the admin
+        let user_obj = {user:"test_user2",password:"test2", role:"operator"}
         return request(app.callback())
             .post(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.onboarding)
             .set('Authorization', `Bearer ${bearer_token}`)
@@ -131,7 +132,18 @@ describe('platform API tests', () => {
                 expect(results.user).toBe("test_user2");
                 expect(results.pw_hash).not.toBeNull();
                 expect(results.pw_hash.startsWith("$argon2id$v=19$m=32768,t=4,p=2")).toBeTruthy()
-                expect(results.role).toBe("admin2");
+                expect(results.role).toBe("admin");
+            });
+    });
+
+    test('onboarding_post_without_password', async () => {
+        return request(app.callback())
+            .post(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.onboarding)
+            .set('Authorization', `Bearer ${bearer_token}`)
+            .send({user:"test_user3", password:"", role:"admin"})
+            .then((response)=>{
+                expect(response.status).toBe(400);
+                expect(response.body.message).toBe("A username and a password are needed");
             });
     });
 
