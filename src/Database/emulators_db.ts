@@ -47,6 +47,7 @@ export class emulators_db {
                 name,
                 cores,
                 io_blocks,
+                layout,
                 connections,
                 emulation_time,
                 deployment_mode
@@ -55,6 +56,7 @@ export class emulators_db {
                 ${emu.name},
                 ${emu.cores},
                 ${emu.io_blocks ?? {}},
+                ${emu.layout ?? {}},
                 ${emu.connections},
                 ${emu.emulation_time},
                 ${emu.deployment_mode}

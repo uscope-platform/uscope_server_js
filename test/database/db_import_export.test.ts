@@ -29,6 +29,7 @@ describe('emulator_database_tests', () => {
         emulation_time:100.5,
         cores:{},
         io_blocks:{},
+        layout:{},
         connections:[],
         deployment_mode:false,
     }

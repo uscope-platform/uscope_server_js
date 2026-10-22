@@ -41,7 +41,7 @@ describe('db_creation_test', () => {
                 ],
                 bitstreams:["id", "name", "data", "hash"],
                 data_versions:["table", "version", "last_modified"],
-                emulators:["id", "emulation_time", "cores", "io_blocks", "deployment_mode", "connections", "name"],
+                emulators:["id", "emulation_time", "cores", "io_blocks", "layout", "deployment_mode", "connections", "name"],
                 filters:["id", "ideal_taps", "quantized_taps", "name", "parameters"],
                 login_tokens:["selector", "validator", "expiry", "username"],
                 peripherals:["id", "image", "name", "parametric", "registers", "version"],

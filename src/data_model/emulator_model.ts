@@ -127,6 +127,10 @@ export interface emulator_model {
     io_blocks?:{
         [key:string]: io_block_model
     },
+    // where the editor draws the nodes, by id: presentation only, kept apart from the nodes
+    layout?:{
+        [key:string]: {x:number, y:number}
+    },
     connections:connection_model[],
     emulation_time:number,
     deployment_mode:boolean

@@ -97,11 +97,15 @@ export class database {
         await this.upgrade_emulators();
     }
 
-    // the databases created before the IO blocks have no column for them
+    // the databases created before the IO blocks and the layout have no column for them
     private async upgrade_emulators(): Promise<void> {
         await this.db`
             alter table ${sql(this.schema)}.emulators
                 add column if not exists io_blocks jsonb default '{}'::jsonb
+        `
+        await this.db`
+            alter table ${sql(this.schema)}.emulators
+                add column if not exists layout jsonb default '{}'::jsonb
         `
     }
 
@@ -433,6 +437,10 @@ export class database {
             await this.db`
                 alter table ${sql(this.schema)}.emulators
                     add io_blocks jsonb default '{}'::jsonb
+            `
+            await this.db`
+                alter table ${sql(this.schema)}.emulators
+                    add layout jsonb default '{}'::jsonb
             `
             await this.db`
                 alter table ${sql(this.schema)}.emulators

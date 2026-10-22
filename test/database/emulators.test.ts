@@ -15,6 +15,7 @@ describe('emulator_database_tests', () => {
             emulation_time:100.5,
             cores:{},
             io_blocks:{},
+            layout:{},
             connections:[],
             deployment_mode:false,
         },
@@ -24,6 +25,7 @@ describe('emulator_database_tests', () => {
             emulation_time:10.2,
             cores:{},
             io_blocks:{},
+            layout:{},
             connections:[],
             deployment_mode:true,
         }
@@ -157,6 +159,13 @@ describe('emulator_database_tests', () => {
         await db.emulators.remove_io_block(1, 10);
         let res = await db.emulators.get_emulator(1);
         expect(res.io_blocks).toStrictEqual({});
+    });
+
+    test('layout', async () => {
+        await db.emulators.edit_atomic_field(1, "layout", {"6": {x: 10, y: 20}});
+        let res = await db.emulators.get_emulator(1);
+        expect(res.layout).toStrictEqual({"6": {x: 10, y: 20}});
+        await db.emulators.edit_atomic_field(1, "layout", {});
     });
 
     test('add_connection', async () => {
