@@ -518,6 +518,37 @@ describe('applications API tests', () => {
     });
 
 
+    test('edit_remove_item_keeps_the_following_items', async () => {
+        // an application of its own, the others are edited by the tests around
+        apps.push({
+            ...JSON.parse(JSON.stringify(init_app)),
+            id: 2,
+            channels: ["ch_a", "ch_b", "ch_c"].map((name, number) => ({
+                name: name, id: name, number: number, mux_setting: 0, enabled: true, scaling_factor: 1
+            }))
+        });
+
+        let edit = {
+            application:2,
+            item:"ch_b",
+            action:"remove",
+            object:"channel"
+        };
+
+        let url = endpoints_map.application.prefix + endpoints_map.application.endpoints.edit;
+        url = url.replace(":id", "2");
+
+        return request(app.callback())
+            .patch(url)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                // only the removed item goes, not the ones after it
+                expect(results.channels.map((c: any) => c.name)).toStrictEqual(["ch_a", "ch_c"]);
+            });
+    });
+
     test('edit_remove_item', async () => {
 
         let edit = {

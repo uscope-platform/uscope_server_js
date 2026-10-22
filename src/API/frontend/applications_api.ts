@@ -186,7 +186,7 @@ export class applications_router {
                 return val[this.item_id_map[e.object]] == e.item;
             });
             if (index !== -1) {
-                app[this.item_types_map[e.object]].splice(index);
+                app[this.item_types_map[e.object]].splice(index, 1);
             }
         }
         await this.db.applications.update_application_field(app);
