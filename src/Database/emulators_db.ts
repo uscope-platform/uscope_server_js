@@ -1,5 +1,6 @@
 import postgres from "postgres";
 import {emulator_model, connection_model, core_model} from "#models";
+import {io_block_model} from "#models/emulator_model.ts";
 import {port_link_model} from "#models/emulator_model.ts";
 
 
@@ -45,6 +46,7 @@ export class emulators_db {
                 id,
                 name,
                 cores,
+                io_blocks,
                 connections,
                 emulation_time,
                 deployment_mode
@@ -52,6 +54,7 @@ export class emulators_db {
                 ${emu.id},
                 ${emu.name},
                 ${emu.cores},
+                ${emu.io_blocks ?? {}},
                 ${emu.connections},
                 ${emu.emulation_time},
                 ${emu.deployment_mode}
@@ -76,6 +79,24 @@ export class emulators_db {
         let emu = await this.get_emulator(id);
         delete emu.cores[core_id.toString(10)];
         return await this.update_emulator_field(id, "cores", emu.cores);
+    }
+
+    public async add_io_block(id:number, block:io_block_model){
+        return await this.update_io_block(id, block);
+    }
+
+    public async update_io_block(id:number, block:io_block_model) {
+        let emu = await this.get_emulator(id);
+        let blocks = emu.io_blocks ?? {};
+        blocks[block.id.toString(10)] = block;
+        return await this.update_emulator_field(id, "io_blocks", blocks);
+    }
+
+    public async remove_io_block(id:number, block_id:number) {
+        let emu = await this.get_emulator(id);
+        let blocks = emu.io_blocks ?? {};
+        delete blocks[block_id.toString(10)];
+        return await this.update_emulator_field(id, "io_blocks", blocks);
     }
 
     public async add_connection(id:number, connection:connection_model){

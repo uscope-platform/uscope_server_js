@@ -28,6 +28,7 @@ describe('emulator_database_tests', () => {
         name:'new new emulator',
         emulation_time:100.5,
         cores:{},
+        io_blocks:{},
         connections:[],
         deployment_mode:false,
     }

@@ -94,6 +94,24 @@ export interface connection_model {
 }
 
 
+// a 32 bit word that the logic reads or writes on the bus, at its own address
+export interface io_port_model{
+    name:string,
+    address:number,
+    type:string,
+    width:number,
+    signed:boolean
+}
+
+// the endpoints that feed the DMAs (source) or are written by them (sink), it shares the ids of the cores
+export interface io_block_model{
+    name:string,
+    id:number,
+    direction:"source" | "sink",
+    ports:io_port_model[]
+}
+
+
 export interface hil_debug_model {
     action:string,
     arguments:any
@@ -105,6 +123,9 @@ export interface emulator_model {
     name:string,
     cores:{
         [key:string]: core_model
+    },
+    io_blocks?:{
+        [key:string]: io_block_model
     },
     connections:connection_model[],
     emulation_time:number,

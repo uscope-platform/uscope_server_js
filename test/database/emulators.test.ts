@@ -4,6 +4,7 @@ import {
     emulator_model, connection_model, core_model,
     efi_implementation_type, fcore_comparator_type
 } from "#models";
+import {io_block_model} from "#models/emulator_model.ts";
 
 describe('emulator_database_tests', () => {
 
@@ -13,6 +14,7 @@ describe('emulator_database_tests', () => {
             name:'new new emulator',
             emulation_time:100.5,
             cores:{},
+            io_blocks:{},
             connections:[],
             deployment_mode:false,
         },
@@ -21,6 +23,7 @@ describe('emulator_database_tests', () => {
             name:'test',
             emulation_time:10.2,
             cores:{},
+            io_blocks:{},
             connections:[],
             deployment_mode:true,
         }
@@ -123,6 +126,37 @@ describe('emulator_database_tests', () => {
         await db.emulators.remove_core(1, 4);
         let res = await db.emulators.get_emulator(1);
         expect(res.cores).toHaveProperty('6')
+    });
+
+    test('add_io_block', async () => {
+        let block :io_block_model = {
+            name: "adc_in",
+            id: 10,
+            direction: "source",
+            ports: [{name: "ch0", address: 0x40000000, type: "float", width: 32, signed: true}, {name: "ch1", address: 0x40000004, type: "integer", width: 16, signed: false}]
+        }
+        await db.emulators.add_io_block(1, block);
+        let res = await db.emulators.get_emulator(1);
+        expect(res.io_blocks).toHaveProperty('10')
+        expect(res.io_blocks?.[10]).toStrictEqual(block);
+    });
+
+    test('update_io_block', async () => {
+        let block :io_block_model = {
+            name: "adc_in_moved",
+            id: 10,
+            direction: "source",
+            ports: [{name: "ch0", address: 0x40001000, type: "float", width: 32, signed: true}]
+        }
+        await db.emulators.update_io_block(1, block);
+        let res = await db.emulators.get_emulator(1);
+        expect(res.io_blocks?.[10]).toStrictEqual(block);
+    });
+
+    test('remove_io_block', async () => {
+        await db.emulators.remove_io_block(1, 10);
+        let res = await db.emulators.get_emulator(1);
+        expect(res.io_blocks).toStrictEqual({});
     });
 
     test('add_connection', async () => {

@@ -94,6 +94,15 @@ export class database {
             await this.create_filters();
             await this.populate_versions();
         }
+        await this.upgrade_emulators();
+    }
+
+    // the databases created before the IO blocks have no column for them
+    private async upgrade_emulators(): Promise<void> {
+        await this.db`
+            alter table ${sql(this.schema)}.emulators
+                add column if not exists io_blocks jsonb default '{}'::jsonb
+        `
     }
 
     public async populate_versions():Promise<void> {
@@ -420,6 +429,10 @@ export class database {
             await this.db`
                 alter table ${sql(this.schema)}.emulators
                     add connections jsonb
+            `
+            await this.db`
+                alter table ${sql(this.schema)}.emulators
+                    add io_blocks jsonb default '{}'::jsonb
             `
             await this.db`
                 alter table ${sql(this.schema)}.emulators
