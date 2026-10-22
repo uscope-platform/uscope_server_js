@@ -89,7 +89,6 @@ describe('script API error handling tests', () => {
         let script_obj = {
             "id": 3,
             "name": "new script_3",
-            "path": null,
             "content": "",
             "triggers": ""
         }

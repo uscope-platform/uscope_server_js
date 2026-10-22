@@ -59,7 +59,6 @@ describe('emulator_database_tests', () => {
     let scr : script_model = {
         id: 2,
         name: "test_script_54",
-        path:"",
         content:"cons",
         triggers:"trogger"
     }

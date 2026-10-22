@@ -3,7 +3,6 @@
 export interface script_model {
     id:number,
     name:string,
-    path:string,
     content:string,
     triggers:string
 }

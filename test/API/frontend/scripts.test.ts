@@ -19,14 +19,12 @@ describe('script API tests', () => {
         {
             "id": 1,
             "name": "new script_1",
-            "path": null,
             "content": "console.log(\"t\")",
             "triggers": "test_trigger"
         },
         {
             "id": 2,
             "name": "new script_2",
-            "path": null,
             "content": "",
             "triggers": ""
         }];
@@ -105,7 +103,6 @@ describe('script API tests', () => {
         let script_obj = {
             "id": 3,
             "name": "new script_3",
-            "path": null,
             "content": "",
             "triggers": ""
         }

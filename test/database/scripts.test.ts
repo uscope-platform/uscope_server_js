@@ -10,14 +10,12 @@ describe('script_database_tests', () => {
         {
             id: 1,
             name: "test_script",
-            path:"",
             content:"console.log('test')",
             triggers:"trogger"
         },
         {
             id: 2,
             name: "test_script_54",
-            path:"",
             content:"cons",
             triggers:"trogger"
         }
@@ -59,9 +57,9 @@ describe('script_database_tests', () => {
 
 
     test('update_script', async () => {
-        await db.scripts.update_script_field(1, "path", "test.js");
+        await db.scripts.update_script_field(1, "name", "test.js");
         let res =await db.scripts.get_script(1);
-        expect(res.path).toEqual("test.js");
+        expect(res.name).toEqual("test.js");
     });
 
 

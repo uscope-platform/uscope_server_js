@@ -23,7 +23,7 @@ export class scripts_db {
 
     public async load_all() : Promise<script_model[]> {
         let raw_res = await this.db`
-            select * from ${this.db(this.schema)}.scripts
+            select id, name, content, triggers from ${this.db(this.schema)}.scripts
         `;
         return <script_model[]> raw_res.map((scr)=>{
             return scr;
@@ -33,7 +33,7 @@ export class scripts_db {
 
     public async get_script(id:number) : Promise<script_model> {
         const raw_res = await this.db`
-            select * from ${this.db(this.schema)}.scripts where id=${id}
+            select id, name, content, triggers from ${this.db(this.schema)}.scripts where id=${id}
         `;
         return <script_model> raw_res[0];
     }
@@ -45,13 +45,11 @@ export class scripts_db {
             insert into ${this.db(this.schema)}.scripts (
                 id,
                 name,
-                path,
                 content,
                 triggers
             ) values (
                 ${app.id},
                 ${app.name},
-                ${app.path},
                 ${app.content},
                 ${app.triggers}
             )
