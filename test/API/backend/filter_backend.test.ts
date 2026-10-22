@@ -130,4 +130,15 @@ describe('filters backend test', () => {
         expect(res.quantized.frequency).toHaveLength(2000);
     });
 
+    test('design_unknown_filter', async () => {
+        let missing = new FiltersBackend({filters: {get_filter: () => undefined}} as any as database, {} as hw_interface);
+        await expect(missing.design_filter(9)).rejects.toThrow("Filter 9 not found");
+    });
+
+    test('design_failure_reports_the_reason', async () => {
+        let broken = new FiltersBackend({filters: {get_filter: () => ({id: 1, parameters: {type: "nonexistent"}})}} as any as database, {} as hw_interface);
+        // the reason is the exception of the script: the unknown type, or the missing module when numpy is not installed
+        await expect(broken.design_filter(1)).rejects.toThrow(/^Filter design failed: \w*(Error|Exception)/);
+    });
+
 });

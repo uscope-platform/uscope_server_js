@@ -161,26 +161,46 @@ export class FiltersBackend {
         this.hw_if = hw;
     }
 
-    public async design_filter(id:number) {
+    /// Runs one operation of the filter script on a filter. The message of the error is the last line of what python
+    /// wrote on stderr (the exception), the rest of it is only logged
+    private async run_filter_script(operation: string, id: number) {
         let filter = await this.db.filters.get_filter(id);
-        let raw_res = spawnSync("/usr/bin/python3", ['-c', filter_designer, "design", JSON.stringify(filter)])
-        let result = JSON.parse(String(raw_res.stdout));
+        if(filter === undefined) throw new Error("Filter " + id + " not found");
+
+        let raw_res = spawnSync("/usr/bin/python3", ['-c', filter_designer, operation, JSON.stringify(filter)]);
+        if(raw_res.error !== undefined){
+            throw new Error("Filter " + operation + " failed, python could not be run: " + raw_res.error.message);
+        }
+
+        let stdout = String(raw_res.stdout).trim();
+        if(raw_res.status !== 0 || stdout === ""){
+            let stderr = String(raw_res.stderr).trim();
+            console.error("Filter " + operation + " failed (exit " + raw_res.status + ", signal " + raw_res.signal + "):\n" + stderr);
+            let reason = stderr.split("\n").filter(line => line.trim() !== "").pop() ?? "no output from the script";
+            throw new Error("Filter " + operation + " failed: " + reason);
+        }
+
+        try{
+            return JSON.parse(stdout);
+        } catch (e) {
+            throw new Error("Filter " + operation + " failed: the script answered something that is not JSON");
+        }
+    }
+
+    public async design_filter(id:number) {
+        let result = await this.run_filter_script("design", id);
         await this.db.filters.update_filter_field(id, "ideal_taps", result[0]);
         return result[1]
     }
 
     public async implement_filter(id:number) {
-        let filter = await this.db.filters.get_filter(id);
-        let raw_res = spawnSync("/usr/bin/python3", ['-c', filter_designer,  "implement", JSON.stringify(filter)])
-        let result = JSON.parse(String(raw_res.stdout));
+        let result = await this.run_filter_script("implement", id);
         await this.db.filters.update_filter_field(id, "quantized_taps", result[0]);
         return result[1];
     }
 
     public async get_response(id:number) {
-        let filter = await this.db.filters.get_filter(id);
-        let raw_res = spawnSync("/usr/bin/python3", ['-c', filter_designer,  "get_response", JSON.stringify(filter)])
-        return JSON.parse(String(raw_res.stdout));
+        return this.run_filter_script("get_response", id);
     }
 
 
