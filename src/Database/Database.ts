@@ -291,7 +291,7 @@ export class database {
             `
             await this.db`
                 alter table ${sql(this.schema)}.applications
-                    add initial_registers_values jsonb
+                    add init_script integer
             `
             await this.db`
                 alter table ${sql(this.schema)}.applications

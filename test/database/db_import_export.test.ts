@@ -39,7 +39,7 @@ describe('emulator_database_tests', () => {
         channels:[],
         channel_groups:[],
         clock_frequency:0,
-        initial_registers_values:[],
+        init_script:null,
         macro:[],
         parameters:[],
         peripherals:[],

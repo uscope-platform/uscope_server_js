@@ -32,7 +32,7 @@ describe('Operation API tests', () => {
             default:false
         }],
         clock_frequency:100000000,
-        initial_registers_values:[],
+        init_script:null,
         macro:[{
             address:0x213,
             value:0

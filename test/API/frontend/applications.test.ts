@@ -28,7 +28,7 @@ describe('applications API tests', () => {
             default:false
         }],
         clock_frequency:100000000,
-        initial_registers_values:[],
+        init_script:null,
         macro:[{
             address:0x213,
             value:0
@@ -133,7 +133,7 @@ describe('applications API tests', () => {
             channels:[],
             channel_groups:[],
             clock_frequency:100000000,
-            initial_registers_values:[],
+            init_script:null,
             macro:[],
             parameters:[],
             peripherals:[],
@@ -211,7 +211,7 @@ describe('applications API tests', () => {
                             default:false
                         }],
                         clock_frequency:100000000,
-                        initial_registers_values:[],
+                        init_script:null,
                         macro:[{
                             address:0x213,
                             value:0
@@ -260,7 +260,7 @@ describe('applications API tests', () => {
                             default:false
                         }],
                         clock_frequency:100000000,
-                        initial_registers_values:[],
+                        init_script:null,
                         macro:[{
                             address:0x213,
                             value:0
@@ -322,7 +322,7 @@ describe('applications API tests', () => {
                             default:false
                         }],
                         clock_frequency:100000000,
-                        initial_registers_values:[],
+                        init_script:null,
                         macro:[{
                             address:0x213,
                             value:0
@@ -381,7 +381,7 @@ describe('applications API tests', () => {
                             default:false
                         }],
                         clock_frequency:100000000,
-                        initial_registers_values:[],
+                        init_script:null,
                         macro:[{
                             address:0x213,
                             value:0
@@ -440,7 +440,7 @@ describe('applications API tests', () => {
                             default:false
                         }],
                         clock_frequency:100000000,
-                        initial_registers_values:[],
+                        init_script:null,
                         macro:[{
                             address:0x213,
                             value:0
@@ -495,7 +495,7 @@ describe('applications API tests', () => {
                             default:false
                         }],
                         clock_frequency:100000000,
-                        initial_registers_values:[],
+                        init_script:null,
                         macro:[{
                             address:0x213,
                             value:0
@@ -575,7 +575,7 @@ describe('applications API tests', () => {
                         channels:[],
                         channel_groups:[],
                         clock_frequency:100000000,
-                        initial_registers_values:[],
+                        init_script:null,
                         macro:[{
                             address:0x213,
                             value:0
@@ -637,7 +637,7 @@ describe('applications API tests', () => {
                             default:false
                         }],
                         clock_frequency:100000000,
-                        initial_registers_values:[],
+                        init_script:null,
                         macro:[{
                             address:0x213,
                             value:0
@@ -695,7 +695,7 @@ describe('applications API tests', () => {
                             default:false
                         }],
                         clock_frequency:100000000,
-                        initial_registers_values:[],
+                        init_script:null,
                         macro:[{
                             address:0x213,
                             value:0
@@ -719,6 +719,30 @@ describe('applications API tests', () => {
             });
     });
 
+
+    test('edit_init_script', async () => {
+        // an application of its own, the others are edited by the tests around
+        apps[2] = {...JSON.parse(JSON.stringify(init_app)), id: 3};
+
+        let url = endpoints_map.application.prefix + endpoints_map.application.endpoints.edit;
+        url = url.replace(":id", "3");
+
+        const edit = (value: number | null) => request(app.callback())
+            .patch(url)
+            .set('Authorization', `Bearer ${token}`)
+            .send({application: 3, item: {name: "init_script", value: value, edit_name: false}, action: "edit", object: "misc"});
+
+        // it is a field of the application, not one of its miscellaneous parameters
+        let response = await edit(7);
+        expect(response.status).toBe(200);
+        expect(results.init_script).toBe(7);
+        expect(results.miscellaneous).toStrictEqual({test_misc_p: 123});
+
+        // and it is cleared with null
+        response = await edit(null);
+        expect(response.status).toBe(200);
+        expect(results.init_script).toBeNull();
+    });
 
     test('edit_pl_clocks', async () => {
 
@@ -755,7 +779,7 @@ describe('applications API tests', () => {
                             default:false
                         }],
                         clock_frequency:100000000,
-                        initial_registers_values:[],
+                        init_script:null,
                         macro:[{
                             address:0x213,
                             value:0

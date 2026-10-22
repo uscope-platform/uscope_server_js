@@ -18,7 +18,6 @@ export class applications_router {
 
         this.item_types_map = {
             channel: "channels",
-            irv: "initial_registers_values",
             macro: "macro",
             parameter: "parameters",
             peripheral: "peripherals",
@@ -31,7 +30,6 @@ export class applications_router {
 
         this.item_id_map = {
             channel: "name",
-            irv: "address",
             macro: "name",
             parameter: "parameter_id",
             peripheral: "name",
@@ -146,6 +144,8 @@ export class applications_router {
                     app.clock_frequency = e.item["value"];
                 } else if(e.item["name"] === "bitstream") {
                     app.bitstream = e.item["value"];
+                } else if(e.item["name"] === "init_script"){
+                    app.init_script = e.item["value"];
                 } else if(e.item["name"] === "pl_clocks"){
                     app.pl_clocks[e.item["item_id"]] = e.item["value"];
                 } else {

@@ -8,7 +8,8 @@ export interface application_model {
     bitstream:string,
     channels:object,
     channel_groups:object,
-    initial_registers_values:initial_register_value[],
+    // the id of the script run when the application is loaded, null when there is none
+    init_script:number | null,
     macro:object,
     parameters:object,
     peripherals:object,
@@ -28,10 +29,6 @@ export interface application_model {
     }
 }
 
-export interface initial_register_value{
-    address:number,
-    value:number
-}
 
 export interface core_load_info{
     id: string,

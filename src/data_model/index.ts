@@ -1,4 +1,4 @@
-export {application_model, application_edit_model, core_dma_info, core_load_info, initial_register_value} from "./application_model"
+export {application_model, application_edit_model, core_dma_info, core_load_info} from "./application_model"
 export {bitstream_edit_model, bitstream_model} from "./bitstreams_model"
 export {scope_data_object, read_data_response} from "./driver_responses_model"
 export {
