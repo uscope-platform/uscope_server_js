@@ -37,13 +37,13 @@ export class platform_router {
         })
 
         this.router.post(endpoints_map.platform.endpoints.onboarding, async (ctx:Koa.Context)=>{
-            let has_users = await this.db.platform.has_users();
+            const already_set_up = new http_error(409, "The platform is already set up");
+            // cheap refusal before the password is hashed, the creation checks again under the lock
+            if(await this.db.platform.has_users()) throw already_set_up;
             let body = <user_add_request>ctx.request.body;
-            if(!has_users) {
-                if(!body.user || !body.password) throw new http_error(400, "A username and a password are needed");
-                // the first account is the administrator, whatever is asked: the platform could not be managed otherwise
-                await this.auth.create_user(body.user, body.password, "admin");
-            }
+            if(!body.user || !body.password) throw new http_error(400, "A username and a password are needed");
+            // the first account is the administrator, whatever is asked: the platform could not be managed otherwise
+            if(!await this.auth.create_first_user(body.user, body.password, "admin")) throw already_set_up;
             ctx.status = 200;
         })
 

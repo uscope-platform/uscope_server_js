@@ -38,6 +38,20 @@ export class platform_db {
         return ;
     }
 
+    /// Adds the user only when there is none: the check and the insert are one transaction under a lock on the table,
+    /// so that of two requests at the same time only one gets in. False when there were users already
+    public async add_first_user(username:string, pw_hash:string, role:string): Promise<boolean> {
+        return this.db.begin(async (tx) => {
+            await tx`lock table ${tx(this.schema)}.users in exclusive mode`;
+            const res = await tx`select EXISTS(select 1 from ${tx(this.schema)}.users)`;
+            if(res[0]?.exists) return false;
+            await tx`
+                insert into ${tx(this.schema)}.users (username, pw_hash, role) values (${username}, ${pw_hash}, ${role})
+            `;
+            return true;
+        });
+    }
+
     public async remove_user(username:string): Promise<any> {
         await this.db`
             delete from ${this.db(this.schema)}.users where username = ${username}

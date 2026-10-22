@@ -21,6 +21,11 @@ describe('platform API tests', () => {
 
     let results:any = {}
     let tokens:any = {}
+    // what the users of the database are: none, as for a platform that was not set up, or some
+    let has_users = false;
+    // the first user is taken by someone else between the check and the creation
+    let first_user_races = false;
+
     let db = {
         platform:{
             remove_user:(username:string) =>{
@@ -50,7 +55,12 @@ describe('platform API tests', () => {
                 }]
             },
             has_users:()=>{
-                return false
+                return has_users
+            },
+            add_first_user:(username:string, pw_hash:string, role:string) =>{
+                if(first_user_races) return false;
+                results = {user:username, pw_hash:pw_hash, role:role};
+                return true;
             }
         }
     } as any as database
@@ -145,6 +155,33 @@ describe('platform API tests', () => {
                 expect(response.status).toBe(400);
                 expect(response.body.message).toBe("A username and a password are needed");
             });
+    });
+
+    test('onboarding_post_already_set_up', async () => {
+        has_users = true;
+        try{
+            const response = await request(app.callback())
+                .post(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.onboarding)
+                .set('Authorization', `Bearer ${bearer_token}`)
+                .send({user:"test_user4", password:"test4", role:"admin"});
+            expect(response.status).toBe(409);
+            expect(response.body.message).toBe("The platform is already set up");
+        } finally {
+            has_users = false;
+        }
+    });
+
+    test('onboarding_post_lost_the_race', async () => {
+        first_user_races = true;
+        try{
+            const response = await request(app.callback())
+                .post(endpoints_map.platform.prefix + endpoints_map.platform.endpoints.onboarding)
+                .set('Authorization', `Bearer ${bearer_token}`)
+                .send({user:"test_user5", password:"test5", role:"admin"});
+            expect(response.status).toBe(409);
+        } finally {
+            first_user_races = false;
+        }
     });
 
     test('get_server_version', async () => {

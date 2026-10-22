@@ -84,16 +84,24 @@ export class Authenticator {
         return jwt.sign({username:user, role:role}, this.secret)
     }
 
-    public async create_user(username:string, password:string, role:string){
-        let pw_hash = await argon2.hash(password, {
+    private hash_password(password:string): Promise<string> {
+        return argon2.hash(password, {
             type: argon2.argon2id,
             memoryCost: 2 ** 15,
             parallelism: 2,
             timeCost: 4,
             hashLength: 50
         })
-        await this.db.platform.add_user(username, pw_hash, role)
+    }
+
+    public async create_user(username:string, password:string, role:string){
+        await this.db.platform.add_user(username, await this.hash_password(password), role)
         return
+    }
+
+    /// Creates the user only when the platform has none, false when it has
+    public async create_first_user(username:string, password:string, role:string): Promise<boolean> {
+        return this.db.platform.add_first_user(username, await this.hash_password(password), role)
     }
 
     public async remove_user(username:string){

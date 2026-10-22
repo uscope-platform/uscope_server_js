@@ -38,8 +38,14 @@ export let error_handler = async  (ctx:Koa.Context, next: Koa.Next) => {
     } catch (err:any) {
         const status = typeof err?.status === "number" ? err.status : DEFAULT_ERROR_STATUS;
         ctx.status = status;
-        ctx.body = {message: error_message(err)};
-        console.error(`${ctx.method} ${ctx.path} -> ${status}:`, err);
+        const message = error_message(err);
+        ctx.body = {message: message};
+        if(status < 500 && typeof err?.status === "number"){
+            // refused on purpose (bad request, no permission, ...): no stack to read
+            console.warn(`${ctx.method} ${ctx.path} -> ${status}: ${message}`);
+        } else {
+            console.error(`${ctx.method} ${ctx.path} -> ${status}:`, err);
+        }
     }
 }
 

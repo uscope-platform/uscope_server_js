@@ -26,6 +26,19 @@ describe('platform_database_tests', () => {
         let res = await db.platform.has_users();
         expect(res).toBeFalsy();
     });
+    test('add_first_user_only_once', async () => {
+        // at the same time, as two browsers would: one gets in
+        let results = await Promise.all([
+            db.platform.add_first_user("first_a", "hash_a", "admin"),
+            db.platform.add_first_user("first_b", "hash_b", "admin"),
+            db.platform.add_first_user("first_c", "hash_c", "admin")
+        ]);
+        expect(results.filter(r => r)).toHaveLength(1);
+        expect(await db.platform.load_all()).toHaveLength(1);
+        expect(await db.platform.add_first_user("first_d", "hash_d", "admin")).toBeFalsy();
+        for(const name of ["first_a", "first_b", "first_c", "first_d"]) await db.platform.remove_user(name);
+    });
+
     test('add_get_user',async  () => {
         await db.platform.add_user("admin", "admin_pw_hash", "admin");
         let res = await db.platform.get_user("admin");
