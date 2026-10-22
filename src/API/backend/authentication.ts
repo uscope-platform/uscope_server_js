@@ -4,16 +4,7 @@ import jwt from "jsonwebtoken";
 import {randomBytes, timingSafeEqual} from "node:crypto";
 import {subtle} from "node:crypto";
 import {auth_response, auto_login_object, user_login_object} from "#models";
-
-class CustomError extends Error {
-    public status:number;
-    public message:string
-    constructor(status:number, message:string) {
-        super(message);
-        this.message = message;
-        this.status = status;
-    }
-}
+import {http_error} from "./middleware";
 
 export class Authenticator {
     private readonly secret: string
@@ -50,7 +41,7 @@ export class Authenticator {
             }
             return token
         } else {
-            throw new CustomError(401, "Login failed")
+            throw new http_error(401, "Login failed")
         }
     }
 
@@ -58,11 +49,11 @@ export class Authenticator {
 
         let query_res = await this.db.platform.get_auto_token(login.selector)
         if(query_res.length>1 || query_res.length==0){
-            throw new CustomError(401, "Login failed")
+            throw new http_error(401, "Login failed")
         } else {
             let token = <auto_login_object>query_res[0]
             if(Date.now()>=Date.parse(token.expiry)){
-                throw new CustomError(401, "Login failed")
+                throw new http_error(401, "Login failed")
             }
             let hashed_validator =await this.validate_auto_token(login.validator)
             if(timingSafeEqual(Buffer.from(hashed_validator), Buffer.from(token.validator))){
@@ -85,7 +76,7 @@ export class Authenticator {
             ret.role = user.role;
             return ret;
         } else {
-            throw new CustomError(401, "Login failed")
+            throw new http_error(401, "Login failed")
         }
     }
 

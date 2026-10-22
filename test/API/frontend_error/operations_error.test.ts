@@ -152,7 +152,7 @@ describe('Operation API Error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("ops error 0");
+                expect(response.body.message).toBe("ops error 0");
             });
     });
 
@@ -164,7 +164,7 @@ describe('Operation API Error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 2");
+                expect(response.body.message).toStrictEqual("ops error 2");
             });
 
     });
@@ -192,7 +192,7 @@ describe('Operation API Error handling tests', () => {
             .send(write_in)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 3");
+                expect(response.body.message).toStrictEqual("ops error 3");
             });
 
     });
@@ -216,7 +216,7 @@ describe('Operation API Error handling tests', () => {
             .send(prog_info)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 4");
+                expect(response.body.message).toStrictEqual("ops error 4");
             });
 
     });
@@ -254,7 +254,7 @@ describe('Operation API Error handling tests', () => {
             .send(prog_info)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 20");
+                expect(response.body.message).toStrictEqual("ops error 20");
             });
 
     });
@@ -348,7 +348,7 @@ describe('Operation API Error handling tests', () => {
             .send(hil)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 15");
+                expect(response.body.message).toStrictEqual("ops error 15");
             });
 
     });
@@ -437,7 +437,7 @@ describe('Operation API Error handling tests', () => {
             .send(hil)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 17");
+                expect(response.body.message).toStrictEqual("ops error 17");
             });
 
     });
@@ -452,7 +452,7 @@ describe('Operation API Error handling tests', () => {
             .send(in_obj)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 11");
+                expect(response.body.message).toStrictEqual("ops error 11");
             });
 
     });
@@ -466,7 +466,7 @@ describe('Operation API Error handling tests', () => {
             .send(in_obj)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("ops error 12");
+                expect(response.body.message).toStrictEqual("ops error 12");
             });
 
     });
@@ -479,7 +479,7 @@ describe('Operation API Error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("ops error 13");
+                expect(response.body.message).toBe("ops error 13");
             });
 
     });
@@ -492,7 +492,7 @@ describe('Operation API Error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("ops error 14");
+                expect(response.body.message).toBe("ops error 14");
             });
 
     });
@@ -506,7 +506,7 @@ describe('Operation API Error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("ops error 18");
+                expect(response.body.message).toBe("ops error 18");
             });
 
     });
@@ -522,7 +522,7 @@ describe('Operation API Error handling tests', () => {
             .send(clk_obj)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("ops error 19");
+                expect(response.body.message).toBe("ops error 19");
             });
 
     });
@@ -537,7 +537,7 @@ describe('Operation API Error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("flt error 0");
+                expect(response.body.message).toBe("flt error 0");
             });
 
     });
@@ -550,7 +550,7 @@ describe('Operation API Error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("flt error 1");
+                expect(response.body.message).toBe("flt error 1");
             });
 
     });
@@ -562,7 +562,7 @@ describe('Operation API Error handling tests', () => {
             .send({id:4, addr:1324})
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("flt error 2");
+                expect(response.body.message).toBe("flt error 2");
             });
 
     });
@@ -586,7 +586,7 @@ describe('Operation API Error handling tests', () => {
             .send(args)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("ops error 21");
+                expect(response.body.message).toBe("ops error 21");
             });
 
     });

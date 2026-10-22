@@ -4,12 +4,42 @@ import  {roles_hierarchy} from "./authorization_rules";
 import {rules} from ".";
 
 
+// the status of the failures that do not say their own, kept as the routes always answered
+const DEFAULT_ERROR_STATUS = 501;
+
+/// An error with the status it must be answered with
+export class http_error extends Error {
+    public status: number;
+    constructor(status: number, message: string) {
+        super(message);
+        this.status = status;
+    }
+}
+
+/// The text of whatever was thrown: the routes and the database throw errors, strings and objects
+const error_message = (err: any): string => {
+    if(typeof err === "string") return err;
+    if(err instanceof Error && err.message) return err.message;
+    if(err !== null && typeof err === "object"){
+        if(typeof err.message === "string" && err.message !== "") return err.message;
+        try{
+            const json = JSON.stringify(err);
+            if(json !== undefined && json !== "{}") return json;
+        } catch {}
+    }
+    return "Unknown error";
+};
+
+/// The one place where a failure becomes a response: {message} with the status of the error, so that the client
+/// always gets the same shape, whatever was thrown
 export let error_handler = async  (ctx:Koa.Context, next: Koa.Next) => {
     try {
         await next();
     } catch (err:any) {
-        ctx.status = err.status || 500;
-        ctx.body = err.message;
+        const status = typeof err?.status === "number" ? err.status : DEFAULT_ERROR_STATUS;
+        ctx.status = status;
+        ctx.body = {message: error_message(err)};
+        console.error(`${ctx.method} ${ctx.path} -> ${status}:`, err);
     }
 }
 

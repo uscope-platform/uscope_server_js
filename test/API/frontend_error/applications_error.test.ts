@@ -59,7 +59,7 @@ describe('applications API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("generic db error 0");
+                expect(response.body.message).toBe("generic db error 0");
             });
     });
 
@@ -70,7 +70,7 @@ describe('applications API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual('generic db error 1');
+                expect(response.body.message).toStrictEqual('generic db error 1');
             });
     });
 
@@ -82,7 +82,7 @@ describe('applications API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 2");
+                expect(response.body.message).toStrictEqual("generic db error 2");
             });
     });
 
@@ -98,7 +98,7 @@ describe('applications API error handling tests', () => {
             .send(app_obj)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual('generic db error 3');
+                expect(response.body.message).toStrictEqual('generic db error 3');
             });
     });
 
@@ -110,7 +110,7 @@ describe('applications API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual('generic db error 5');
+                expect(response.body.message).toStrictEqual('generic db error 5');
             });
     });
 
@@ -132,7 +132,7 @@ describe('applications API error handling tests', () => {
             .send(edit)
             .then((response) => {
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 2");
+                expect(response.body.message).toStrictEqual("generic db error 2");
             });
     });
 

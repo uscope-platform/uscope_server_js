@@ -16,73 +16,43 @@ export class settings_router{
         });
 
         this.router.get(endpoints_map.settings.endpoints.debugger_option, async (ctx:Koa.Context) => {
-            try{
-                let opt_name = ctx.params.name;
-                ctx.body = await this.backend.get_debugger_option(opt_name);
-                ctx.status = 200
-            } catch(error:any){
-                ctx.body = error
-                ctx.status = 501
-            }
+            let opt_name = ctx.params.name;
+            ctx.body = await this.backend.get_debugger_option(opt_name);
+            ctx.status = 200
         });
 
 
         this.router.post(endpoints_map.settings.endpoints.debugger_option, async (ctx:Koa.Context) => {
-            try{
-                let opt = <debugger_option>ctx.request.body;
-                await this.backend.set_debugger_option(opt);
-                ctx.status = 200
-            } catch(error:any){
-                ctx.body = error
-                ctx.status = 501
-            }
+            let opt = <debugger_option>ctx.request.body;
+            await this.backend.set_debugger_option(opt);
+            ctx.status = 200
         });
 
 
         this.router.get(endpoints_map.settings.endpoints.debug_level, async (ctx:Koa.Context) => {
-            try{
-                ctx.type = 'text';
-                ctx.body = await this.backend.get_debug_level();
-                ctx.status = 200
-            } catch(error:any){
-                ctx.body = error
-                ctx.status = 501
-            }
+            ctx.type = 'text';
+            ctx.body = await this.backend.get_debug_level();
+            ctx.status = 200
         });
 
 
         this.router.post(endpoints_map.settings.endpoints.debug_level, async (ctx:Koa.Context) => {
-            try{
-                let level = <any>ctx.request.body;
-                await this.backend.set_debug_level(<string>level.level)
-                ctx.status = 200
-            } catch(error:any){
-                ctx.body = error
-                ctx.status = 501
-            }
+            let level = <any>ctx.request.body;
+            await this.backend.set_debug_level(<string>level.level)
+            ctx.status = 200
         });
 
 
         this.router.get(endpoints_map.settings.endpoints.hil_address_map, async (ctx:Koa.Context) => {
-            try{
-                ctx.body = await this.backend.get_hil_map();
-                ctx.status = 200
-            } catch(error:any){
-                ctx.body = error
-                ctx.status = 501
-            }
+            ctx.body = await this.backend.get_hil_map();
+            ctx.status = 200
         });
 
 
         this.router.post(endpoints_map.settings.endpoints.hil_address_map, async (ctx:Koa.Context) => {
-            try{
-                let level = <hil_address_map>ctx.request.body;
-                await this.backend.set_hil_map(level)
-                ctx.status = 200
-            } catch(error:any){
-                ctx.body = error
-                ctx.status = 501
-            }
+            let level = <hil_address_map>ctx.request.body;
+            await this.backend.set_hil_map(level)
+            ctx.status = 200
         });
 
     }

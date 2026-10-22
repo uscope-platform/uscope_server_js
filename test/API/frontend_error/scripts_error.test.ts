@@ -59,7 +59,7 @@ describe('script API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
             expect(response.status).toBe(501);
-            expect(response.text).toBe("generic db error 60");
+            expect(response.body.message).toBe("generic db error 60");
         });
     });
 
@@ -69,7 +69,7 @@ describe('script API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 61");
+                expect(response.body.message).toStrictEqual("generic db error 61");
             });
     });
 
@@ -81,7 +81,7 @@ describe('script API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 62");
+                expect(response.body.message).toStrictEqual("generic db error 62");
             });
     });
 
@@ -99,7 +99,7 @@ describe('script API error handling tests', () => {
             .send(script_obj)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 63");
+                expect(response.body.message).toStrictEqual("generic db error 63");
             });
     });
 
@@ -113,7 +113,7 @@ describe('script API error handling tests', () => {
                 .send(edit)
                 .then((response)=>{
                     expect(response.status).toBe(501);
-                    expect(response.text).toStrictEqual("generic db error 64");
+                    expect(response.body.message).toStrictEqual("generic db error 64");
                 });
     });
 
@@ -125,7 +125,7 @@ describe('script API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 65");
+                expect(response.body.message).toStrictEqual("generic db error 65");
             });
     });
 

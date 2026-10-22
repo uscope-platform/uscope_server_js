@@ -59,7 +59,7 @@ describe('emulators API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("generic db error 20");
+                expect(response.body.message).toBe("generic db error 20");
             });
     });
 
@@ -69,7 +69,7 @@ describe('emulators API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 21");
+                expect(response.body.message).toStrictEqual("generic db error 21");
             });
     });
 
@@ -81,7 +81,7 @@ describe('emulators API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 22");
+                expect(response.body.message).toStrictEqual("generic db error 22");
             });
     });
 
@@ -102,7 +102,7 @@ describe('emulators API error handling tests', () => {
             .send(filter_obj)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual('generic db error 23');
+                expect(response.body.message).toStrictEqual('generic db error 23');
             });
     });
 
@@ -116,7 +116,7 @@ describe('emulators API error handling tests', () => {
             .send(edit)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual('generic db error 24');
+                expect(response.body.message).toStrictEqual('generic db error 24');
             });
     });
 
@@ -128,7 +128,7 @@ describe('emulators API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual('generic db error 25');
+                expect(response.body.message).toStrictEqual('generic db error 25');
             });
     });
 

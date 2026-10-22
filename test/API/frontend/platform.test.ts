@@ -193,7 +193,7 @@ describe('platform API tests', () => {
             .send(user_obj)
             .then((response)=>{
             expect(response.status).toBe(401);
-            expect(response.text).toBe("Login failed");
+            expect(response.body.message).toBe("Login failed");
         });
     });
 

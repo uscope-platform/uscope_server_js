@@ -59,7 +59,7 @@ describe('peripherals API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toBe("generic db error 40");
+                expect(response.body.message).toBe("generic db error 40");
             });
     });
 
@@ -69,7 +69,7 @@ describe('peripherals API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 41");
+                expect(response.body.message).toStrictEqual("generic db error 41");
             });
     });
 
@@ -81,7 +81,7 @@ describe('peripherals API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 42");
+                expect(response.body.message).toStrictEqual("generic db error 42");
             });
     });
 
@@ -101,7 +101,7 @@ describe('peripherals API error handling tests', () => {
             .send(peripheral_obj)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 43");
+                expect(response.body.message).toStrictEqual("generic db error 43");
             });
     });
 
@@ -115,7 +115,7 @@ describe('peripherals API error handling tests', () => {
             .send(edit)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 44");
+                expect(response.body.message).toStrictEqual("generic db error 44");
             });
     });
 
@@ -127,7 +127,7 @@ describe('peripherals API error handling tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(501);
-                expect(response.text).toStrictEqual("generic db error 45");
+                expect(response.body.message).toStrictEqual("generic db error 45");
             });
     });
 
