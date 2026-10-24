@@ -100,7 +100,9 @@ export interface io_port_model{
     address:number,
     type:string,
     width:number,
-    signed:boolean
+    signed:boolean,
+    // where the data of the endpoint of a source comes from in an emulation, it is not used on the hardware
+    source?: core_input_source
 }
 
 // the endpoints that feed the DMAs (source) or are written by them (sink), it shares the ids of the cores
