@@ -16,7 +16,7 @@ export class SettingsBackend {
         return this.hw_if.get_debug_level();
     }
 
-    public async get_debugger_option(name:string): Promise<debugger_option>{
+    public async get_debugger_option(name:string): Promise<any>{
         return this.hw_if.get_debugger_option(name);
     }
 

@@ -74,12 +74,13 @@ export class hw_interface {
         return await this.send_command(commands.platform.get_debug_level, {})
     }
 
-    public async get_debugger_option(name:string): Promise<debugger_option>{
-        throw new Error("set_debugger_option is not implemented.");
+    /// The value of an option of the debugger of the emulations, like multichannel_debug
+    public async get_debugger_option(name:string): Promise<any>{
+        return await this.send_command(commands.core.get_debugger_option, {name: name});
     }
 
     public async set_debugger_option(option: debugger_option): Promise<any>{
-        throw new Error("set_debugger_option is not implemented.");
+        return await this.send_command(commands.core.set_debugger_option, {name: option.name, value: option.value});
     }
 
 
