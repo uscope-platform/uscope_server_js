@@ -23,7 +23,8 @@ export class bitstream_router {
         this.router.get(endpoints_map.bitstream.endpoints.load_all, async (ctx:Koa.Context) => {
             let raw_res =  await this.db.bitstreams.load_all();
             ctx.body = raw_res.map((bit: bitstream_model)=>{
-                return {id:bit.id, name:bit.name};
+                // the hash is the SHA-256 of the file: it tells which version of the bitstream it is
+                return {id:bit.id, name:bit.name, hash:bit.hash};
             })
             ctx.status = 200
         });
