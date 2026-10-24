@@ -104,6 +104,15 @@ export class Authenticator {
         return this.db.platform.add_first_user(username, await this.hash_password(password), role)
     }
 
+    /// Changes what is given of a user: its name, its password (that is hashed here) and its role
+    public async update_user(username:string, changes: {username?: string, password?: string, role?: string}){
+        await this.db.platform.update_user(username, {
+            ...(changes.username !== undefined ? {username: changes.username} : {}),
+            ...(changes.password !== undefined ? {pw_hash: await this.hash_password(changes.password)} : {}),
+            ...(changes.role !== undefined ? {role: changes.role} : {}),
+        });
+    }
+
     public async remove_user(username:string){
         await this.db.platform.remove_user(username);
     }

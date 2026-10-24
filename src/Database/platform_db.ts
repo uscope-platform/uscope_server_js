@@ -52,6 +52,29 @@ export class platform_db {
         });
     }
 
+    /// Changes the name, the password hash and the role of a user, the ones that are given. The sessions and the tokens
+    /// of the user follow its new name
+    public async update_user(username:string, changes: {username?: string, pw_hash?: string, role?: string}): Promise<void> {
+        await this.db.begin(async (tx) => {
+            if(changes.pw_hash !== undefined){
+                await tx`update ${tx(this.schema)}.users set pw_hash = ${changes.pw_hash} where username = ${username}`;
+            }
+            if(changes.role !== undefined){
+                await tx`update ${tx(this.schema)}.users set role = ${changes.role} where username = ${username}`;
+            }
+            if(changes.username !== undefined && changes.username !== username){
+                await tx`update ${tx(this.schema)}.users set username = ${changes.username} where username = ${username}`;
+            }
+        });
+    }
+
+    public async count_admins(): Promise<number> {
+        const res = await this.db`
+            select count(*)::int as count from ${this.db(this.schema)}.users where role = 'admin'
+        `
+        return res[0]?.count ?? 0;
+    }
+
     public async remove_user(username:string): Promise<any> {
         await this.db`
             delete from ${this.db(this.schema)}.users where username = ${username}

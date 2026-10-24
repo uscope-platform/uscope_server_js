@@ -56,6 +56,7 @@ interface rules_map {
         get_users:string,
         onboarding: string,
         remove_user:string,
+        edit_user:string,
         manual_login:string,
         auto_login:string,
         db_dump:string,
@@ -161,6 +162,7 @@ export let rules : rules_map = {
     platform:{
         add_user:'admin',
         remove_user:'admin',
+        edit_user:'admin',
         get_users:'admin',
         onboarding: 'public',
         manual_login:'public',

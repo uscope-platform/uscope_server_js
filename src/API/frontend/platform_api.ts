@@ -12,6 +12,14 @@ interface user_add_request {
     role:string
 }
 
+interface user_edit_request {
+    user?:string,
+    password?:string,
+    role?:string
+}
+
+const ROLES = ["admin", "user", "operator"];
+
 export class platform_router {
     public router: Router;
     private auth: Authenticator;
@@ -54,7 +62,39 @@ export class platform_router {
             ctx.status = 200;
         });
 
+        this.router.patch(endpoints_map.platform.endpoints.edit_user, async (ctx:Koa.Context) => {
+            const name = ctx.params.name;
+            const body = <user_edit_request>ctx.request.body ?? {};
+            const new_name = body.user?.trim();
+
+            const current = await this.db.platform.get_user(name);
+            if(current === undefined) throw new http_error(404, "There is no user called " + name);
+            if(new_name === undefined && body.password === undefined && body.role === undefined) throw new http_error(400, "There is nothing to change");
+            if(new_name === "") throw new http_error(400, "The username cannot be empty");
+            if(body.password === "") throw new http_error(400, "The password cannot be empty");
+            if(body.role !== undefined && !ROLES.includes(body.role)) throw new http_error(400, "The role has to be one of " + ROLES.join(", "));
+            if(new_name !== undefined && new_name !== name && await this.db.platform.user_exists(new_name)){
+                throw new http_error(409, "There is a user called " + new_name + " already");
+            }
+            // the platform could not be managed without an administrator
+            if(body.role !== undefined && body.role !== "admin" && current.role === "admin" && await this.db.platform.count_admins() <= 1){
+                throw new http_error(409, "This is the only administrator, there has to be one");
+            }
+
+            await this.auth.update_user(name, {
+                ...(new_name !== undefined ? {username: new_name} : {}),
+                ...(body.password !== undefined ? {password: body.password} : {}),
+                ...(body.role !== undefined ? {role: body.role} : {}),
+            });
+            ctx.status = 200;
+        });
+
         this.router.delete(endpoints_map.platform.endpoints.remove_user, async (ctx:Koa.Context) => {
+            // the platform could not be managed without an administrator
+            const current = await this.db.platform.get_user(ctx.params.name);
+            if(current?.role === "admin" && await this.db.platform.count_admins() <= 1){
+                throw new http_error(409, "This is the only administrator, there has to be one");
+            }
             await this.auth.remove_user(ctx.params.name);
             ctx.status = 200;
         });
