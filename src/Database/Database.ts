@@ -9,6 +9,8 @@ import {db_dump} from "#models"
 
 const sql = postgres({ max: 4 })
 
+type columns_map = {[column: string]: {type: string, default: string | null, is_serial: boolean}};
+
 export class database {
     public applications:applications_db;
     public scripts: scripts_db;
@@ -20,9 +22,15 @@ export class database {
     public platform: platform_db;
     db: postgres.Sql;
     private readonly schema: string;
+    private readonly host: string;
+    private readonly username: string;
+    private readonly password: string;
 
 
      constructor(host: string, username:string, password:string, schema:string) {
+         this.host = host;
+         this.username = username;
+         this.password = password;
          this.db = postgres({
              host: host,
              port: 5432,
@@ -80,33 +88,128 @@ export class database {
         let db_exists = await this.check_db_existance();
         if(!db_exists){
             console.log("DATABASE UNINITIALIZED, PROCEDING WITH INITIALIZATION");
-            await this.create_schema();
-            await this.create_data_versions();
-            await this.create_stored_procedures();
-            await this.create_users();
-            await this.create_tokens();
-            await this.create_programs();
-            await this.create_scripts();
-            await this.create_applications();
-            await this.create_peripherals();
-            await this.create_emulators();
-            await this.create_bitstreams();
-            await this.create_filters();
-            await this.populate_versions();
+            await this.create_tables();
+        } else {
+            await this.migrate();
         }
-        await this.upgrade_emulators();
     }
 
-    // the databases created before the IO blocks and the layout have no column for them
-    private async upgrade_emulators(): Promise<void> {
-        await this.db`
-            alter table ${sql(this.schema)}.emulators
-                add column if not exists io_blocks jsonb default '{}'::jsonb
+    private async create_tables(): Promise<void> {
+        await this.create_schema();
+        await this.create_missing_tables();
+        await this.populate_versions();
+    }
+
+    // every create_* method leaves an already existing table untouched
+    private async create_missing_tables(): Promise<void> {
+        await this.create_data_versions();
+        await this.create_stored_procedures();
+        await this.create_users();
+        await this.create_tokens();
+        await this.create_programs();
+        await this.create_scripts();
+        await this.create_applications();
+        await this.create_peripherals();
+        await this.create_emulators();
+        await this.create_bitstreams();
+        await this.create_filters();
+    }
+
+    // Brings an existing database to the schema described by the create_* methods.
+    // The expected schema is built by those same methods in a scratch schema inside a transaction
+    // that is always rolled back: nothing is dropped, and a pre-existing schema with the same
+    // name makes the creation fail instead of being overwritten.
+    // Handled: missing tables, missing columns, columns no longer in the schema, changed
+    // column types and defaults. Not handled: constraints, indexes and triggers of existing tables.
+    // A renamed column is a drop plus an add, so its content is lost.
+    private async migrate(): Promise<void> {
+        await this.create_missing_tables();
+
+        const expected = await this.read_expected_columns();
+        const current = await this.read_columns(this.db, this.schema);
+
+        for(const table of Object.keys(expected)) {
+            await this.migrate_table(table, expected[table], current[table] ?? {});
+        }
+        for(const table of Object.keys(current)) {
+            if(!(table in expected)) console.log(`MIGRATION: table ${table} is not in the schema anymore, leaving it untouched`);
+        }
+        await this.populate_versions();
+    }
+
+    private async read_expected_columns(): Promise<{[table: string]: columns_map}> {
+        const rollback = new Error("rollback of the scratch schema");
+        let expected: {[table: string]: columns_map} = {};
+        try {
+            await this.db.begin(async (tx) => {
+                const scratch = new database(this.host, this.username, this.password, `${this.schema}_migration_scratch`);
+                scratch.db = tx as unknown as postgres.Sql;
+                await scratch.create_tables();
+                expected = await this.read_columns(tx as unknown as postgres.Sql, scratch.schema);
+                throw rollback;
+            });
+        } catch(err) {
+            if(err !== rollback) throw err;
+        }
+        return expected;
+    }
+
+    private async migrate_table(table: string, expected: columns_map, current: columns_map): Promise<void> {
+        // types and defaults come from the catalog of the scratch schema, identifiers are quoted
+        const q = (id: string) => `"${id.replace(/"/g, '""')}"`;
+        const tab = `${q(this.schema)}.${q(table)}`;
+
+        for(const [name, col] of Object.entries(expected)) {
+            const cur = current[name];
+            const column = q(name);
+            if(!cur) {
+                console.log(`MIGRATION: adding column ${table}.${name}`);
+                const type = col.is_serial ? "serial" : col.type;
+                const def = col.default !== null ? ` default ${col.default}` : "";
+                await this.db.unsafe(`alter table ${tab} add column ${column} ${type}${def}`);
+            } else if(col.is_serial) {
+                continue;
+            } else if(cur.type !== col.type) {
+                console.log(`MIGRATION: changing type of ${table}.${name} from ${cur.type} to ${col.type}`);
+                await this.db.unsafe(`alter table ${tab} alter column ${column} drop default`);
+                await this.db.unsafe(`alter table ${tab} alter column ${column} type ${col.type} using ${column}::${col.type}`);
+                if(col.default !== null) await this.db.unsafe(`alter table ${tab} alter column ${column} set default ${col.default}`);
+            } else if(cur.default !== col.default) {
+                console.log(`MIGRATION: changing default of ${table}.${name}`);
+                if(col.default === null) await this.db.unsafe(`alter table ${tab} alter column ${column} drop default`);
+                else await this.db.unsafe(`alter table ${tab} alter column ${column} set default ${col.default}`);
+            }
+        }
+        for(const name of Object.keys(current)) {
+            if(!(name in expected)) {
+                console.log(`MIGRATION: dropping column ${table}.${name}`);
+                await this.db.unsafe(`alter table ${tab} drop column ${q(name)} cascade`);
+            }
+        }
+    }
+
+    private async read_columns(db: postgres.Sql, schema: string): Promise<{[table: string]: columns_map}> {
+        const rows = await db`
+            select c.relname as table_name, a.attname as column_name,
+                   format_type(a.atttypid, a.atttypmod) as type,
+                   pg_get_expr(d.adbin, d.adrelid) as default_value
+            from pg_attribute a
+                join pg_class c on c.oid = a.attrelid
+                join pg_namespace n on n.oid = c.relnamespace
+                left join pg_attrdef d on d.adrelid = a.attrelid and d.adnum = a.attnum
+            where n.nspname = ${schema} and c.relkind = 'r' and a.attnum > 0 and not a.attisdropped
         `
-        await this.db`
-            alter table ${sql(this.schema)}.emulators
-                add column if not exists layout jsonb default '{}'::jsonb
-        `
+        const res: {[table: string]: columns_map} = {};
+        for(const row of rows) {
+            const is_serial = typeof row.default_value === "string" && row.default_value.startsWith("nextval(");
+            res[row.table_name] ??= {};
+            res[row.table_name][row.column_name] = {
+                type: row.type,
+                default: is_serial ? null : row.default_value,
+                is_serial: is_serial
+            };
+        }
+        return res;
     }
 
     public async populate_versions():Promise<void> {
@@ -493,21 +596,14 @@ export class database {
     }
 
     public async create_stored_procedures(): Promise<void>{
-        try {
-            await this.db`
-            select pg_get_functiondef('${sql(this.schema)}.update_version()'::regprocedure);
-         `
-        } catch (err){
-            await this.db`
-            create function ${sql(this.schema)}.update_version() returns trigger as $$ begin
+        await this.db`
+            create or replace function ${sql(this.schema)}.update_version() returns trigger as $$ begin
             insert into ${sql(this.schema)}.data_versions("table", version, last_modified) values (TG_ARGV[0], gen_random_uuid(),CURRENT_TIMESTAMP)
             on conflict("table") do update set version=excluded.version, last_modified=excluded.last_modified;
             return new;
             end;
             $$ language plpgsql;
-         `
-        }
-        return
+        `
     }
 
     public async delete_database():Promise<void>{
