@@ -84,6 +84,16 @@ export class hw_interface {
     }
 
 
+    /// What the HIL commands and the scope data are for: the "hardware" or the "emulator" that runs in the driver
+    public async get_hil_target(): Promise<string>{
+        return await this.send_command(commands.core.get_hil_target, {});
+    }
+
+    public async set_hil_target(target: string){
+        return await this.send_command(commands.core.set_hil_target, {target: target});
+    }
+
+
     public async get_sampling_frequency(): Promise<number>{
         return await this.send_command(commands.scope.get_sampling_frequency, {});
     }

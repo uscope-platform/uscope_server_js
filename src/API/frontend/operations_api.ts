@@ -136,6 +136,20 @@ export class operations_router {
 
 
 
+        this.router.get(endpoints_map.operations.endpoints.hil_target, async (ctx:Koa.Context) => {
+            ctx.type = 'text';
+            ctx.response.body = await this.ops_backend.get_hil_target();
+            ctx.status = 200
+        });
+
+
+        this.router.post(endpoints_map.operations.endpoints.hil_target, async (ctx:Koa.Context) => {
+            let req = <any>ctx.request.body;
+            await this.ops_backend.set_hil_target(<string>req.target);
+            ctx.status = 200
+        });
+
+
         this.router.get(endpoints_map.operations.endpoints.hil_start, async (ctx:Koa.Context) => {
             ctx.response.body = await this.ops_backend.hil_start();
             ctx.status = 200

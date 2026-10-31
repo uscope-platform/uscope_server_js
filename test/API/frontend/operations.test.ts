@@ -671,6 +671,44 @@ describe('Operation API tests', () => {
 
 
 
+    test('get_hil_target', async () => {
+        let router = rtr as any;
+        const spy = jest.spyOn(router.ops_backend, 'get_hil_target').mockImplementation(
+            () : string => {
+                return "emulator"
+            });
+
+        return request(app.callback())
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_target)
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(response.text).toStrictEqual("emulator");
+            });
+
+    });
+
+    test('set_hil_target', async () => {
+        let router = rtr as any;
+        let result = "";
+        const spy = jest.spyOn(router.ops_backend, 'set_hil_target').mockImplementation(
+            (arg:any)  => {
+                result = arg
+            });
+
+        return request(app.callback())
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.hil_target)
+            .set('Authorization', `Bearer ${token}`)
+            .send({target:"emulator"})
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(result).toStrictEqual("emulator");
+            });
+
+    });
+
     test('get_clocks', async () => {
         let router = rtr as any;
         const spy = jest.spyOn(router.ops_backend, 'get_clocks').mockImplementation(

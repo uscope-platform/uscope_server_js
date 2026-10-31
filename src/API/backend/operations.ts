@@ -46,6 +46,14 @@ export class OperationsBackend {
         return this.hw_if.set_input(input);
     }
 
+    public async get_hil_target(): Promise<any>{
+        return this.hw_if.get_hil_target();
+    }
+
+    public async set_hil_target(target: string): Promise<any>{
+        return this.hw_if.set_hil_target(target);
+    }
+
     public async hil_start(): Promise<any>{
         return this.hw_if.start_hil();
     }

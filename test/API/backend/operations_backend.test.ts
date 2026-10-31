@@ -81,6 +81,13 @@ describe('operations backend test', () => {
         stop_hil:()=>{
             return "ok";
         },
+        get_hil_target:()=>{
+            return "emulator";
+        },
+        set_hil_target:(a:any)=>{
+            args = a;
+            return "ok";
+        },
         select_output:(a:any)=>{
             args = a;
             return "ok";
@@ -191,6 +198,18 @@ describe('operations backend test', () => {
     test('hil_stop', async () => {
         let res =await backend.hil_stop();
         expect(res).toStrictEqual("ok");
+    });
+
+    test('get_hil_target', async () => {
+        let res =await backend.get_hil_target();
+        expect(res).toStrictEqual("emulator");
+    });
+
+
+    test('set_hil_target', async () => {
+        let res =await backend.set_hil_target("emulator");
+        expect(res).toStrictEqual("ok");
+        expect(args).toStrictEqual("emulator");
     });
 
     test('get_version', async () => {

@@ -27,7 +27,9 @@ interface hw_commands_map {
             set_hil_address_map:string,
             get_hil_address_map:string,
             set_debugger_option:string,
-            get_debugger_option:string
+            get_debugger_option:string,
+            set_hil_target:string,
+            get_hil_target:string
         },
         platform:{
             set_pl_clock:string,
@@ -67,7 +69,9 @@ export let commands :hw_commands_map = {
         set_hil_address_map:"set_hil_address_map",
         get_hil_address_map:"get_hil_address_map",
         set_debugger_option:"set_debugger_option",
-        get_debugger_option:"get_debugger_option"
+        get_debugger_option:"get_debugger_option",
+        set_hil_target:"set_hil_target",
+        get_hil_target:"get_hil_target"
     },
     platform:{
         set_pl_clock:"set_pl_clock",
