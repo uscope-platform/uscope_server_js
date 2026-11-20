@@ -38,6 +38,13 @@ export class operations_router {
             ctx.status = 200
         });
 
+        this.router.get(endpoints_map.operations.endpoints.load_bitstream, async (ctx:Koa.Context) => {
+            let id = parseInt(ctx.params.id);
+            let bitstream = await this.db.bitstreams.get_bitstream(id);
+            if(bitstream === undefined) throw "Bitstream not found (" + id+ ")";
+            await this.ops_backend.load_application(bitstream);
+            ctx.status = 200
+        });
 
         this.router.post(endpoints_map.operations.endpoints.write_registers, async (ctx:Koa.Context) => {
             let data = <register_write_model[]>ctx.request.body;

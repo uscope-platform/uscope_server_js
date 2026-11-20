@@ -4,6 +4,7 @@ interface rules_map {
     operations: {
         [index: string]: any;
         load_application:string,
+        load_bitstream:string,
         write_registers:string,
         read_register:string
         compile_program:string,
@@ -115,6 +116,7 @@ interface rules_map {
 export let rules : rules_map = {
     operations:{
         load_application:"operator",
+        load_bitstream:"user",
         read_register:"operator",
         write_registers:"operator",
         compile_program:"operator",

@@ -6,6 +6,7 @@ interface api_map {
         prefix:string,
         endpoints:{
             load_application:string,
+            load_bitstream: string,
             write_registers:string,
             read_register:string,
             compile_program:string,
@@ -168,6 +169,7 @@ export let endpoints_map : api_map = {
         prefix: g_prefix + "/operations",
         endpoints:{
             load_application:"/load_application/:id",
+            load_bitstream:"/load_bitstream/:id",
             write_registers:"/write_registers",
             read_register:"/read_register/:address",
             compile_program:"/compile_program",
