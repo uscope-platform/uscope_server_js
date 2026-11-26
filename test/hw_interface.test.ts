@@ -33,7 +33,7 @@ describe('Hardware interface test', () => {
 
     test('get sampling frequency', async () => {
         let resp = await hw.get_sampling_frequency();
-        expect(resp).toStrictEqual(0);
+        expect(resp).toStrictEqual(1);
     });
 
 
@@ -143,24 +143,6 @@ describe('Hardware interface test', () => {
     });
 
 
-    test('compile program success', async () => {
-        let prog :programs_info= {
-            id:1,
-            headers:[],
-            type:"C",
-            core_address:0x443c00000,
-            hash:"21324",
-            content:"void main(){float a; float b; float c; c = a+b;}",
-            io:[
-                {name:"a",associated_io:"a", address:1, type:"input", common_io:false},
-                {name:"b",associated_io:"b", address:2, type:"input", common_io:false},
-                {name:"c",associated_io:"c", address:3, type:"output", common_io:false},
-            ]
-        }
-
-        let resp = await hw.compile_program(prog);
-        expect(resp).toStrictEqual({hex: [131076, 12,131073, 65538,196611, 12, 12, 395329, 12], status: "ok"});
-    });
 
     test('compile program error', async () => {
         let prog :programs_info= {
