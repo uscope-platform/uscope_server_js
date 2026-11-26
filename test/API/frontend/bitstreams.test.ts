@@ -88,7 +88,7 @@ describe('bitstream API tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(response.body).toStrictEqual([{ id:1, name:'test_1'}, { id:2, name:'test_2'} ])
+                expect(response.body).toStrictEqual([{ id:1, name:'test_1', hash:hash}, { id:2, name:'test_2', hash:hash} ])
             });
     });
 
@@ -138,14 +138,31 @@ describe('bitstream API tests', () => {
         let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.edit;
         path = path.replace(":id", "3");
 
-        let edit = {script:4, field:{name:"path", value:"test edit"}};
+        let edit = {script:4, field:{name:"name", value:"test edit"}};
         return request(app.callback())
             .patch(path)
             .set('Authorization', `Bearer ${token}`)
             .send(edit)
             .then((response)=>{
                 expect(response.status).toBe(200);
-                expect(results).toStrictEqual([3, "path", "test edit"])
+                expect(results).toStrictEqual([3, "name", "test edit"])
+            });
+    });
+
+    test('edit of a field that cannot be edited', async () => {
+
+        let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.edit;
+        path = path.replace(":id", "3");
+
+        results = [];
+        let edit = {script:4, field:{name:"hash", value:"forged"}};
+        return request(app.callback())
+            .patch(path)
+            .set('Authorization', `Bearer ${token}`)
+            .send(edit)
+            .then((response)=>{
+                expect(response.status).toBe(400);
+                expect(results).toStrictEqual([])
             });
     });
 

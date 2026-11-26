@@ -3,6 +3,10 @@ import {database} from "#database";
 import * as Koa from "koa";
 import {endpoints_map} from ".";
 import {rpu_edit_model, rpu_model} from "#models";
+import {http_error} from "#api_backend";
+
+// id is the key and hash is derived from data: neither can be set directly
+const EDITABLE_FIELDS = ["name", "core", "data"];
 
 export class rpu_router {
     public router: Router;
@@ -52,6 +56,10 @@ export class rpu_router {
         this.router.patch(endpoints_map.rpu.endpoints.edit, async (ctx:Koa.Context) => {
             let id = parseInt(ctx.params.id);
             let e = <rpu_edit_model>ctx.request.body;
+
+            if(!EDITABLE_FIELDS.includes(e?.field?.name)){
+                throw new http_error(400, "The editable fields are " + EDITABLE_FIELDS.join(", "));
+            }
 
             if(e.field.name === "data"){
                 e.field.value= get_decoded_file(e.field.value);

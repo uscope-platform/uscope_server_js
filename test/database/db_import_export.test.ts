@@ -2,8 +2,9 @@ import {database} from "#database";
 import {expect} from "@jest/globals";
 import {
     emulator_model, application_model, filter_model, bitstream_model,
-    script_model, program_model, peripheral_model
+    script_model, program_model, peripheral_model, rpu_model
 } from "#models";
+import {createHash} from "node:crypto";
 
 
 
@@ -14,6 +15,14 @@ describe('emulator_database_tests', () => {
         name:'test_2',
         data: Buffer.from("adfeaf"),
         hash: "7588160db403c04aa2dd5a8fa36f799e6d9860040ea0b4c95624d9ef7526c56f"
+    }
+    let rpu_data = Buffer.from("rpu elf content");
+    let rpu: rpu_model = {
+        id:3,
+        name:'test_rpu',
+        core:1,
+        data: rpu_data,
+        hash: createHash('sha256').update(rpu_data).digest('hex')
     }
     let flt: filter_model = {
         id: 1,
@@ -95,6 +104,7 @@ describe('emulator_database_tests', () => {
         await db.scripts.add_script(scr);
         await db.programs.add_program(prg);
         await db.peripherals.add_peripheral(per)
+        await db.rpu_programs.add_rpu_program(rpu);
 
         let dump = await db.dump();
 
@@ -105,7 +115,8 @@ describe('emulator_database_tests', () => {
             programs: [prg],
             peripherals: [per],
             emulators: [emu],
-            bitstreams: [bit]
+            bitstreams: [bit],
+            rpu_programs: [rpu]
         });
         await db.delete_database();
     });
@@ -119,7 +130,8 @@ describe('emulator_database_tests', () => {
             programs: [prg],
             peripherals: [per],
             emulators: [emu],
-            bitstreams: [bit]
+            bitstreams: [bit],
+            rpu_programs: [rpu]
         })
         let ret_app = await db.applications.load_all();
         expect(ret_app).toStrictEqual([app]);
@@ -141,6 +153,9 @@ describe('emulator_database_tests', () => {
 
         let ret_bit = await db.bitstreams.load_all();
         expect(ret_bit).toStrictEqual([bit]);
+
+        let ret_rpu = await db.rpu_programs.load_all();
+        expect(ret_rpu).toStrictEqual([rpu]);
 
         return await db.delete_database();
     });

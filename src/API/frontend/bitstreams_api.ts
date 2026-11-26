@@ -3,6 +3,10 @@ import {database} from "#database";
 import * as Koa from "koa";
 import {endpoints_map} from ".";
 import {bitstream_edit_model, bitstream_model} from "#models";
+import {http_error} from "#api_backend";
+
+// id is the key and hash is derived from data: neither can be set directly
+const EDITABLE_FIELDS = ["name", "data"];
 
 export class bitstream_router {
     public router: Router;
@@ -54,6 +58,10 @@ export class bitstream_router {
         this.router.patch(endpoints_map.bitstream.endpoints.edit, async (ctx:Koa.Context) => {
             let id = parseInt(ctx.params.id);
             let e = <bitstream_edit_model>ctx.request.body;
+
+            if(!EDITABLE_FIELDS.includes(e?.field?.name)){
+                throw new http_error(400, "The editable fields are " + EDITABLE_FIELDS.join(", "));
+            }
 
             if(e.field.name === "data"){
                 e.field.value= get_decoded_file(e.field.value);

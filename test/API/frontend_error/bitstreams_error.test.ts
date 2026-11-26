@@ -108,7 +108,7 @@ describe('bitstream API error handlong tests', () => {
     });
 
     test('edit', async () => {
-        let edit = {script:4, field:"path", value:"test edit"};
+        let edit = {script:4, field:{name:"name", value:"test edit"}};
         let path = endpoints_map.bitstream.prefix + endpoints_map.bitstream.endpoints.edit;
         path = path.replace(':id', '3')
         return request(app.callback())
