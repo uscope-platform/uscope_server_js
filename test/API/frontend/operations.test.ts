@@ -50,6 +50,12 @@ describe('Operation API tests', () => {
     app.use(bodyParser());
     let results = {app_id:0, bitstream:""};
     let db = {
+        rpu_programs:{
+            get_rpu_program:(id:number)=>{
+                if(id !== 3) return undefined;
+                return {id:3, name:"r5_test", core:1, data:Buffer.from("\x7fELF test program"), hash:"abc"}
+            }
+        },
         applications:{
             get_application:(id:number)=>{
                 results.app_id = id;
@@ -786,6 +792,94 @@ describe('Operation API tests', () => {
                 expect(result).toStrictEqual(400000000);
             });
 
+    });
+
+    test('rpu_load', async () => {
+        let router = rtr as any;
+        let loaded :any = null;
+        const spy = jest.spyOn(router.ops_backend, 'rpu_load_program').mockImplementation(
+            async (prog:any) => {
+                loaded = prog;
+            });
+
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.rpu_load;
+        return request(app.callback())
+            .post(path.replace(":id", "3"))
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(loaded.id).toBe(3);
+                expect(loaded.core).toBe(1);
+            });
+    });
+
+    test('rpu_load_unknown_program', async () => {
+        let router = rtr as any;
+        const spy = jest.spyOn(router.ops_backend, 'rpu_load_program').mockImplementation(async () => {});
+        spy.mockClear();
+
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.rpu_load;
+        return request(app.callback())
+            .post(path.replace(":id", "7"))
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(404);
+                expect(spy).toHaveBeenCalledTimes(0);
+            });
+    });
+
+    test('rpu_stop', async () => {
+        let router = rtr as any;
+        let stopped :any = null;
+        const spy = jest.spyOn(router.ops_backend, 'rpu_stop').mockImplementation(async (core:any) => {stopped = core});
+
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.rpu_stop;
+        return request(app.callback())
+            .post(path.replace(":core", "1"))
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(stopped).toBe(1);
+            });
+    });
+
+    test('rpu_status', async () => {
+        let router = rtr as any;
+        const spy = jest.spyOn(router.ops_backend, 'rpu_status').mockImplementation(
+            async (core:any) : Promise<string> => {
+                return core === 1 ? "running" : "offline"
+            });
+
+        let path = endpoints_map.operations.prefix + endpoints_map.operations.endpoints.rpu_status;
+        return request(app.callback())
+            .get(path.replace(":core", "1"))
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(response.text).toBe("running");
+            });
+    });
+
+    test('rpu_invalid_core', async () => {
+        let router = rtr as any;
+        const spies = ['rpu_stop', 'rpu_status'].map((name)=>{
+            const spy = jest.spyOn(router.ops_backend, name).mockImplementation(async () => {});
+            spy.mockClear();
+            return spy;
+        });
+
+        let prefix = endpoints_map.operations.prefix;
+        let ep = endpoints_map.operations.endpoints;
+        for(let core of ["2", "-1", "a"]){
+            expect((await request(app.callback()).post(prefix + ep.rpu_stop.replace(":core", core))
+                .set('Authorization', `Bearer ${token}`)).status).toBe(400);
+            expect((await request(app.callback()).get(prefix + ep.rpu_status.replace(":core", core))
+                .set('Authorization', `Bearer ${token}`)).status).toBe(400);
+        }
+        for(let spy of spies) expect(spy).toHaveBeenCalledTimes(0);
     });
 
     test('set_rpu_clock_invalid', async () => {

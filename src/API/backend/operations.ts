@@ -2,7 +2,7 @@ import {
     bitstream_model, acquisition_status, channel_statuses, clock_info,
     programs_info, scope_address, select_hil_output, set_hil_inputs,
     status_object, hil_debug_model, emulator_model, read_data_response,
-    register_write_model
+    register_write_model, rpu_model
 } from "#models";
 import {randomBytes} from "crypto";
 import {hw_interface} from "#hw";
@@ -108,6 +108,19 @@ export class OperationsBackend {
 
     public async set_rpu_clock(value:number): Promise<any>{
         return this.hw_if.set_rpu_clock(value);
+    }
+
+    /// Loads a stored RPU program on the core it is stored for and starts it
+    public async rpu_load_program(prog:rpu_model): Promise<any> {
+        return await this.hw_if.rpu_load_program(prog.core, Buffer.from(prog.data));
+    }
+
+    public async rpu_stop(core:number): Promise<any> {
+        return await this.hw_if.rpu_stop(core);
+    }
+
+    public async rpu_status(core:number): Promise<string> {
+        return await this.hw_if.rpu_status(core);
     }
 
     public async compile_program(prog:programs_info) : Promise<any> {

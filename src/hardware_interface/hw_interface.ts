@@ -175,6 +175,21 @@ export class hw_interface {
         return await this.send_command(commands.platform.get_rpu_clock,{});
     }
 
+    /// Loads an ELF program on an RPU core (0 or 1) and starts it, a core that is not offline is stopped first.
+    /// There is no plain start: a stopped core is restarted by loading its program again
+    public async rpu_load_program(core: number, program: Buffer) {
+        return await this.send_command(commands.rpu.rpu_load_program, {core: core, program: program.toString("base64")});
+    }
+
+    public async rpu_stop(core: number) {
+        return await this.send_command(commands.rpu.rpu_stop, {core: core});
+    }
+
+    /// The remoteproc state of the core: offline, running, crashed, ...
+    public async rpu_status(core: number) : Promise<string> {
+        return await this.send_command(commands.rpu.rpu_status, {core: core});
+    }
+
     public async compile_program(program:object){
         return await this.send_command(commands.core.compile_program, program);
     }

@@ -151,6 +151,30 @@ describe('Hardware interface test', () => {
         await expect(hw.set_rpu_clock(600000000)).rejects.toBeDefined();
     });
 
+    // needs the mock module fake R5 cores and a writable /lib/firmware/uscope
+    test('rpu load program', async () => {
+        let program = Buffer.concat([Buffer.from([0x7f, 0x45, 0x4c, 0x46]), Buffer.alloc(1020, 0xa5)]);
+        let resp = await hw.rpu_load_program(0, program);
+        expect(resp).toBeUndefined();
+        expect(await hw.rpu_status(0)).toBe("running");
+    });
+
+    test('rpu stop', async () => {
+        await hw.rpu_stop(0);
+        expect(await hw.rpu_status(0)).toBe("offline");
+    });
+
+    test('rpu reload stopped core', async () => {
+        let program = Buffer.concat([Buffer.from([0x7f, 0x45, 0x4c, 0x46]), Buffer.alloc(60, 0xa5)]);
+        await hw.rpu_load_program(0, program);
+        expect(await hw.rpu_status(0)).toBe("running");
+        await hw.rpu_stop(0);
+    });
+
+    test('rpu load invalid program', async () => {
+        await expect(hw.rpu_load_program(0, Buffer.from("not an elf"))).rejects.toMatch(/not an ELF/);
+    });
+
 
 
     test('compile program error', async () => {

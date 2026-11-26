@@ -7,7 +7,13 @@ import {
     programs_info, scope_address, select_hil_output, set_hil_inputs, status_object,
     hil_debug_model, filter_apply_model
 } from "#models";
-import {FiltersBackend, OperationsBackend} from "#api_backend";
+import {FiltersBackend, OperationsBackend, http_error} from "#api_backend";
+
+/// The RPU has two cores, 0 and 1
+let parse_core = (raw:string) : number => {
+    if(raw !== "0" && raw !== "1") throw new http_error(400, "The RPU core must be 0 or 1, got " + raw);
+    return parseInt(raw);
+}
 
 
 export class operations_router {
@@ -86,6 +92,24 @@ export class operations_router {
                 ctx.throw(400, "The RPU clock request must be an object with a positive integer value field (frequency in Hz)");
             }
             await this.ops_backend.set_rpu_clock(data.value);
+            ctx.status = 200
+        });
+
+        this.router.post(endpoints_map.operations.endpoints.rpu_load, async (ctx:Koa.Context) => {
+            let id = parseInt(ctx.params.id);
+            let prog = await this.db.rpu_programs.get_rpu_program(id);
+            if(prog === undefined) throw new http_error(404, "RPU program not found (" + ctx.params.id + ")");
+            await this.ops_backend.rpu_load_program(prog);
+            ctx.status = 200
+        });
+
+        this.router.post(endpoints_map.operations.endpoints.rpu_stop, async (ctx:Koa.Context) => {
+            await this.ops_backend.rpu_stop(parse_core(ctx.params.core));
+            ctx.status = 200
+        });
+
+        this.router.get(endpoints_map.operations.endpoints.rpu_status, async (ctx:Koa.Context) => {
+            ctx.response.body = await this.ops_backend.rpu_status(parse_core(ctx.params.core));
             ctx.status = 200
         });
 

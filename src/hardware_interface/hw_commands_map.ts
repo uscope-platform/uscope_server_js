@@ -39,6 +39,11 @@ interface hw_commands_map {
             get_version:string,
             set_debug_level:string,
             get_debug_level:string
+        },
+        rpu:{
+            rpu_load_program:string,
+            rpu_stop:string,
+            rpu_status:string
         }
 }
 
@@ -83,5 +88,10 @@ export let commands :hw_commands_map = {
         get_version:"get_version",
         set_debug_level:"set_debug_level",
         get_debug_level:"get_debug_level"
+    },
+    rpu:{
+        rpu_load_program:"rpu_load_program",
+        rpu_stop:"rpu_stop",
+        rpu_status:"rpu_status"
     }
 }

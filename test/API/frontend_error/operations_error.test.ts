@@ -48,6 +48,12 @@ describe('Operation API Error handling tests', () => {
     app.use(bodyParser());
     let results = {app_id:0, bitstream:""};
     let db = {
+        rpu_programs:{
+            get_rpu_program:(id:number)=>{
+                if(id !== 3) return undefined;
+                return {id:3, name:"r5_test", core:1, data:Buffer.from("\x7fELF test program"), hash:"abc"}
+            }
+        },
         applications:{
             get_application:(id:number)=>{
                 results.app_id = id;
@@ -119,6 +125,15 @@ describe('Operation API Error handling tests', () => {
         },
         set_rpu_clock: () =>{
             throw "ops error 23"
+        },
+        rpu_load_program: () =>{
+            throw "ops error 24"
+        },
+        rpu_stop: () =>{
+            throw "ops error 26"
+        },
+        rpu_status: () =>{
+            throw "ops error 27"
         },
         apply_program: () =>{
             throw "ops error 20"
@@ -556,6 +571,22 @@ describe('Operation API Error handling tests', () => {
                 expect(response.body.message).toBe("ops error 23");
             });
 
+    });
+
+    test('rpu_commands', async () => {
+        let prefix = endpoints_map.operations.prefix;
+        let ep = endpoints_map.operations.endpoints;
+        let cases :[string, string, string][] = [
+            ["post", ep.rpu_load.replace(":id", "3"), "ops error 24"],
+            ["post", ep.rpu_stop.replace(":core", "0"), "ops error 26"],
+            ["get", ep.rpu_status.replace(":core", "0"), "ops error 27"],
+        ];
+        for(let [method, path, message] of cases){
+            let req = method === "post" ? request(app.callback()).post(prefix + path) : request(app.callback()).get(prefix + path);
+            let response = await req.set('Authorization', `Bearer ${token}`);
+            expect(response.status).toBe(501);
+            expect(response.body.message).toBe(message);
+        }
     });
 
 
