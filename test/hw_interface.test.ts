@@ -178,7 +178,7 @@ describe('Hardware interface test', () => {
         }
         let resp = await hw.compile_program(prog);
         expect(resp).toStrictEqual({
-            error: "extraneous input 'ab' expecting ';'",
+            error: "[1:51] extraneous input 'ab' expecting ';'",
             status: "error"
         });
     });

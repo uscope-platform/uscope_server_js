@@ -19,9 +19,22 @@ let filter_designer =`
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import sys
+import traceback
+
+
+# Installed before the other imports so that a missing module is reported too. Other lines (warnings, ...) can be
+# written on stderr after the traceback: the marked line is the one the server reports as the reason of the failure
+def report_failure(exc_type, exc, tb):
+    traceback.print_exception(exc_type, exc, tb)
+    reason = traceback.format_exception_only(exc_type, exc)[-1].strip()
+    print("FILTER_SCRIPT_ERROR: " + reason, file=sys.stderr, flush=True)
+
+
+sys.excepthook = report_failure
+
 import numpy as np
 from scipy import signal
-import sys
 import json
 
 
@@ -151,6 +164,9 @@ if __name__ == '__main__':
         print(json.dumps(response))
 `
 
+// prefix of the line where the script writes the exception that made it fail
+const SCRIPT_ERROR_MARKER = "FILTER_SCRIPT_ERROR:";
+
 export class FiltersBackend {
     public db: database;
     public hw_if: hw_interface;
@@ -176,7 +192,10 @@ export class FiltersBackend {
         if(raw_res.status !== 0 || stdout === ""){
             let stderr = String(raw_res.stderr).trim();
             console.error("Filter " + operation + " failed (exit " + raw_res.status + ", signal " + raw_res.signal + "):\n" + stderr);
-            let reason = stderr.split("\n").filter(line => line.trim() !== "").pop() ?? "no output from the script";
+            let lines = stderr.split("\n").map(line => line.trim()).filter(line => line !== "");
+            let marked = lines.filter(line => line.startsWith(SCRIPT_ERROR_MARKER)).pop();
+            let reason = marked !== undefined ? marked.slice(SCRIPT_ERROR_MARKER.length).trim()
+                : lines.pop() ?? "no output from the script";
             throw new Error("Filter " + operation + " failed: " + reason);
         }
 

@@ -54,6 +54,9 @@ describe('platform API tests', () => {
                     "validator": "14f1097418691f37690a06cb947bafee0f1912aa5f7e228e72f902e55da5af5a"
                 }]
             },
+            count_admins:() =>{
+                return 2;
+            },
             has_users:()=>{
                 return has_users
             },

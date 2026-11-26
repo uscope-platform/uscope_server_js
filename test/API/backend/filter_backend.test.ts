@@ -1,4 +1,5 @@
-import {expect} from "@jest/globals";
+import {expect, jest} from "@jest/globals";
+import child_process from "node:child_process";
 
 import {FiltersBackend} from "#api_backend";
 import {database} from "#database";
@@ -138,7 +139,46 @@ describe('filters backend test', () => {
     test('design_failure_reports_the_reason', async () => {
         let broken = new FiltersBackend({filters: {get_filter: () => ({id: 1, parameters: {type: "nonexistent"}})}} as any as database, {} as hw_interface);
         // the reason is the exception of the script: the unknown type, or the missing module when numpy is not installed
-        await expect(broken.design_filter(1)).rejects.toThrow(/^Filter design failed: \w*(Error|Exception)/);
+        await expect(broken.design_filter(1)).rejects.toThrow(/^Filter design failed: (ValueError: Unknown filter type|ModuleNotFoundError)/);
+    });
+
+    // the cases below fake the run of python, to depend neither on its installation nor on what else it prints
+    describe('reasons of a failure of the script', () => {
+        let broken = new FiltersBackend({filters: {get_filter: () => ({id: 1, parameters: {type: "lp"}})}} as any as database, {} as hw_interface);
+        let fake_run = (result: object) => {
+            jest.spyOn(child_process, "spawnSync").mockReturnValue({
+                pid: 0, output: [], stdout: Buffer.from(""), stderr: Buffer.from(""), status: 1, signal: null, ...result
+            } as any);
+        };
+
+        beforeEach(() => jest.spyOn(console, "error").mockImplementation(() => {}));
+        afterEach(() => jest.restoreAllMocks());
+
+        test('the marked exception, even with lines after it', async () => {
+            fake_run({stderr: Buffer.from(
+                "Traceback (most recent call last):\n" +
+                "  File \"<string>\", line 70, in design_filter\n" +
+                "ValueError: Unknown filter type\n" +
+                "FILTER_SCRIPT_ERROR: ValueError: Unknown filter type\n" +
+                "Exception ignored in: <function _shutdown>\n"
+            )});
+            await expect(broken.design_filter(1)).rejects.toThrow(/^Filter design failed: ValueError: Unknown filter type$/);
+        });
+
+        test('the last line, when nothing is marked', async () => {
+            fake_run({stderr: Buffer.from("something\nSegmentation fault\n")});
+            await expect(broken.design_filter(1)).rejects.toThrow(/^Filter design failed: Segmentation fault$/);
+        });
+
+        test('a script that writes nothing', async () => {
+            fake_run({status: null, signal: "SIGKILL"});
+            await expect(broken.design_filter(1)).rejects.toThrow(/^Filter design failed: no output from the script$/);
+        });
+
+        test('python that cannot be run', async () => {
+            fake_run({status: null, error: new Error("spawnSync /usr/bin/python3 ENOENT")});
+            await expect(broken.design_filter(1)).rejects.toThrow(/^Filter design failed, python could not be run: .*ENOENT/);
+        });
     });
 
 });
