@@ -155,6 +155,14 @@ export let rules : rules_map = {
         edit:'admin',
         delete:'admin'
     },
+    rpu:{
+        hash:'operator',
+        load_all:'operator',
+        get:'user',
+        add:'user',
+        edit:'user',
+        delete:'user'
+    },
     program:{
         hash:'operator',
         load_all:'operator',

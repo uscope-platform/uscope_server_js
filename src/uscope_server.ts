@@ -2,9 +2,9 @@ import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import jwt from "koa-jwt";
 import {
-    applications_router, bitstream_router, emulators_router,filters_router,
+    applications_router, bitstream_router, emulators_router, filters_router,
     peripherals_router, operations_router, programs_router, scripts_router,
-    settings_router, platform_router
+    settings_router, platform_router, rpu_router
 } from "#api_frontend/index.ts";
 import {database} from "#database/index.ts";
 import {FiltersBackend, OperationsBackend, SettingsBackend, authorizer, error_handler} from "#api_backend/index.ts";
@@ -91,6 +91,11 @@ db.init_db().then(r => {
     let plt_rtr = new platform_router(jwt_secret, db, hw_if);
     app.use(plt_rtr.router.routes());
     app.use(plt_rtr.router.allowedMethods());
+
+    let rpu_rtr = new rpu_router(db);
+    app.use(rpu_rtr.router.routes());
+    app.use(rpu_rtr.router.allowedMethods());
+
 
 
     console.log("SERVER READY");

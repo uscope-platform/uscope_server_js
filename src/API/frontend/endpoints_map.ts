@@ -63,6 +63,18 @@ interface api_map {
             delete:string
         }
     },
+    rpu:{
+        prefix:string,
+        endpoints:{
+            [index: string]: any;
+            hash:string,
+            load_all:string,
+            get:string,
+            add:string,
+            edit:string,
+            delete:string
+        }
+    },
     program:{
         prefix:string,
         endpoints:{
@@ -204,7 +216,17 @@ export let endpoints_map : api_map = {
             delete:"/:id"
         }
     },
-
+    rpu:{
+        prefix: g_prefix + "/rpu",
+        endpoints:{
+            hash:"/hash",
+            load_all:"/load_all",
+            get:"/:id",
+            add:"/:id",
+            edit:"/:id",
+            delete:"/:id"
+        }
+    },
     program:{
         prefix: g_prefix + "/program",
         endpoints:{

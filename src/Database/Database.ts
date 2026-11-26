@@ -3,7 +3,7 @@ import postgres from "postgres";
 import {
     bitstreams_db, applications_db, peripherals_db,
     platform_db, emulators_db, filters_db, scripts_db,
-    programs_db
+    programs_db, rpu_db
 } from ".";
 import {db_dump} from "#models"
 
@@ -20,6 +20,7 @@ export class database {
     public peripherals: peripherals_db;
     public bitstreams: bitstreams_db;
     public platform: platform_db;
+    public rpu_programs: rpu_db;
     db: postgres.Sql;
     private readonly schema: string;
     private readonly host: string;
@@ -49,6 +50,7 @@ export class database {
          this.emulators = new emulators_db(this.db, schema);
          this.peripherals = new peripherals_db(this.db, schema);
          this.bitstreams = new bitstreams_db(this.db, schema);
+         this.rpu_programs = new rpu_db(this.db, schema);
      }
 
      public async dump():Promise<db_dump>{
@@ -59,7 +61,8 @@ export class database {
             programs: await this.programs.load_all(),
             peripherals: await this.peripherals.load_all(),
             emulators: await this.emulators.load_all(),
-            bitstreams: await this.bitstreams.load_all()
+            bitstreams: await this.bitstreams.load_all(),
+            rpu_programs: await this.rpu_programs.load_all()
         }
      }
 
@@ -71,6 +74,7 @@ export class database {
          for(let prg of obj.programs) await this.programs.add_program(prg);
          for(let emu of obj.emulators) await this.emulators.add_emulator(emu);
          for(let bit of obj.bitstreams) await this.bitstreams.add_bitstream(bit);
+         for(let prog of obj.rpu_programs) await this.rpu_programs.add_rpu_program(prog);
      }
 
      public async close():Promise<void> {
@@ -81,6 +85,7 @@ export class database {
          await this.scripts.close();
          await this.programs.close();
          await this.emulators.close();
+         await this.rpu_programs.close();
          return
      }
 
@@ -113,6 +118,7 @@ export class database {
         await this.create_emulators();
         await this.create_bitstreams();
         await this.create_filters();
+        await this.create_rpu();
     }
 
     // Brings an existing database to the schema described by the create_* methods.
@@ -221,6 +227,7 @@ export class database {
         await this.add_version("scripts");
         await this.add_version("filters");
         await this.add_version("emulators");
+        await this.add_version("rpu_programs");
 
     }
 
@@ -591,6 +598,39 @@ export class database {
             `
             await this.db`
                 create trigger bump_peripherals_version after insert or delete or update on ${sql(this.schema)}.peripherals execute procedure ${sql(this.schema)}.update_version('Peripherals');
+            `
+        }
+    }
+
+    public async create_rpu(): Promise<void> {
+        let res = await this.create_table( "rpu_programs")
+        if(res) {
+            await this.db`
+                alter table ${sql(this.schema)}.rpu_programs
+                    add id integer not null
+            `
+            await this.db`
+                alter table ${sql(this.schema)}.rpu_programs
+                    add core integer
+            `
+            await this.db`
+                alter table ${sql(this.schema)}.rpu_programs
+                    add name text    not null
+            `
+            await this.db`
+                alter table ${sql(this.schema)}.rpu_programs
+                    add data bytea
+            `
+            await this.db`
+                alter table ${sql(this.schema)}.rpu_programs
+                    add hash text;
+            `
+
+            await this.db`
+                create unique index rpu_programs_id_index on ${sql(this.schema)}.rpu_programs (id);
+            `
+            await this.db`
+                create trigger bump_rpu_version after insert or delete or update on ${sql(this.schema)}.rpu_programs execute procedure ${sql(this.schema)}.update_version('rpu_programs');
             `
         }
     }

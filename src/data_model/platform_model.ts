@@ -1,10 +1,11 @@
-import {application_model} from "./application_model";
-import script_model from "./script_model";
-import program_model from "./program_model";
-import filter_model from "./filters_model";
-import emulator_model from "./emulator_model";
-import peripheral_model from "./peripheral_model";
-import bitstream_model from "./bitstreams_model";
+import {application_model} from "#models/application_model";
+import {script_model} from "#models/script_model";
+import {program_model} from "#models/program_model";
+import {filter_model} from "#models/filters_model";
+import {emulator_model} from "#models/emulator_model";
+import {peripheral_model} from "#models/peripheral_model";
+import {bitstream_model} from "#models/bitstreams_model";
+import {rpu_model} from "#models/rpu_model";
 
 
 export interface user_model {
@@ -40,5 +41,6 @@ export interface db_dump {
     filters: filter_model[],
     emulators: emulator_model[],
     peripherals: peripheral_model[],
-    bitstreams: bitstream_model[]
+    bitstreams: bitstream_model[],
+    rpu_programs: rpu_model[]
 }

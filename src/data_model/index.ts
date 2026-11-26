@@ -16,3 +16,4 @@ export {auth_response, db_dump, auto_login_object, user_model, user_login_object
 export {program_edit_model ,program_model} from "./program_model"
 export {script_edit_model, script_model} from "./script_model"
 export {debugger_option} from "./settings_model"
+export {rpu_edit_model, rpu_model} from "./rpu_model"
