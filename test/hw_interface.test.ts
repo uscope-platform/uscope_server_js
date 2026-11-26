@@ -22,20 +22,14 @@ describe('Hardware interface test', () => {
 
     test('get debug level', async () => {
         let resp = await hw.get_debug_level();
-        expect(resp).toStrictEqual("debug")
+        expect(resp).toStrictEqual("minimal")
     });
 
     test('set debug level', async () => {
         let resp = await hw.set_debug_level("debug");
         expect(resp).toBeUndefined();
+        await hw.set_debug_level("minimal");
     });
-
-
-    test('get sampling frequency', async () => {
-        let resp = await hw.get_sampling_frequency();
-        expect(resp).toStrictEqual(1);
-    });
-
 
 
     test('load bitstream', async () => {
@@ -275,6 +269,12 @@ describe('Hardware interface test', () => {
         expect(resp).toBeUndefined();
     });
 
+    // the driver knows the sampling frequency only once a HIL is deployed: the LCM of the frequencies of its cores
+    test('get sampling frequency', async () => {
+        let resp = await hw.get_sampling_frequency();
+        expect(resp).toStrictEqual(1);
+    });
+
     test('disassemble hil', async () => {
         let hil = {
             version:2,
@@ -352,11 +352,11 @@ describe('Hardware interface test', () => {
         let resp = await hw.hil_disassemble(hil);
         expect(resp).toStrictEqual({
             "test": {
-                "program": "add r63, r62, r1\nstop\n",
+                "program": "add r63, r62, r1\nnop\nnop\nnop\nnop\nnop\nnop\nstop\n",
                 "common_io_translation_table":[],
                 "translation_table": [
-                    [1, {"address": 62, "name":"mem_2"}],
-                    [2, {"address": 63, "name":"mem"}],
+                    [1, {"address": 63, "name":"mem"}],
+                    [2, {"address": 62, "name":"mem_2"}],
                     [3, {"address": 1 , "name":"out"}]
                 ]
             }
@@ -592,9 +592,9 @@ describe('Hardware interface test', () => {
 
         let resp = await hw.hil_hardware_sim(hil);
         expect(resp).toStrictEqual({
-            "code": "21743271936:131076\n21743271940:12\n21743271944:196609\n21743271948:65538\n21743271952:131075\n21743271956:12\n21743271960:12\n21743271964:395329\n21743271968:12\n",
-            "control": "18316595212:131073\n18316595276:56\n18316595200:1\n18316599308:0\n18316599304:3\n18316599296:1106876826\n18316599308:1\n18316599304:2\n18316599296:1082130432\n18316529668:0\n18316525576:2\n18316525572:100000000\n18316529664:1\n18316591104:11\n18316722176:1\n",
-            "inputs": "test.input_1,18316599296,3,0,0\ntest.input_2,18316599296,2,1,0\n",
+            "code": "21743271936:524292\n21743271940:12\n21743271944:196609\n21743271948:65538\n21743271952:131075\n21743271956:12\n21743271960:12\n21743271964:397345\n21743271968:0\n21743271972:0\n21743271976:0\n21743271980:0\n21743271984:0\n21743271988:0\n21743271992:12\n",
+            "control": "18316595212:131073\n18316595276:56\n18316595200:1\n18316599308:0\n18316599304:2\n18316599296:1106876826\n18316599308:1\n18316599304:3\n18316599296:1082130432\n18316529668:0\n18316525576:2\n18316525572:100000000\n18316529664:1\n18316591104:11\n18316722176:1\n",
+            "inputs": "test.input_1,18316599296,2,0,0\ntest.input_2,18316599296,3,1,0\n",
             "outputs": "2:test.out\n"
         });
     });
