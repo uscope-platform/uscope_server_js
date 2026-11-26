@@ -750,6 +750,60 @@ describe('Operation API tests', () => {
 
     });
 
+    test('get_rpu_clock', async () => {
+        let router = rtr as any;
+        const spy = jest.spyOn(router.ops_backend, 'get_rpu_clock').mockImplementation(
+            async () : Promise<number> => {
+                return 500000000
+            });
+
+        return request(app.callback())
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.rpu_clock)
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(response.text).toStrictEqual("500000000");
+            });
+
+    });
+
+    test('set_rpu_clock', async () => {
+        let router = rtr as any;
+        let result = 0;
+        const spy = jest.spyOn(router.ops_backend, 'set_rpu_clock').mockImplementation(
+            async (arg:any) => {
+                result = arg
+            });
+
+        return request(app.callback())
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.rpu_clock)
+            .set('Authorization', `Bearer ${token}`)
+            .send({value:400000000})
+            .then((response)=>{
+                expect(response.status).toBe(200);
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(result).toStrictEqual(400000000);
+            });
+
+    });
+
+    test('set_rpu_clock_invalid', async () => {
+        let router = rtr as any;
+        const spy = jest.spyOn(router.ops_backend, 'set_rpu_clock').mockImplementation(
+            async () => {});
+        spy.mockClear();
+
+        for(let body of [{value:"400000000"}, {value:1.5}, {value:-1}, {freq:400000000}]){
+            let response = await request(app.callback())
+                .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.rpu_clock)
+                .set('Authorization', `Bearer ${token}`)
+                .send(body);
+            expect(response.status).toBe(400);
+        }
+        expect(spy).toHaveBeenCalledTimes(0);
+    });
+
 
 
     test('design_filter', async () => {

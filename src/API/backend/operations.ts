@@ -102,6 +102,14 @@ export class OperationsBackend {
         return this.hw_if.set_clock(info);
     }
 
+    public async get_rpu_clock(): Promise<number>{
+        return await this.hw_if.get_rpu_clock();
+    }
+
+    public async set_rpu_clock(value:number): Promise<any>{
+        return this.hw_if.set_rpu_clock(value);
+    }
+
     public async compile_program(prog:programs_info) : Promise<any> {
         return await this.hw_if.compile_program(prog);
     }

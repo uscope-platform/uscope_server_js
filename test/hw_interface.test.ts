@@ -136,6 +136,21 @@ describe('Hardware interface test', () => {
         expect(resp).toBe(126000000);
     });
 
+    test('set rpu clock', async () => {
+        let resp = await hw.set_rpu_clock(400000000);
+        expect(resp).toBeUndefined();
+    });
+
+    test('get rpu clock', async () => {
+        let resp = await hw.get_rpu_clock();
+        expect(resp).toBe(400000000);
+        await hw.set_rpu_clock(500000000);
+    });
+
+    test('set rpu clock out of range', async () => {
+        await expect(hw.set_rpu_clock(600000000)).rejects.toBeDefined();
+    });
+
 
 
     test('compile program error', async () => {

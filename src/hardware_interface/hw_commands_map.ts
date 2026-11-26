@@ -34,6 +34,8 @@ interface hw_commands_map {
         platform:{
             set_pl_clock:string,
             get_clock:string,
+            set_rpu_clock:string,
+            get_rpu_clock:string,
             get_version:string,
             set_debug_level:string,
             get_debug_level:string
@@ -76,6 +78,8 @@ export let commands :hw_commands_map = {
     platform:{
         set_pl_clock:"set_pl_clock",
         get_clock:"get_clock",
+        set_rpu_clock:"set_rpu_clock",
+        get_rpu_clock:"get_rpu_clock",
         get_version:"get_version",
         set_debug_level:"set_debug_level",
         get_debug_level:"get_debug_level"

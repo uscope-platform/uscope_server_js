@@ -64,7 +64,8 @@ export class hw_interface {
         socket.end();
         let resp = unpack(raw_resp).body;
         if(resp.response_code != 1){
-            throw resp.data;
+            // some driver errors carry only a response code, still report something readable
+            throw resp.data ?? `Driver error while executing ${command} (response code ${resp.response_code})`;
         } else{
             return resp.data;
         }
@@ -164,6 +165,14 @@ export class hw_interface {
 
     public async get_clock(id:number, is_primary: boolean) : Promise<number>{
         return await this.send_command(commands.platform.get_clock,{is_primary:is_primary, id:id});
+    }
+
+    public async set_rpu_clock(value: number) {
+        return await this.send_command(commands.platform.set_rpu_clock, {value: value});
+    }
+
+    public async get_rpu_clock() : Promise<number>{
+        return await this.send_command(commands.platform.get_rpu_clock,{});
     }
 
     public async compile_program(program:object){

@@ -114,6 +114,12 @@ describe('Operation API Error handling tests', () => {
         set_clock: () =>{
             throw "ops error 19"
         },
+        get_rpu_clock: () =>{
+            throw "ops error 22"
+        },
+        set_rpu_clock: () =>{
+            throw "ops error 23"
+        },
         apply_program: () =>{
             throw "ops error 20"
         },
@@ -523,6 +529,31 @@ describe('Operation API Error handling tests', () => {
             .then((response)=>{
                 expect(response.status).toBe(501);
                 expect(response.body.message).toBe("ops error 19");
+            });
+
+    });
+
+    test('get_rpu_clock', async () => {
+
+        return request(app.callback())
+            .get(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.rpu_clock)
+            .set('Authorization', `Bearer ${token}`)
+            .then((response)=>{
+                expect(response.status).toBe(501);
+                expect(response.body.message).toBe("ops error 22");
+            });
+
+    });
+
+    test('set_rpu_clock', async () => {
+
+        return request(app.callback())
+            .post(endpoints_map.operations.prefix + endpoints_map.operations.endpoints.rpu_clock)
+            .set('Authorization', `Bearer ${token}`)
+            .send({value:400000000})
+            .then((response)=>{
+                expect(response.status).toBe(501);
+                expect(response.body.message).toBe("ops error 23");
             });
 
     });

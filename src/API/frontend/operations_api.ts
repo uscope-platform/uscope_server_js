@@ -74,6 +74,21 @@ export class operations_router {
             ctx.status = 200
         });
 
+        this.router.get(endpoints_map.operations.endpoints.rpu_clock, async (ctx:Koa.Context) => {
+            ctx.response.body = await this.ops_backend.get_rpu_clock();
+            ctx.status = 200
+        });
+
+
+        this.router.post(endpoints_map.operations.endpoints.rpu_clock, async (ctx:Koa.Context) => {
+            let data = <{value:number}>ctx.request.body;
+            if(typeof data?.value !== "number" || !Number.isInteger(data.value) || data.value <= 0){
+                ctx.throw(400, "The RPU clock request must be an object with a positive integer value field (frequency in Hz)");
+            }
+            await this.ops_backend.set_rpu_clock(data.value);
+            ctx.status = 200
+        });
+
         this.router.post(endpoints_map.operations.endpoints.compile_program, async (ctx:Koa.Context) => {
             let data = <programs_info>ctx.request.body;
             ctx.response.body = await this.ops_backend.compile_program(data);
