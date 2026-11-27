@@ -11,11 +11,26 @@ import {FiltersBackend, OperationsBackend, SettingsBackend, authorizer, error_ha
 import {hw_interface} from "#hw/index.ts";
 
 import cors from '@koa/cors';
+import {randomBytes} from "node:crypto";
 
 const app = new Koa();
 
 
-let jwt_secret = "super secret v2"
+// JWT signing secret:
+//  - JWT_SECRET, when set, is used as is.
+//  - In a deployment (docker) a random secret is generated at every start, so no secret ever
+//    lives in the repository. Access tokens become invalid on restart; clients that chose
+//    "remember me" get a new one through their auto-login token on the next page load.
+//  - In development a fixed secret is kept, so nodemon reloads do not invalidate tokens.
+let jwt_secret: string;
+if(process.env.JWT_SECRET) {
+    jwt_secret = process.env.JWT_SECRET;
+} else if(process.env.USCOPE_DEPLOYMENT_OPTION === "DOCKER") {
+    jwt_secret = randomBytes(64).toString("hex");
+    console.log("JWT_SECRET not set: using a random signing secret for this run");
+} else {
+    jwt_secret = "uscope development secret";
+}
 
 app.use(cors())
 
