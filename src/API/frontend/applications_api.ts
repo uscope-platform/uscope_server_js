@@ -126,6 +126,9 @@ export class applications_router {
                 delete app.miscellaneous[e.item["name"]];
                 app.miscellaneous[e.item["value"]]= val;
             }
+        } else if(e.object === "pl_clocks"){
+            // what the client sends when the frequency of a clock is changed: {item_id: clock number, value: frequency}
+            app.pl_clocks[e.item["item_id"]] = e.item["value"];
         } else {
             let index = app[this.item_types_map[e.object]].findIndex((val:any)=>{
                 return val[this.item_id_map[e.object]] == e.item["item_id"];

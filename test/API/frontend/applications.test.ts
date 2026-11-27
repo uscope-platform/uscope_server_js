@@ -744,6 +744,23 @@ describe('applications API tests', () => {
         expect(results.init_script).toBeNull();
     });
 
+    test('edit_pl_clocks_as_the_client_sends_it', async () => {
+        // an application of its own, the others are edited by the tests around
+        apps[3] = {...JSON.parse(JSON.stringify(init_app)), id: 4};
+
+        let url = endpoints_map.application.prefix + endpoints_map.application.endpoints.edit;
+        url = url.replace(":id", "4");
+
+        let response = await request(app.callback())
+            .patch(url)
+            .set('Authorization', `Bearer ${token}`)
+            .send({application: 4, item: {item_id: 2, value: 123000000}, action: "edit", object: "pl_clocks"});
+
+        expect(response.status).toBe(200);
+        expect(results.pl_clocks).toStrictEqual({"0": 100e6, "1": 100e6, "2": 123000000, "3": 100e6});
+        expect(results.miscellaneous).toStrictEqual({test_misc_p: 123});
+    });
+
     test('edit_pl_clocks', async () => {
 
         let edit = {
